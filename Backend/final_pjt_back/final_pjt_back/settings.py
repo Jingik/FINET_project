@@ -9,11 +9,20 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import environ
+import os
 from pathlib import Path
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Take environment variables from .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -31,6 +40,20 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts', # 로그인
+    'boards', # 게시글
+    'instruments', # 정보
+    'exchange', # 환율
+    'rest_framework', # REST_Framework
+    'rest_framework.authtoken',
+    'dj_rest_auth', # 인증
+    'corsheaders', # 출처 자원 공유 
+    'django.contrib.sites',
+    # 'allauth', # social 로그인을 위한 라이브러리 Ex) 네이버, 카카오
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    'dj_rest_auth.registration', 
+    'drf_spectacular', # API 문서화
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,12 +65,16 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
+
+SITE_ID = 1
 
 ROOT_URLCONF = 'final_pjt_back.urls'
 
@@ -103,9 +130,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "ko-kr"
 
-TIME_ZONE = 'UTC'
+MEDIA_URL = 'media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
+
+TIME_ZONE = "Asia/Seoul"
 
 USE_I18N = True
 
