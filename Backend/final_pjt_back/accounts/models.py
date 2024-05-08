@@ -1,20 +1,29 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-# Create your models here.
 
-class User(AbstractUser):
-    username = models.CharField(max_length=50, unique=True)
-    name = models.CharField(max_length=50)
-    email = models.EmailField(max_length=300, blank=True, null=True)
-    profile_img = models.ImageField(upload_to='image/', default='image/user.png')
-    financial_products = models.TextField(blank=True, null=True)
-    age = models.IntegerField(blank=True, null=True)
-    money = models.IntegerField(blank=True, null=True)
-    salary = models.IntegerField(blank=True, null=True)
-    desire_amount_saving = models.IntegerField(blank=True, null=True)
-    desire_amount_deposit = models.IntegerField(blank=True, null=True)
-    deposit_period = models.IntegerField(blank=True, null=True)
-    saving_period = models.IntegerField(blank=True, null=True)
-    is_superuser = models.BooleanField(default=False)
+class User(models.Model):
+    id = models.AutoField(primary_key=True)
+    username = models.CharField(unique=True, max_length=50)
+    password = models.CharField(max_length=100) 
+    name = models.CharField(max_length=20)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    
+    class UserAgeGroup(models.TextChoices):
+        AGE_GROUP_10S = '10s', '10대'
+        AGE_GROUP_20S = '20s', '20대'
+        AGE_GROUP_30S = '30s', '30대'
 
-    USERNAME_FIELD = 'username'
+    user_age_group = models.CharField(max_length=3, choices=UserAgeGroup.choices)
+    
+    class ServicePurpose(models.TextChoices):
+        PURPOSE_A = 'A', '서비스 목적 A'
+        PURPOSE_B = 'B', '서비스 목적 B'
+        # 필요한 만큼 추가할 수 있습니다.
+
+    service_purpose = models.CharField(max_length=1, choices=ServicePurpose.choices)
+    account_number = models.CharField(max_length=50, blank=True, null=True)
+    asset = models.BigIntegerField(default=0)
+    auth_number = models.IntegerField(default=0)
+    user_status = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return self.username

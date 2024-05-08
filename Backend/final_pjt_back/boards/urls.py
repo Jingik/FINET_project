@@ -18,6 +18,13 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index)
+    path('', views.index, name="index"),
+    path('create/', views.create, name='board_create'),
+    path('<int:pk>/', views.detail, name='board_detail'), 
+    path('<int:pk>/update/', views.update, name='board_update'),   
+    path('<int:board_pk>/comment/', views.comment, name='comment'),
+    path('<int:board_pk>/comment/<int:comment_pk>/', views.comment_detail, name='comment_detail'),
+    path('comment/<int:comment_pk>/', views.create_reply, name='create_reply'),
+    
 ]
 
