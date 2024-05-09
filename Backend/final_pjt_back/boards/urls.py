@@ -20,9 +20,12 @@ from . import views
 urlpatterns = [
     path('', views.index, name="index"),
     path('create/', views.create, name='board_create'),
-    path('<int:pk>/', views.detail, name='board_detail'), 
-    path('<int:pk>/update/', views.update, name='board_update'),   
-    path('<int:board_pk>/comment/', views.comment, name='comment'),
-    path('<int:board_pk>/comment/<int:comment_pk>/', views.comment_detail, name='comment_detail'),
+    path('<int:pk>/', views.detail, name='board_detail'),
+    path('<int:pk>/update/', views.update, name='board_update'),
+    path('<int:pk>/delete/', views.delete, name='board_delete'), # Assuming you want a delete endpoint for the board
+    path('<int:pk>/comments/', views.comments_create, name='comments_create'), # Changed from 'comment' to 'comments_create'
+    # path('<int:pk>/comments/<int:comment_pk>/', views.comments_detail, name='comment_detail'), # Assuming you want a detail view for comments
+    path('<int:pk>/comments/<int:comment_pk>/delete/', views.comments_delete, name='comments_delete'),
 ]
+
 
