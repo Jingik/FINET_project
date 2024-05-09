@@ -24,7 +24,5 @@ urlpatterns = [
     path('<int:pk>/update/', views.update, name='board_update'),   
     path('<int:board_pk>/comment/', views.comment, name='comment'),
     path('<int:board_pk>/comment/<int:comment_pk>/', views.comment_detail, name='comment_detail'),
-    path('comment/<int:comment_pk>/', views.create_reply, name='create_reply'),
-    
 ]
 

@@ -6,9 +6,8 @@ from rest_framework import status
 import requests
 from .serializers import ExchangeSerializer
 
-EXCHANGE_API_KEY = 'BDEnNlZa0E5gjifaBugXl6cHON5XSFnZ' # 환율 인증 키
+# EXCHANGE_API_KEY = 'BDEnNlZa0E5gjifaBugXl6cHON5XSFnZ' # 환율 인증 키
 EXCHANGE_API_URL = f'https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey={settings.EXCHANGE_API_KEY}&data=AP01'
-
 
 @api_view(['GET'])
 def index (request):

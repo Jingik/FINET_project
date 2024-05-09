@@ -49,10 +49,10 @@ INSTALLED_APPS = [
     'dj_rest_auth', # 인증
     'corsheaders', # 출처 자원 공유 
     'django.contrib.sites',
-    # 'allauth', # social 로그인을 위한 라이브러리 Ex) 네이버, 카카오
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    'dj_rest_auth.registration', 
+    'allauth', # social 로그인을 위한 라이브러리 Ex) 네이버, 카카오
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
     'drf_spectacular', # API 문서화
     'django.contrib.admin',
     'django.contrib.auth',
@@ -96,6 +96,33 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'final_pjt_back.wsgi.application'
 
+SITE_ID = 1
+
+REST_FRAMEWORK = {
+    # Authentication
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    # permission
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 10
+}
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'FINET API',
+    'DESCRIPTION': 'FINET description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -142,6 +169,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+EXCHANGE_API_KEY = 'BDEnNlZa0E5gjifaBugXl6cHON5XSFnZ'
+
+FINLIFE_API_KEY = 'e3b1e1d317e3d9e6788a5f8e822e2123'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
