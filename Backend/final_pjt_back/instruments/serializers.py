@@ -1,6 +1,10 @@
 from rest_framework import serializers
 from .models import *
 
+## 개인 신용 대출
+## 모델도 아직 안 만듬
+## serializer도 아직 안 만듬
+
 class DepositProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = DepositProducts
@@ -24,7 +28,7 @@ class SavingProductsSerializer(serializers.ModelSerializer):
         model = SavingProducts
         fields = '__all__'
         
-class SavingOptionSerializer(serializers.ModelSerializer):
+class SavingOptionsSerializer(serializers.ModelSerializer):
     class SavingSerializer(serializers.ModelSerializer):
         class Meta:
             model = SavingProducts

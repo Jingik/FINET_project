@@ -51,4 +51,6 @@ class SavingOptions(models.Model):
     intr_rate2 = models.FloatField(null=True)
     
 
-# 개인 신용 대출
+## 개인 신용 대출
+## 모델도 아직 안 만듬
+## serializer도 아직 안 만듬
