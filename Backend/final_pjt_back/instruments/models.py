@@ -52,5 +52,26 @@ class SavingOptions(models.Model):
     
 
 ## 개인 신용 대출
-## 모델도 아직 안 만듬
-## serializer도 아직 안 만듬
+
+class CreditLoanProducts(models.Model):
+    creditloan_code = models.CharField(max_length=100) # fin_prdt_cd 
+    fin_co_no = models.CharField(max_length=100)
+    kor_co_nm = models.CharField(max_length=100)
+    name = models.CharField(max_length=100) # fin_prdt_nm
+    dcls_month = models.CharField(max_length=20)
+    join_way = models.CharField(max_length=100)
+    mtrt_int = models.TextField(blank=True, null=True)
+    spcl_cnd = models.TextField(blank=True, null=True)
+    join_deny = models.IntegerField(blank=True, null=True)
+    join_member = models.TextField(blank=True, null=True)
+    etc_note = models.TextField(blank=True, null=True)
+    max_limit = models.IntegerField(blank=True, null=True)
+    contract_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='contract_credit_loan')
+    
+class CreditLoanOptions(models.Model):
+    creditloan = models.ForeignKey(CreditLoanProducts, on_delete=models.CASCADE)
+    intr_rate_type_nm = models.CharField(max_length=2)
+    rsrv_type_nm = models.CharField(max_length=10)
+    save_trm = models.CharField(max_length=3)
+    intr_rate = models.FloatField(null=True)
+    intr_rate2 = models.FloatField(null=True)
