@@ -26,6 +26,8 @@ urlpatterns = [
     path('posts/', include('boards.urls')),
     path('financial/', include('instruments.urls')),
     path('exchange/', include('exchange.urls')),
+    path('maps/', include('exchange.urls')),
+    
     path('accounts/', include('dj_rest_auth.urls')),
     path('accounts/registration/', include('dj_rest_auth.registration.urls')),
     
