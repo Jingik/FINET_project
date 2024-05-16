@@ -40,6 +40,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'maps', # map
     'accounts', # 로그인
     'boards', # 게시글
     'instruments', # 정보
