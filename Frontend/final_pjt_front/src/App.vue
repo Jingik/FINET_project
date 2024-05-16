@@ -1,7 +1,7 @@
 <template>
     <div>
       <NavigationHeader />
-      <!-- <RouterLink :to="{ name: 'MainView' }">Main</RouterLink> -->
+      <RouterLink :to="{ name: 'maps' }">지도</RouterLink> |
       <RouterView />
     </div>
     <NavigationFooter />

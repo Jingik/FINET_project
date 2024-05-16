@@ -1,8 +1,8 @@
 <template>
-    <div :class="$style.finetCopyright2008FinetContainer">
+    <div :class="$style.finetCopyright2024FinetContainer">
       <p :class="$style.finet">FINET</p>
-      <p :class="$style.copyright2008FinetAllRight">
-        Copyrightⓒ2008 FINET All rights reserved.
+      <p :class="$style.copyright2024FinetAllRight">
+        Copyrightⓒ2024 FINET All rights reserved.
       </p>
     </div>
 </template>
@@ -16,12 +16,12 @@
   margin: 0;
 }
 
-.copyright2008FinetAllRight {
+.copyright2024FinetAllRight {
     margin: 0;
     font-size: 20px;
     color: #000;
 }
-.finetCopyright2008FinetContainer {
+.finetCopyright2024FinetContainer {
     position: absolute;
     top: 32px;
     left: 80px;
