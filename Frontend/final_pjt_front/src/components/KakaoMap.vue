@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import mapMarkerImage from '@/assets/mapmarker.png';
+import mapMarkerImage from '@/assets/img/mapmarker.png';
 
 export default {
   mounted() {
