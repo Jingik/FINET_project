@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class Map (models.Model):
+# class Map (models.Model):
     # cur_unit = models.CharField(max_length=100) # 통화코드
     # cur_nm = models.CharField(max_length=100) # 국가/통화명
     # ttb = models.CharField(max_length=100) # 전신환 받을 때
