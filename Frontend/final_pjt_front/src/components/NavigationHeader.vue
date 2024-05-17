@@ -49,15 +49,17 @@
         <div class="label">검색어를 입력해주세요.</div>
         <img class="button-typesubmit-icon" alt="" src="@/assets/img/button type=submit.svg" />
       </div>
-      <div class="button">
+      <RouterLink :to="{ name: 'LogInView' }"><div class="button">
         <div class="nav-item1">로그인/회원가입</div>
-      </div>
+      </div></RouterLink>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { RouterLink } from 'vue-router'
+
 
 const dropdownVisible = ref({
   deposit: false,
