@@ -1,11 +1,11 @@
 <template>
   <div>
-    <MainLogin />
+    <Main />
   </div>
 </template>
 
 <script setup>
-import MainLogin from '@/components/MainVue.vue'
+import Main from '@/components/MainLoginVue.vue'
 
 </script>
 

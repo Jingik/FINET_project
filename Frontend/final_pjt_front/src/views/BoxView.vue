@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import MainLogin from '@/components/MainVue.vue'
+import MainLogin from '@/components/LoginMainBoxComponent.vue'
 
 </script>
 

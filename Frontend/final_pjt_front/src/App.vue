@@ -6,15 +6,15 @@
     <div class="content">
       <RouterView />
     </div>
-    <!-- <div class ="footer">
+    <div class ="footer">
       <NavigationFooter />
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script setup>
-import NavigationHeader from './components/NavigationHeader.vue'
-// import NavigationFooter from './components/NavigationFooter.vue'
+import NavigationHeader from '@/components/NavigationHeader.vue'
+import NavigationFooter from '@/components/NavigationFooter.vue'
 import { RouterView } from 'vue-router'
 </script>
 
