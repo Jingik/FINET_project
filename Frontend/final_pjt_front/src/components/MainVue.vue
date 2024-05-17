@@ -89,11 +89,14 @@
         <img class="png-ai-1-icon4" alt="" src="@/assets/img/새마을금고_로고_PNG_AI_원본_다운 1.png" />
       </div>
     </div>
+    <div class ="footer">
+      <NavigationFooter />
+    </div>
   </template>
   
   <script setup>
   import { defineComponent } from "vue";
-  
+  import NavigationFooter from '@/components/NavigationFooter.vue'
   </script>
   
   <style scoped>
@@ -643,5 +646,10 @@
       font-size: 20px;
     }
   }
+  .footer {
+  width: 100%;
+  background-color: #f0f0f0; /* Adjust to your footer background color */
+  box-sizing: border-box;
+}
   </style>
   
