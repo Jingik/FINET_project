@@ -98,6 +98,7 @@
   
   <style scoped>
   .div {
+    
     width: 100%;
     position: relative;
     /* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); */
@@ -169,13 +170,12 @@
   
   .child {
   position: absolute;
-  top: 1101px;
-  left: 7%; /* 왼쪽 끝에서 5% 떨어진 위치에 설정 */
+  top: 1100px;
+  left: 2%; /* 왼쪽 끝에서 5% 떨어진 위치에 설정 */
   right: 2%; /* 오른쪽 끝에서 5% 떨어진 위치에 설정 */
   background-color: #0d99f1;
   height: 831px;
 }
-
 
   
   .div17 {
