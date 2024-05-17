@@ -483,7 +483,7 @@
   .button3 {
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
-    background-color: #00276c;
+    background-color: #fff;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -491,9 +491,13 @@
     padding: 14px 24px;
     text-align: left;
     font-size: 16px;
+    color: #000;
+    border: 1px solid #000;
+  }
+  .button3:hover{
+    background-color: #00276c;
     color: #fff;
   }
-  
   .div26 {
     position: absolute;
     top: 2070px;
