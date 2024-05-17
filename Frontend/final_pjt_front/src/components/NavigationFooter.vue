@@ -1,5 +1,5 @@
 <template>
-  <div class="navigation-footer">
+  <div class="navigation-footer ">
     <div class="items-parent">
       <div class="items">
         <div class="div1">예적금</div>

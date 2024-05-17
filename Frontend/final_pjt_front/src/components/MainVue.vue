@@ -63,7 +63,7 @@
           </div>
         </div>
         <div class="card3">
-          <div class="div24">
+          <div class="div22">
             <img class="icn-resize-icn-md" alt="" src="@/assets/img/icn resize icn-md.svg" />
             <b class="h3-feature-title3">내 소비내역 맞춤 카드 찾기</b>
             <div class="paragraph2">
@@ -95,6 +95,7 @@
   <script setup>
   import { defineComponent } from "vue";
   import NavigationHeader from '@/components/NavigationHeader.vue'
+  
   </script>
   
   <style scoped>
@@ -231,7 +232,10 @@
     position: relative;
     gap: 48px;
   }
-  
+  .customer-quote:hover{
+    background-color: #007ace;
+    border:#007ace;
+  }
   .cards {
     position: absolute;
     top: 1354px;
@@ -315,19 +319,16 @@
     align-items: center;
     justify-content: flex-start;
     padding: 11.3px 27.1px;
-  }
-  
-  .button1 {
     background-color: #fff;
     border: 1px solid #fff;
   }
   
-  .button2 {
-    background-color: #007ace;
-    border: 0.8px solid #fff;
-    color: #fff;
-  }
-  
+  .button1:hover, .button2:hover{
+  background-color: #007ace;
+  border:#007ace;
+  /* color: #fff; 텍스트 색상도 변경하려면 추가 */
+}
+
   .container1 {
     display: flex;
     flex-direction: row;
@@ -415,7 +416,7 @@
     flex-shrink: 0;
   }
   
-  .div22, .div24 {
+  .div22{
     width: 100%;
     box-shadow: 0px 9.79669189453125px 14.32px rgba(0, 0, 0, 0.07);
     overflow: hidden;
@@ -426,14 +427,8 @@
     padding: 26.4px 30.1px;
     box-sizing: border-box;
     gap: 7.5px;
-  }
-  
-  .div22 {
     background-color: #fff;
-  }
-  
-  .div24 {
-    background-color: #007ace;
+    transition: background-color 0.3s, color 0.3s; /* 애니메이션 추가 */
   }
   
   .card1, .card2, .card3 {
@@ -444,10 +439,10 @@
     align-items: flex-start;
     justify-content: flex-start;
   }
-  
-  .card3 {
-    color: #fff;
-  }
+  .div22:hover{
+  background-color: #007ace;
+}
+
   
   .quick-menu-container {
     position: absolute;
