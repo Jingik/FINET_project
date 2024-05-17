@@ -1,6 +1,5 @@
 <template>
     <div class="div">
-      <NavigationHeader/>
       <div class="child"></div>
       <div class="cards">
         <div class="customer-quote">
@@ -94,7 +93,6 @@
   
   <script setup>
   import { defineComponent } from "vue";
-  import NavigationHeader from '@/components/NavigationHeader.vue'
   
   </script>
   
@@ -102,9 +100,9 @@
   .div {
     width: 100%;
     position: relative;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    /* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); */
     background-color: #fff;
-    border: 1px solid #000;
+    /* border: 1px solid #000; */
     box-sizing: border-box;
     height: 2696px;
     overflow: hidden;

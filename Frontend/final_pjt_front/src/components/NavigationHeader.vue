@@ -197,50 +197,52 @@ const hideDropdown = (key) => {
   }
 }
 
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    height: auto;
+@media (max-width:
+768px) {
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      height: auto;
+    }
+
+    .span {
+      width: 100%;
+      justify-content: space-between;
+      padding: 10px 0;
+    }
+
+    .nav {
+      width: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .input-typetext {
+      width: 100%;
+    }
   }
 
-  .span {
-    width: 100%;
-    justify-content: space-between;
-    padding: 10px 0;
+  @media (max-width: 480px) {
+    .header {
+      padding: 0 5px;
+    }
+
+    .p4 {
+      font-size: 20px;
+    }
+
+    .nav-item1 {
+      font-size: 18px;
+    }
+
+    .input-typetext {
+      font-size: 12px;
+    }
+
+    .button {
+      font-size: 14px;
+    }
   }
 
-  .nav {
-    width: 100%;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .input-typetext {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .header {
-    padding: 0 5px;
-  }
-
-  .p4 {
-    font-size: 20px;
-  }
-
-  .nav-item1 {
-    font-size: 18px;
-  }
-
-  .input-typetext {
-    font-size: 12px;
-  }
-
-  .button {
-    font-size: 14px;
-  }
-}
 </style>
