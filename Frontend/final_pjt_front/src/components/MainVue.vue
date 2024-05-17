@@ -171,8 +171,8 @@
   .child {
   position: absolute;
   top: 1101px;
-  left: 5%; /* 왼쪽 끝에서 5% 떨어진 위치에 설정 */
-  right: 5%; /* 오른쪽 끝에서 5% 떨어진 위치에 설정 */
+  left: 7%; /* 왼쪽 끝에서 5% 떨어진 위치에 설정 */
+  right: 2%; /* 오른쪽 끝에서 5% 떨어진 위치에 설정 */
   background-color: #0d99f1;
   height: 831px;
 }
