@@ -186,35 +186,32 @@
     z-index: 0;
   }
   
-  .icon, .icon1, .icon2 {
-    position: absolute;
-    margin: 0 !important;
-    object-fit: cover;
-    z-index: 1;
-  }
-  
   .icon {
-    width: 401px;
-    top: 85px;
-    left: 32px;
-    height: 401px;
-  }
+  position: absolute;
+  bottom: 0; /* 부모 요소의 맨 아래에 배치 */
+  width: 80%; /* 부모 요소의 너비에 맞춤 */
+  height: auto; /* 비율을 유지하며 높이 조정 */
+  max-width: 100%; /* 최대 너비를 부모 요소의 너비로 제한 */
+  object-fit: contain; /* 비율을 유지하며 부모 요소에 맞춤 */
+}
   
-  .icon1 {
-    width: 439px;
-    top: 206px;
-    left: 13.33px;
-    height: 280px;
-  }
-  
-  .icon2 {
-    width: 465px;
-    top: 192px;
-    left: 0.67px;
-    border-radius: 12px;
-    height: 294px;
-  }
-  
+.icon1 {
+  position: absolute;
+  bottom: 0; /* 부모 요소의 맨 아래에 배치 */
+  width: 85%; /* 부모 요소의 너비에 맞춤 */
+  height: auto; /* 비율을 유지하며 높이 조정 */
+  max-width: 100%; /* 최대 너비를 부모 요소의 너비로 제한 */
+  object-fit: contain; /* 비율을 유지하며 부모 요소에 맞춤 */
+}
+
+.icon2 {
+  position: absolute;
+  bottom: 0; /* 부모 요소의 맨 아래에 배치 */
+  width: 90%; /* 부모 요소의 너비에 맞춤 */
+  height: auto; /* 비율을 유지하며 높이 조정 */
+  max-width: 100%; /* 최대 너비를 부모 요소의 너비로 제한 */
+  object-fit: contain; /* 비율을 유지하며 부모 요소에 맞춤 */
+}
   .customer-quote {
     align-self: stretch;
     flex: 1;
@@ -235,19 +232,21 @@
     border:#007ace;
   }
   .cards {
-    position: absolute;
-    top: 1354px;
-    left: 231px;
-    width: 85%;
-    height: 486px;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 32px;
-    font-size: 20px;
-    flex-wrap: wrap;
-  }
+  position: absolute;
+  top: 1354px;
+  left: 50%; /* 부모 요소의 수평 중앙으로 이동 */
+  transform: translateX(-50%); /* 자신을 수평 중앙으로 이동 */
+  width: 85%;
+  height: 486px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center; /* 카드를 수평 중앙으로 정렬 */
+  gap: 32px;
+  font-size: 20px;
+  flex-wrap: wrap;
+}
+
   
   .div20 {
     align-self: stretch;
