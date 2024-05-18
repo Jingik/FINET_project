@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <div class="span">
+    <div class="span" @click="handleSpanClick">
       <div class="p4">FINET</div>
       <img class="img-icon1" alt="" src="@/assets/img/img (1).png" />
     </div>
@@ -49,18 +49,22 @@
         <div class="label">검색어를 입력해주세요.</div>
         <img class="button-typesubmit-icon" alt="" src="@/assets/img/button type=submit.svg" />
       </div>
-      <RouterLink :to="isLoggedIn ? { name: 'ProfilePage' } : { name: 'LogInView' }">
-        <div class="button">
-          <div class="nav">{{ isLoggedIn ? '마이페이지 가기' : '로그인/회원가입' }}</div>
-        </div>
-      </RouterLink>
+      <div class="button-group">
+        <RouterLink :to="isLogin ? { name: 'ProfilePage' } : { name: 'LogInView' }">
+          <div class="button">
+            <div class="nav">{{ isLogin ? '마이페이지 가기' : '로그인/회원가입' }}</div>
+          </div>
+        </RouterLink>
+        <button v-if="isLogin" @click="logOut" class="button">로그아웃</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { RouterLink } from 'vue-router'
+import { ref, computed } from 'vue';
+import { RouterLink, useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/user';
 
 const dropdownVisible = ref({
   deposit: false,
@@ -70,8 +74,9 @@ const dropdownVisible = ref({
   lounge: false,
 });
 
-// Simulated login state; replace with actual login logic
-const isLoggedIn = ref(false);
+const userStore = useUserStore();
+const isLogin = computed(() => userStore.isLogin);
+const router = useRouter();
 
 const showDropdown = (key) => {
   dropdownVisible.value[key] = true;
@@ -79,6 +84,18 @@ const showDropdown = (key) => {
 
 const hideDropdown = (key) => {
   dropdownVisible.value[key] = false;
+};
+
+const logOut = () => {
+  userStore.logOut();
+};
+
+const handleSpanClick = () => {
+  if (isLogin.value) {
+    router.push({ name: 'MainLogin' });
+  } else {
+    router.push({ name: 'MainView' });
+  }
 };
 </script>
 
@@ -98,6 +115,7 @@ const hideDropdown = (key) => {
   margin-bottom: -21px;
   position: relative;
   width: 162px;
+  cursor: pointer;
 }
 
 .header .p4 {
@@ -144,9 +162,29 @@ const hideDropdown = (key) => {
   position: relative;
   white-space: nowrap;
   width: fit-content;
+  cursor: pointer;
 }
 
-.header .input-type-text {
+.header .dropdown-content {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background-color: white;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  min-width: 160px;
+}
+
+.header .dropdown-item {
+  padding: 12px 16px;
+  cursor: pointer;
+}
+
+.header .dropdown-item:hover {
+  background-color: #ddd;
+}
+
+.header .input-typetext {
   align-items: center;
   border: 1px solid;
   border-color: #0000001a;
@@ -177,58 +215,23 @@ const hideDropdown = (key) => {
   width: 20px;
 }
 
-.header .button-2 {
-  all: unset;
+.header .button-group {
+  display: flex;
   align-items: center;
-  background-color: #edf0f3;
-  border: 1px solid;
-  border-color: #c2b3b3;
-  border-radius: 8px;
-  box-shadow: var(--button-shadow);
-  box-sizing: border-box;
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  padding: 14px 24px;
-  position: relative;
-  width: 104px;
 }
 
-.header .text-wrapper-3 {
-  color: #565454;
-  font-family: var(--small-text-font-family);
-  font-size: var(--small-text-font-size);
-  font-style: var(--small-text-font-style);
-  font-weight: var(--small-text-font-weight);
-  letter-spacing: var(--small-text-letter-spacing);
-  line-height: var(--small-text-line-height);
-  margin-left: -1.5px;
-  margin-right: -1.5px;
-  margin-top: -1px;
-  position: relative;
-  white-space: nowrap;
-  width: fit-content;
-}
-
-.dropdown-content {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: white;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.dropdown-item {
-  padding: 12px 16px;
+.header .button {
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 4px;
   cursor: pointer;
-  white-space: nowrap;
+  margin-left: 10px;
 }
 
-.dropdown-item:hover {
-  background-color: #f1f1f1;
+.header .button:hover {
+  background-color: #0056b3;
 }
 
 @media (max-width: 1024px) {
@@ -266,7 +269,7 @@ const hideDropdown = (key) => {
     padding: 10px 0;
   }
 
-  .header .input-type-text {
+  .header .input-typetext {
     width: 100%;
   }
 }
@@ -284,11 +287,11 @@ const hideDropdown = (key) => {
     font-size: 18px;
   }
 
-  .header .input-type-text {
+  .header .input-typetext {
     font-size: 12px;
   }
 
-  .header .button {
+  .button {
     font-size: 14px;
   }
 }

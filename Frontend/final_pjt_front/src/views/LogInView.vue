@@ -52,11 +52,13 @@ import { ref, watch } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import Modal from '@/components/LoginModal.vue'
+import { useUserStore } from '@/stores/user';
 
 const username = ref('')
 const password = ref('')
 const showModal = ref(false)
 const router = useRouter()
+const userStore = useUserStore()
 
 // Watchers to log the values of username and password
 watch(username, (newVal) => {
@@ -78,6 +80,11 @@ const logIn = async () => {
     })
     // Handle successful login
     console.log(response.data)
+    localStorage.setItem('auth_token', response.data.token)
+    axios.defaults.headers.common['Authorization'] = `Token ${response.data.token}`
+    userStore.token = response.data.token
+    console.log('로그인 성공, 토큰:', userStore.token)
+    console.log('isLogin:', userStore.isLogin)
     router.push({ name: 'MainLogin' })
   } catch (err) {
     showModal.value = true
@@ -230,7 +237,4 @@ const onButton2Click = () => {
     padding: 32px; /* 패딩 증가 */
   }
 }
-
 </style>
-
-

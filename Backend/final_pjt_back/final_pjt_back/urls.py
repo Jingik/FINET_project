@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,9 +28,10 @@ urlpatterns = [
     path('financial/', include('instruments.urls')),
     path('exchange/', include('exchange.urls')),
     path('maps/', include('exchange.urls')),
+    # path('accounts/', include('dj_rest_auth.urls')),
+    # path('accounts/registration/', include('dj_rest_auth.registration.urls')),
     
-    path('accounts/', include('dj_rest_auth.urls')),
-    path('accounts/registration/', include('dj_rest_auth.registration.urls')),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
     
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:

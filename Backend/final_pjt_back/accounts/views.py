@@ -6,6 +6,7 @@ from rest_framework import status
 from .serializers import UserSerializer
 from django.contrib.auth.hashers import check_password
 from .models import User
+from rest_framework.authtoken.models import Token
 
 @api_view(['GET'])
 def id_check_exists(request):
@@ -23,18 +24,21 @@ def id_check_exists(request):
 def signup(request):
     username = request.data.get('username')
     password = request.data.get('password')
+    password2 = request.data.get('password2')
 
-    if not username or not password:
-        return JsonResponse({'error': 'Username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+    if not username or not password or not password2:
+        return JsonResponse({'error': 'Username, password, and password confirmation are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if password != password2:
+        return JsonResponse({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
 
     if User.objects.filter(username=username).exists():
         return JsonResponse({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
 
-    serializer = UserSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return JsonResponse({'message': 'Signup successful'}, status=status.HTTP_201_CREATED)
-    return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    user = User.objects.create_user(username=username, password=password)
+    token, created = Token.objects.get_or_create(user=user)
+    return JsonResponse({'message': 'Signup successful', 'token': token.key}, status=status.HTTP_201_CREATED)
+
 
 @api_view(['POST'])
 def user_login(request):
@@ -44,22 +48,19 @@ def user_login(request):
     username = request.data.get('username')
     password = request.data.get('password')
 
-    print(f"Attempting login with username: {username} and password: {password}")
-
     if not username or not password:
         return JsonResponse({'error': 'Username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
-        print(f"User not found: {username}")
         return JsonResponse({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
     if check_password(password, user.password):
         login(request, user)
-        return JsonResponse({'message': 'Login successful'}, status=status.HTTP_200_OK)
+        token, created = Token.objects.get_or_create(user=user)
+        return JsonResponse({'message': 'Login successful', 'token': token.key}, status=status.HTTP_200_OK)
     else:
-        print(f"Failed login attempt for username: {username}")
         return JsonResponse({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
