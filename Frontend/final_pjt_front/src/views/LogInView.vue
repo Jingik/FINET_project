@@ -37,31 +37,57 @@
         </button>
       </div>
     </div>
-    <RouterLink :to="{ name: 'FindIdView' }"><div class="forgot-password">
-      <span>계정을 잊으셨나요? </span>
-      <span class="forgot-password-link">아이디/비밀번호 찾기</span>
-    </div></RouterLink>
+    <RouterLink :to="{ name: 'FindIdView' }">
+      <div class="forgot-password">
+        <span>계정을 잊으셨나요? </span>
+        <span class="forgot-password-link">아이디/비밀번호 찾기</span>
+      </div>
+    </RouterLink>
+    <Modal :show="showModal" title="로그인 실패" message="아이디 또는 비밀번호가 잘못되었습니다." @close="showModal = false" />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useUserStore } from '@/stores/user'
-import { RouterView, RouterLink } from 'vue-router'
+import { ref, watch } from 'vue'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
+import Modal from '@/components/LoginModal.vue'
 
+const username = ref('')
+const password = ref('')
+const showModal = ref(false)
+const router = useRouter()
 
-const username = ref(null)
-const password = ref(null)
-const store = useUserStore()
+// Watchers to log the values of username and password
+watch(username, (newVal) => {
+  console.log('Username:', newVal)
+})
+watch(password, (newVal) => {
+  console.log('Password:', newVal)
+})
 
-const logIn = function () {
-  const payload = {
-    username: username.value,
-    password: password.value
+const logIn = async () => {
+  console.log('Username before request:', username.value)
+  console.log('Password before request:', password.value)
+  try {
+    console.log('Username request:', username.value)
+    console.log('Password request:', password.value)
+    const response = await axios.post('http://127.0.0.1:8000/users/login/', {
+      username: username.value,
+      password: password.value
+    })
+    // Handle successful login
+    console.log(response.data)
+    router.push({ name: 'MainLogin' })
+  } catch (err) {
+    showModal.value = true
+    console.error(err)
   }
-  store.logIn(payload)
 }
 
+const onButton2Click = () => {
+  router.push({ name: 'SignUpView' })
+}
 </script>
 
 <style scoped>

@@ -34,7 +34,7 @@ SECRET_KEY = 'django-insecure-5uve34-fu@@viu9s*g&+h7(ubd#^+e$wm+c((zw3$agh(y*q0d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'allauth', # social 로그인을 위한 라이브러리 Ex) 네이버, 카카오
     'allauth.account',
     'allauth.socialaccount',
-    'dj_rest_auth.registration',
+    # 'dj_rest_auth.registration',
     'drf_spectacular', # API 문서화
     'django.contrib.admin',
     'django.contrib.auth',
@@ -97,7 +97,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'final_pjt_back.wsgi.application'
 
-SITE_ID = 1
+AUTH_USER_MODEL = 'accounts.User'
 
 REST_FRAMEWORK = {
     # Authentication
@@ -114,8 +114,8 @@ REST_FRAMEWORK = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
+    'django.contrib.auth.backends.ModelBackend',
+    # 'allauth.account.auth_backends.AuthenticationBackend',
 )
 
 SPECTACULAR_SETTINGS = {
@@ -124,6 +124,11 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

@@ -1,10 +1,16 @@
 from rest_framework import serializers
-from .models import *
+from django.contrib.auth.hashers import make_password
+from .models import User
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'password', 'name', 'phone_number', 'user_age_group', 'service_purpose', 'account_number', 'asset', 'auth_number', 'user_status']
-        extra_kwargs = {
-            'password': {'write_only': True},  # 패스워드는 읽기 전용으로 설정하여 노출을 방지합니다.
-        }
+        fields = [
+            'username', 'password', 'name', 'phone_number', 'email', 
+            'user_age_group', 'service_purpose', 'asset'
+        ]
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data['password'])
+        return super(UserSerializer, self).create(validated_data)
