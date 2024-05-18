@@ -6,6 +6,7 @@ import MainLogin from '@/components/LoginMainBoxComponent.vue'
 import LogInView from '@/views/LogInView.vue'
 import SignUpView from '@/views/SignUpView.vue'
 import FindIdView from '@/views/FindIdView.vue'
+import ExchangeView from '@/views/ExchangeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,11 @@ const router = createRouter({
       path:'/users/findid',
       name: 'FindIdView',
       component: FindIdView
+    },
+    {
+      path: '/exchange',
+      name: 'ExchangeView',
+      component: ExchangeView
     }
 
   ]
