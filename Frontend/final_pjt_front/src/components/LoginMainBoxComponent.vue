@@ -67,7 +67,6 @@
 
 <script setup>
 import { reactive } from 'vue';
-
 const cards = reactive([
   { id: 1, title: '서비스 1', description: '이것은 서비스 1입니다.' },
   { id: 2, title: '서비스 2', description: '이것은 서비스 2입니다.' },
@@ -94,6 +93,7 @@ html, body {
   padding: 0 20px;
   margin: 0;
   box-sizing: border-box;
+  margin-bottom: 200px;  /*아래 여백 추가*/
 }
 
 .header {
