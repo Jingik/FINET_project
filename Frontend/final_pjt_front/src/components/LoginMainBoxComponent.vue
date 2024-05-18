@@ -140,7 +140,9 @@ html, body {
   width: 100%;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   justify-content: center;
+  margin-bottom: 80px; /* 여백 추가 */
 }
+
 
 .product-box {
   background-color: #fff;
