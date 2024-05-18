@@ -66,7 +66,7 @@
     position: relative;
     background-color: #fff;
     box-sizing: border-box;
-    height: 2696px;
+    height: 900px;
     overflow: hidden;
     text-align: left;
     font-size: 16px;
@@ -248,7 +248,7 @@
   
   .quick-menu-container {
     position: absolute;
-    top: calc(50% - 739px);
+    top: 630px;
     left: 5%;
     width: 90%;
     display: flex;

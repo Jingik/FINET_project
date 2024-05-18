@@ -29,20 +29,17 @@
 </template>
 
 <script setup>
-import { defineComponent } from "vue";
-
 </script>
 
 <style scoped>
 .child {
-position: absolute;
-top: 1100px;
-left: 2%; /* 왼쪽 끝에서 5% 떨어진 위치에 설정 */
-right: 2%; /* 오른쪽 끝에서 5% 떨어진 위치에 설정 */
-background-color: #0d99f1;
-height: 831px;
+  position: absolute;
+  top: 1100px;
+  left: 2%;
+  right: 2%;
+  background-color: #0d99f1;
+  height: 831px;
 }
-
 
 .div17 {
   align-self: stretch;
@@ -52,32 +49,17 @@ height: 831px;
   z-index: 0;
 }
 
-.icon {
-position: absolute;
-bottom: 0; /* 부모 요소의 맨 아래에 배치 */
-width: 80%; /* 부모 요소의 너비에 맞춤 */
-height: auto; /* 비율을 유지하며 높이 조정 */
-max-width: 100%; /* 최대 너비를 부모 요소의 너비로 제한 */
-object-fit: contain; /* 비율을 유지하며 부모 요소에 맞춤 */
-}
-
-.icon1 {
-position: absolute;
-bottom: 0; /* 부모 요소의 맨 아래에 배치 */
-width: 85%; /* 부모 요소의 너비에 맞춤 */
-height: auto; /* 비율을 유지하며 높이 조정 */
-max-width: 100%; /* 최대 너비를 부모 요소의 너비로 제한 */
-object-fit: contain; /* 비율을 유지하며 부모 요소에 맞춤 */
-}
-
+.icon,
+.icon1,
 .icon2 {
-position: absolute;
-bottom: 0; /* 부모 요소의 맨 아래에 배치 */
-width: 90%; /* 부모 요소의 너비에 맞춤 */
-height: auto; /* 비율을 유지하며 높이 조정 */
-max-width: 100%; /* 최대 너비를 부모 요소의 너비로 제한 */
-object-fit: contain; /* 비율을 유지하며 부모 요소에 맞춤 */
+  position: absolute;
+  bottom: 0; /* 부모 요소의 맨 아래에 배치 */
+  width: 100%; /* 부모 요소의 너비에 맞춤 */
+  height: auto; /* 비율을 유지하며 높이 조정 */
+  max-width: 100%; /* 최대 너비를 부모 요소의 너비로 제한 */
+  object-fit: contain; /* 비율을 유지하며 부모 요소에 맞춤 */
 }
+
 .customer-quote {
   align-self: stretch;
   flex: 1;
@@ -93,26 +75,27 @@ object-fit: contain; /* 비율을 유지하며 부모 요소에 맞춤 */
   position: relative;
   gap: 48px;
 }
-.customer-quote:hover{
+
+.customer-quote:hover {
   background-color: #007ace;
-  border:#007ace;
-}
-.cards {
-position: absolute;
-top: 1354px;
-left: 50%; /* 부모 요소의 수평 중앙으로 이동 */
-transform: translateX(-50%); /* 자신을 수평 중앙으로 이동 */
-width: 85%;
-height: 486px;
-display: flex;
-flex-direction: row;
-align-items: flex-start;
-justify-content: center; /* 카드를 수평 중앙으로 정렬 */
-gap: 32px;
-font-size: 20px;
-flex-wrap: wrap;
+  border: #007ace;
 }
 
+.cards {
+  position: absolute;
+  top: 1354px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+  height: 486px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 32px;
+  font-size: 20px;
+  flex-wrap: wrap;
+}
 
 .div20 {
   align-self: stretch;
@@ -133,8 +116,8 @@ flex-wrap: wrap;
 .heading {
   position: absolute;
   top: 1191px;
-  left: 244px;
-  width: 100%;
+  left: 5%; /* 모바일에서 좌우 여백을 조정 */
+  width: 90%; /* 모바일에서 좌우 여백을 조정 */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -172,10 +155,12 @@ flex-wrap: wrap;
   color: #000;
   border: 1px solid #000;
 }
-.button3:hover{
+
+.button3:hover {
   background-color: #00276c;
   color: #fff;
 }
+
 .div26 {
   position: absolute;
   top: 2070px;
@@ -191,12 +176,11 @@ flex-wrap: wrap;
 }
 
 @media (max-width: 768px) {
-  
   .heading {
     left: 5%;
     width: 90%;
   }
-  
+
   .cards {
     top: 1500px;
     left: 5%;
@@ -204,30 +188,30 @@ flex-wrap: wrap;
     flex-direction: column;
     gap: 16px;
   }
-  
+
   .div26 {
     top: 2200px;
     left: 5%;
     width: 90%;
   }
-  
 }
 
 @media (max-width: 480px) {
   .heading {
     font-size: 32px;
   }
-  
+
   .button3 {
     padding: 10px 20px;
   }
-  
+
   .div26 {
     font-size: 48px;
   }
-  
+
   .div27 {
     font-size: 20px;
   }
 }
 </style>
+

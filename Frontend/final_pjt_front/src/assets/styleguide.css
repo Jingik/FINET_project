@@ -1,0 +1,27 @@
+:root {
+    --body-text-font-family: "Inter", Helvetica;
+    --body-text-font-size: 20px;
+    --body-text-font-style: normal;
+    --body-text-font-weight: 500;
+    --body-text-letter-spacing: 0px;
+    --body-text-line-height: 150%;
+    --button-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+    --light-background-color: rgba(255, 255, 255, 1);
+    --light-text-color: rgba(255, 255, 255, 1);
+    --second-text-color: rgba(115, 115, 115, 1);
+    --small-text-font-family: "Inter", Helvetica;
+    --small-text-font-size: 16px;
+    --small-text-font-style: normal;
+    --small-text-font-weight: 500;
+    --small-text-letter-spacing: 0px;
+    --small-text-line-height: 150%;
+    --text-color: rgba(37, 43, 66, 1);
+    --variable-collection-spacing-m: 48px;
+    --variable-collection-spacing-s: 24px;
+    --x-1: rgba(13, 153, 241, 1);
+    --x1-1: rgba(0, 122, 206, 1);
+    --x1-2: rgba(0, 92, 172, 1);
+    --x1-3: rgba(0, 64, 139, 1);
+    --x1-4: rgba(0, 39, 108, 1);
+  }
+  

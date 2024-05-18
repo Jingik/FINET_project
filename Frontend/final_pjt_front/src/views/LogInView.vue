@@ -64,7 +64,7 @@ const logIn = function () {
 
 </script>
 
-<style scoped>  
+<style scoped>
 .login-container {
   display: flex;
   flex-direction: column;
@@ -72,62 +72,61 @@ const logIn = function () {
   justify-content: center;
   min-height: 100vh; /* 부모 요소의 높이를 채우도록 함 */
   background-color: #ffffff;
-  
 }
 
 .login-frame {
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 40px;
-  width: 400px;
+  padding: 60px; /* 패딩을 증가 */
+  width: 600px; /* 너비를 증가 */
 }
 
 .login-header {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 }
 
 .login-title {
-  font-size: 24px;
+  font-size: 32px; /* 폰트 크기 증가 */
   font-weight: bold;
   color: #333;
 }
 
 .login-subtitle {
-  font-size: 16px;
+  font-size: 20px; /* 폰트 크기 증가 */
   color: #666;
 }
 
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 24px; /* 간격 증가 */
 }
 
 .form-label {
-  font-size: 14px;
+  font-size: 18px; /* 폰트 크기 증가 */
   color: #666;
-  margin-bottom: 8px;
+  margin-bottom: 12px; /* 간격 증가 */
 }
 
 .form-input {
-  width: 375px;
-  padding: 12px;
+  width: 100%; /* 입력 필드가 전체 너비를 차지하도록 설정 */
+  padding: 16px; /* 패딩 증가 */
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 18px; /* 폰트 크기 증가 */
 }
 
 .form-actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 24px;
+  margin-top: 32px; /* 간격 증가 */
 }
 
 .login-button,
 .signup-button {
   flex: 1;
-  padding: 12px 24px;
-  font-size: 16px;
+  padding: 16px 32px; /* 패딩 증가 */
+  font-size: 18px; /* 폰트 크기 증가 */
   border-radius: 4px;
   cursor: pointer;
 }
@@ -145,26 +144,26 @@ const logIn = function () {
 }
 
 .social-login {
-  margin-top: 32px;
+  margin-top: 40px; /* 간격 증가 */
   text-align: center;
   position: relative;
   padding: 0 20px;
 }
 
 .social-title {
-  font-size: 16px;
+  font-size: 18px; /* 폰트 크기 증가 */
   color: #666;
-  margin-bottom: 16px;
-  position: relative; /* 이 부분을 추가합니다 */
-  z-index: 1; /* 이 부분을 추가합니다 */
+  margin-bottom: 20px; /* 간격 증가 */
+  position: relative;
+  z-index: 1;
 }
 
 .social-buttons {
   display: flex;
   justify-content: center;
-  gap: 16px;
-  position: relative; /* 이 부분을 추가합니다 */
-  z-index: 1; /* 이 부분을 추가합니다 */
+  gap: 24px; /* 간격 증가 */
+  position: relative;
+  z-index: 1;
 }
 
 .social-button {
@@ -172,25 +171,25 @@ const logIn = function () {
   align-items: center;
   background-color: #fff;
   border-radius: 4px;
-  padding: 12px 24px;
+  padding: 16px 32px; /* 패딩 증가 */
   cursor: pointer;
 }
 
 .social-icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
+  width: 32px; /* 아이콘 크기 증가 */
+  height: 32px; /* 아이콘 크기 증가 */
+  margin-right: 12px; /* 간격 증가 */
 }
 
 .social-label {
-  font-size: 16px;
+  font-size: 18px; /* 폰트 크기 증가 */
   color: #333;
 }
 
 .forgot-password {
-  margin-top: 16px;
+  margin-top: 24px; /* 간격 증가 */
   text-align: center;
-  font-size: 14px;
+  font-size: 16px; /* 폰트 크기 증가 */
   color: #666;
 }
 
@@ -202,8 +201,10 @@ const logIn = function () {
 @media (max-width: 480px) {
   .login-frame {
     width: 90%;
-    padding: 24px;
+    padding: 32px; /* 패딩 증가 */
   }
 }
 
 </style>
+
+

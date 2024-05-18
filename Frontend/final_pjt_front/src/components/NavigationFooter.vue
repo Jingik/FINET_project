@@ -6,7 +6,9 @@
         <span>
           <p class="finet">
             <span>
+              <br>
               <span>FINET</span>
+              <br>
             </span>
           </p>
           <p class="blank-line">
@@ -63,12 +65,7 @@
     </div>
   </footer>
 </template>
-<script>
-  import { defineComponent } from "vue";
-
-  export default defineComponent({
-    name: "FrameComponent3",
-  });
+<script setup>
 </script>
 <style scoped>
   .divider {
@@ -329,9 +326,9 @@
   }
   .divider-parent {
     position: absolute;
-    top: 2433px;
-    left: 80px;
-    width: 1760px;
+    top: 0px;
+    left: 0px;
+    width: 1920px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
