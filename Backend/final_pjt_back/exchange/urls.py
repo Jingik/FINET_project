@@ -19,5 +19,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index)
+    path('', views.index, name='exchangelist'),
+    path('<str:cur_unit>/', views.exchange_rate_detail, name='exchange-rate-detail'),
+
 ]

@@ -29,13 +29,13 @@
           <div class="dropdown-item">내게 맞는 카드</div>
         </div>
       </div>
-      <div class="nav" @mouseover="showDropdown('exchange')" @mouseleave="hideDropdown('exchange')">
+      <RouterLink :to="{ name: 'ExchangeView' }"><div class="nav" @mouseover="showDropdown('exchange')" @mouseleave="hideDropdown('exchange')">
         외환/환전
         <div v-if="dropdownVisible.exchange" class="dropdown-content">
-          <div class="dropdown-item">환율조회</div>
+          <RouterLink :to="{ name: 'ExchangeView' }"><div class="dropdown-item">환율조회</div></RouterLink>
           <div class="dropdown-item">환전계산기</div>
         </div>
-      </div>
+      </div></RouterLink>
       <div class="nav" @mouseover="showDropdown('lounge')" @mouseleave="hideDropdown('lounge')">
         라운지
         <div v-if="dropdownVisible.lounge" class="dropdown-content">
