@@ -32,12 +32,12 @@ const router = createRouter({
       component: MainLogin
     },
     {
-      path: '/signup',
+      path: '/users/signup',
       name: 'SignUpView',
       component: SignUpView
     },
     {
-      path:'/users/user_login',
+      path:'/users/login',
       name: 'LogInView',
       component: LogInView
     },
