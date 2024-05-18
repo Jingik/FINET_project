@@ -1,12 +1,12 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import MainView from '@/views/MainView.vue'
-import KakaoView from '@/views/KakaoView.vue'
-import MainLoginView from '@/views/MainLoginView.vue'
-import MainLogin from '@/components/LoginMainBoxComponent.vue'
-import LogInView from '@/views/LogInView.vue'
-import SignUpView from '@/views/SignUpView.vue'
-import FindIdView from '@/views/FindIdView.vue'
-import ExchangeView from '@/views/ExchangeView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import MainView from '@/views/MainView.vue';
+import KakaoView from '@/views/KakaoView.vue';
+import MainLoginView from '@/views/MainLoginView.vue';
+import LogInView from '@/views/LogInView.vue';
+import SignUpView from '@/views/SignUpView.vue';
+import FindIdView from '@/views/FindIdView.vue';
+import ExchangeView from '@/views/ExchangeView.vue';
+import { useUserStore } from '@/stores/user';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,63 +14,57 @@ const router = createRouter({
     {
       path: '/',
       name: 'MainView',
-      component: MainView
+      component: MainView,
     },
     {
-      path: "/maps",
-      name: "maps",
-      component: KakaoView
+      path: '/maps',
+      name: 'maps',
+      component: KakaoView,
     },
     {
-      path: "/main",
-      name: "MainLogin",
-      component: MainLoginView
-    },
-    {
-      path: "/box",
-      name: "MainLogin2",
-      component: MainLogin
+      path: '/main',
+      name: 'MainLogin',
+      component: MainLoginView,
     },
     {
       path: '/users/signup',
       name: 'SignUpView',
-      component: SignUpView
+      component: SignUpView,
     },
     {
-      path:'/users/login',
+      path: '/users/login',
       name: 'LogInView',
-      component: LogInView
+      component: LogInView,
     },
     {
-      path:'/users/findid',
+      path: '/users/findid',
       name: 'FindIdView',
-      component: FindIdView
+      component: FindIdView,
     },
     {
       path: '/exchange',
       name: 'ExchangeView',
-      component: ExchangeView
-    }
+      component: ExchangeView,
+    },
+  ],
+});
 
-  ]
-})
+router.beforeEach((to, from, next) => {
+  const store = useUserStore();
 
-// import { useUserStore } from '@/stores/user'
+  // 인증되지 않은 사용자는 보호된 페이지에 접근할 수 없음
+  if (to.name === 'MainLogin' && !store.isLogin) {
+    window.alert('로그인이 필요합니다!');
+    next({ name: 'LogInView' });
+  }
+  // 인증된 사용자는 회원가입과 로그인 페이지에 접근할 수 없음
+  else if ((to.name === 'SignUpView' || to.name === 'LogInView') && store.isLogin) {
+    window.alert('이미 로그인되었습니다.');
+    next({ name: 'MainView' });
+  } 
+  else {
+    next();
+  }
+});
 
-
-// router.beforeEach((to, from) => {
-//   const store = useUserStore()
-//   // 인증되지 않은 사용자는 메인 페이지에 접근 할 수 없음
-//   if (to.name === 'ArticleView' && store.isLogin === false) {
-//     window.alert('로그인이 필요해요!!')
-//     return { name: 'LogInView' }
-//   }
-
-//   // 인증된 사용자는 회원가입과 로그인 페이지에 접근 할 수 없음
-//   if ((to.name === 'SignUpView' || to.name === 'LogInView') && (store.isLogin === true)) {
-//     window.alert('이미 로그인 했습니다.')
-//     return { name: 'ArticleView' }
-//   }
-// })
-
-export default router
+export default router;

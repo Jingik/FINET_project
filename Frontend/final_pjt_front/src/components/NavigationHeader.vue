@@ -29,13 +29,13 @@
           <div class="dropdown-item">내게 맞는 카드</div>
         </div>
       </div>
-      <RouterLink :to="{ name: 'ExchangeView' }"><div class="nav" @mouseover="showDropdown('exchange')" @mouseleave="hideDropdown('exchange')">
+      <div class="nav" @mouseover="showDropdown('exchange')" @mouseleave="hideDropdown('exchange')">
         외환/환전
         <div v-if="dropdownVisible.exchange" class="dropdown-content">
           <RouterLink :to="{ name: 'ExchangeView' }"><div class="dropdown-item">환율조회</div></RouterLink>
           <div class="dropdown-item">환전계산기</div>
         </div>
-      </div></RouterLink>
+      </div>
       <div class="nav" @mouseover="showDropdown('lounge')" @mouseleave="hideDropdown('lounge')">
         라운지
         <div v-if="dropdownVisible.lounge" class="dropdown-content">
@@ -49,9 +49,11 @@
         <div class="label">검색어를 입력해주세요.</div>
         <img class="button-typesubmit-icon" alt="" src="@/assets/img/button type=submit.svg" />
       </div>
-      <RouterLink :to="{ name: 'LogInView' }"><div class="button">
-        <div class="nav">로그인/회원가입</div>
-      </div></RouterLink>
+      <RouterLink :to="isLoggedIn ? { name: 'ProfilePage' } : { name: 'LogInView' }">
+        <div class="button">
+          <div class="nav">{{ isLoggedIn ? '마이페이지 가기' : '로그인/회원가입' }}</div>
+        </div>
+      </RouterLink>
     </div>
   </div>
 </template>
@@ -60,7 +62,6 @@
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router'
 
-
 const dropdownVisible = ref({
   deposit: false,
   loan: false,
@@ -68,6 +69,9 @@ const dropdownVisible = ref({
   exchange: false,
   lounge: false,
 });
+
+// Simulated login state; replace with actual login logic
+const isLoggedIn = ref(false);
 
 const showDropdown = (key) => {
   dropdownVisible.value[key] = true;
@@ -81,18 +85,12 @@ const hideDropdown = (key) => {
 <style scoped>
 .header {
   align-items: flex-start;
-  /* box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); */
-  /* background-color: #ffffff;; */
   display: flex;
   gap: 10px;
   height: 86px;
-  width: 83.33%; /* 화면 너비의 10/12를 차지 */
-  margin: 0 auto; /* 중앙 정렬 */
+  width: 83.33%;
+  margin: 0 auto;
   top: 0;
-  /*position: fixed;*/ /* 화면 상단에 고정 */
-  left: 0;
-  right: 0;
-  /*z-index: 1000;*/ /* 다른 요소 위에 표시되도록 z-index 설정 */
 }
 
 .header .span {
@@ -131,8 +129,8 @@ const hideDropdown = (key) => {
   display: flex;
   gap: var(--variable-collection-spacing-m);
   height: 86px;
-  justify-content: flex-end; /* 오른쪽 끝으로 정렬 */
-  margin-left: auto; /* 왼쪽 여백을 자동으로 설정하여 오른쪽 정렬 */
+  justify-content: flex-end;
+  margin-left: auto;
 }
 
 .header .nav {
@@ -254,7 +252,7 @@ const hideDropdown = (key) => {
     align-items: flex-start;
     height: auto;
     padding: 10px;
-    width: 90%; /* 화면 크기가 작을 때 너비를 조금 줄임 */
+    width: 90%;
   }
 
   .header .navbar {
@@ -295,6 +293,3 @@ const hideDropdown = (key) => {
   }
 }
 </style>
-
-
-
