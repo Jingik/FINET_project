@@ -1,14 +1,19 @@
 <template>
-  <div>
-    <h1>DetailView</h1>
+  <div class="container">
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">{{ error }}</div>
-    <div v-else-if="board">
-      <p>ID: {{ board.id }}</p>
-      <p>Title: {{ board.title }}</p>
-      <p>Content: {{ board.content }}</p>
-      <p>Created At: {{ board.created_at }}</p>
-      <p>Updated At: {{ board.updated_at }}</p>
+    <div v-else-if="board" class="card my-4">
+      <div class="card-body">
+        <h5 class="card-title">{{ board.title }}</h5>
+        <hr>
+        <p class="card-text">
+          <small class="text-muted">
+            작성자: {{ board.user_name }} | 작성일: {{ formatDate(board.created_at) }}
+          </small>
+        </p>
+        <p class="card-text" style="padding-top: 50px; padding-bottom: 50px;">{{ board.content }}</p>
+        <router-link :to="{ name: 'BoardView' }" class="btn btn-primary">뒤로가기</router-link> <!-- 뒤로가기 버튼 -->
+      </div>
     </div>
   </div>
 </template>
@@ -40,55 +45,43 @@ onMounted(async () => {
     loading.value = false;
   }
 });
+
+function formatDate(dateString) {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString('ko-KR', options);
+}
 </script>
 
-<style>
-  /* 게시물 상세보기 스타일 */
-  .detail-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-  }
+<style scoped>
+.container {
+  display: flex;
+  justify-content: center;
+  padding-top: 150px;
+  padding-bottom: 150px;
+}
 
-  .detail-container h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
-  }
+.card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  width: 800px;
+  margin: 0 auto;
+}
 
-  .detail-item {
-    margin-bottom: 10px;
-  }
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
 
-  .detail-item p {
-    margin: 0;
-    font-size: 16px;
-    color: #666;
-  }
+.card-title {
+  font-weight: bold;
+  font-size: 60px;
+}
 
-  /* 게시물 내용 스타일 */
-  .content {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
+.card-text {
+  font-size: 30px;
+}
 
-  .content p {
-    margin: 0;
-    font-size: 16px;
-    line-height: 1.5;
-    color: #333;
-  }
-
-  /* 날짜 스타일 */
-  .date {
-    font-style: italic;
-    color: #888;
-  }
+.text-muted {
+  font-size: 0.9rem;
+}
 </style>
-

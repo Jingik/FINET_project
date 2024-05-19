@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>Board List</h3>
+    <h3 style="margin-bottom: 20px;">▼ 글 목록</h3>
     <div v-if="store.boards.length === 0">No boards available.</div>
     <div v-else>
       <BoardListItem 
