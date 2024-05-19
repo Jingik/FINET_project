@@ -3,9 +3,12 @@ import MainView from '@/views/MainView.vue'
 import KakaoView from '@/views/KakaoView.vue'
 import MainLoginView from '@/views/MainLoginView.vue'
 import LogInView from '@/views/LogInView.vue'
-import SignUpView from '@/views/SignUpView.vue'
 import FindIdView from '@/views/FindIdView.vue'
+import SignUpView from '@/views/SignUpView.vue'
 import ExchangeView from '@/views/ExchangeView.vue'
+import BoardView from '@/views/BoardView.vue'
+import CreateView from '@/views/CreateView.vue'
+import DetailView from '@/views/DetailView.vue'
 import { useUserStore } from '@/stores/user'
 
 const routes = [
@@ -40,6 +43,21 @@ const routes = [
         return { name: 'LogInView' }
       }
     }
+  },
+  {
+    path: '/posts',
+    name: 'BoardView',
+    component: BoardView
+  },
+  {
+    path: '/posts/:id',
+    name: 'DetailView',
+    component: DetailView
+  },
+  {
+    path: '/posts/create',
+    name: 'CreateView',
+    component: CreateView
   }
 ]
 
