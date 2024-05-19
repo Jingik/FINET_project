@@ -1,15 +1,24 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
-// import { useRouter } from 'vue-router'
 
 export const useCounterStore = defineStore('counter', () => {
-  const count = ref(0)
-  const doubleCount = computed(() => count.value * 2)
-  function increment() {
-    count.value++
+  const boards = ref([])
+  const API_URL = 'http://127.0.0.1:8000'
+
+  const getBoards = function () {
+    axios({
+      method: 'get',
+      url: `${API_URL}`
+    })
+      .then(response => {
+        console.log(response)
+        console.log(response.data)
+        boards.value = response.data
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
-
-
-  return { count, doubleCount, increment}
-})
+  return { boards, API_URL, getBoards }
+}, { persist: true })
