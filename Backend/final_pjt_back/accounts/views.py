@@ -7,6 +7,7 @@ from .serializers import UserSerializer
 from django.contrib.auth.hashers import check_password
 from .models import User
 from rest_framework.authtoken.models import Token
+import traceback
 
 @api_view(['GET'])
 def id_check_exists(request):
@@ -22,22 +23,16 @@ def id_check_exists(request):
 
 @api_view(['POST'])
 def signup(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
-    password2 = request.data.get('password2')
-
-    if not username or not password or not password2:
-        return JsonResponse({'error': 'Username, password, and password confirmation are required'}, status=status.HTTP_400_BAD_REQUEST)
-
-    if password != password2:
-        return JsonResponse({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
-
-    if User.objects.filter(username=username).exists():
-        return JsonResponse({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
-
-    user = User.objects.create_user(username=username, password=password)
-    token, created = Token.objects.get_or_create(user=user)
-    return JsonResponse({'message': 'Signup successful', 'token': token.key}, status=status.HTTP_201_CREATED)
+    try:
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            token, created = Token.objects.get_or_create(user=user)
+            return JsonResponse({'message': 'Signup successful', 'token': token.key}, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        print(traceback.format_exc())  # 예외 발생 시 전체 스택 트레이스를 출력합니다.
+        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])

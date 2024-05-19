@@ -30,14 +30,15 @@
             <label for="password2">비밀번호 재입력</label>
             <input type="password" v-model.trim="password2" id="password2" required>
           </div>
+          <div v-if="passwordError" class="error-message">{{ passwordError }}</div>
           <div class="margintop">
             <label for="user_age_group">나이 그룹</label>
             <select v-model="user_age_group" id="user_age_group" required>
-              <option value="10대">10대</option>
-              <option value="20대">20대</option>
-              <option value="30대">30대</option>
-              <option value="40대">40대</option>
-              <option value="50대">50대</option>
+              <option value="10s">10대</option>
+              <option value="20s">20대</option>
+              <option value="30s">30대</option>
+              <option value="40s">40대</option>
+              <option value="50s">50대</option>
             </select>
           </div>
           <div class="margintop">
@@ -63,36 +64,38 @@
   </div>
 </template>
 
-
 <script setup>
-import { ref } from 'vue'
-import { useUserStore } from '@/stores/user'
+import { ref } from 'vue';
+import { useUserStore } from '@/stores/user';
 
-const username = ref(null)
-const phone_number = ref(null)
-const name = ref(null)
-const password1 = ref(null)
-const password2 = ref(null)
-const user_age_group = ref(null)
-const service_purpose = ref(null)
-const email = ref(null)
-const assets = ref(null)
+const username = ref(null);
+const phone_number = ref(null);
+const name = ref(null);
+const password1 = ref(null);
+const password2 = ref(null);
+const user_age_group = ref(null);
+const service_purpose = ref(null);
+const email = ref(null);
+const assets = ref(null);
 
-const isDuplicateUsername = ref(false)
-const isUsernameChecked = ref(false)
+const isDuplicateUsername = ref(false);
+const isUsernameChecked = ref(false);
+const passwordError = ref('');
 
-const store = useUserStore()
+const store = useUserStore();
 
 const checkDuplicateUsername = async () => {
-  // Here you should implement the actual logic to check for username duplication.
-  // For example, make an API call to check if the username is taken.
-  
-  isUsernameChecked.value = true
-  const response = await store.checkUsername(username.value) // Assume this method exists in your store
-  isDuplicateUsername.value = response.isDuplicate
-}
+  isUsernameChecked.value = true;
+  const response = await store.checkUsername(username.value);
+  isDuplicateUsername.value = response.isDuplicate;
+};
 
-const signUp = function () {
+const signUp = async () => {
+  if (password1.value !== password2.value) {
+    passwordError.value = '비밀번호가 일치하지 않습니다.';
+    return;
+  }
+
   const payload = {
     username: username.value,
     password1: password1.value,
@@ -103,11 +106,10 @@ const signUp = function () {
     service_purpose: service_purpose.value,
     email: email.value,
     assets: assets.value
-  }
-  store.signUp(payload)
-}
+  };
+  await store.signUp(payload);
+};
 </script>
-
 
 <style scoped>
 .signup-container {
@@ -115,18 +117,16 @@ const signUp = function () {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 80vh; /* 부모 요소의 높이를 채우도록 함 */
+  min-height: 80vh;
   background-color: #ffffff;
-  
 }
 
 .signup-frame {
   background-color: #fff;
   border-radius: 8px;
-  padding: 60px; /* 패딩을 증가 */
-  width: 700px; /* 너비를 증가 */
-  box-shadow:  0 2px 8px rgba(0, 0, 0, 0.1);
-
+  padding: 60px;
+  width: 700px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .signup-header {
@@ -135,33 +135,31 @@ const signUp = function () {
 }
 
 .signup-title {
-  font-size: 32px; /* 폰트 크기 증가 */
+  font-size: 32px;
   font-weight: bold;
   color: #333;
 }
 
 .signup-subtitle {
-  font-size: 20px; /* 폰트 크기 증가 */
+  font-size: 20px;
   color: #666;
 }
-  /* 전체 폼 스타일 */
-  #signup-form {
-    background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-  }
 
-  /* 폼 요소 스타일 */
-  #signup-form input, #signup-form select {
-    width: 100%;
-    padding: 10px;
-    /* margin-bottom: 10px; */
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    font-size: 16px;
-  }
+#signup-form {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+}
 
-  .form-inline {
+#signup-form input, #signup-form select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+.form-inline {
   display: flex;
   align-items: center;
   justify-items: center;
@@ -184,37 +182,38 @@ const signUp = function () {
   display: block;
   margin-top: 5px;
 }
+
 .signupbtn {
   margin-top: 30px;
-  width: 100%; /* 버튼 너비를 100%로 설정 */
+  width: 100%;
   font-size: 20px;
   height: 40px;
-  background-color: #007bff; /* 파란색 계열 */
-  color: white; /* 하얀 글씨 */
+  background-color: #007bff;
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .signupbtn:hover {
-  background-color: #0056b3; /* 버튼 hover 시 darker blue */
+  background-color: #0056b3;
 }
 
 .idcheckbtn {
-  height: 40px; /* 버튼 높이를 40px로 설정 */
+  height: 40px;
   width: 100px;
-  background-color: #007bff; /* 파란색 계열 */
-  color: white; /* 하얀 글씨 */
+  background-color: #007bff;
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .idcheckbtn:hover {
-  background-color: #0056b3; /* 버튼 hover 시 darker blue */
+  background-color: #0056b3;
 }
 
-.margintop{
+.margintop {
   margin-top: 10px;
 }
 </style>

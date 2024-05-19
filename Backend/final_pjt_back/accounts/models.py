@@ -35,10 +35,6 @@ class User(AbstractBaseUser):
         ('C', '서비스 목적 C')
     ])
     asset = models.BigIntegerField(default=0)
-    
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
 
     objects = UserManager()
 
