@@ -24,13 +24,12 @@ from rest_framework.authtoken.views import obtain_auth_token
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('accounts.urls')),
-    path('api/v1/posts/', include('boards.urls')),
     path('financial/', include('instruments.urls')),
     path('exchange/', include('exchange.urls')),
     path('maps/', include('exchange.urls')),
     # path('accounts/', include('dj_rest_auth.urls')),
     # path('accounts/registration/', include('dj_rest_auth.registration.urls')),
-    
+    path('posts/', include('boards.urls')),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
     
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

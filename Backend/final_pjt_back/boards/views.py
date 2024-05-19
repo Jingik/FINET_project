@@ -8,6 +8,17 @@ from .models import Board, Comment
 from .serializers import BoardSerializer, CommentSerializer
 from django.shortcuts import get_object_or_404
 
+# @api_view(['GET', 'POST'])
+# @permission_classes([IsAuthenticated])
+# def board_list(request):
+#     if request.method == 'GET':
+#         boards = Board.objects.all().order_by('-created_at')
+#         paginator = PageNumberPagination()
+#         paginator.page_size = 10
+#         result_page = paginator.paginate_queryset(boards, request)
+#         serializer = BoardSerializer(result_page, many=True)
+#         return paginator.get_paginated_response(serializer.data)
+
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def board_list(request):
@@ -25,6 +36,17 @@ def board_list(request):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_board(request):
+    data = JSONParser().parse(request)
+    serializer = BoardSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
@@ -44,7 +66,8 @@ def board_detail(request, pk):
     elif request.method == 'DELETE':
         board.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
+    
+    
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def comment_list(request, board_id):

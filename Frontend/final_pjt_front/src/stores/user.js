@@ -12,7 +12,7 @@ export const useUserStore = defineStore('user', () => {
 
   const getArticles = async function () {
     try {
-      const response = await axios.get(`${API_URL}/api/v1/articles/`, {
+      const response = await axios.get(`${API_URL}/api/v1/posts/`, {
         headers: {
           Authorization: `Token ${token.value}`
         }

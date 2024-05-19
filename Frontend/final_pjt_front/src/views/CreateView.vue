@@ -16,36 +16,26 @@
 </template>
 
 <script setup>
-import axios from 'axios'
 import { ref } from 'vue'
-import { useCounterStore } from '@/stores/counter'
+import { usePostStore } from '@/stores/post'
 import { useRouter } from 'vue-router'
 
-const store = useCounterStore()
-const title = ref(null)
-const content = ref(null)
+const store = usePostStore()
+const title = ref('')
+const content = ref('')
 const router = useRouter()
 
-const createBoard = function () {
-  axios({
-    method: 'post',
-    url: `${store.API_URL}/api/v1/posts/create/`,
-    data: {
-      title: title.value,
-      content: content.value
-    }
-  })
-    .then((response) => {
-      console.log(response.data)
-      router.push({ name: 'BoardView' })
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+const createBoard = async () => {
+  try {
+    const response = await store.createBoard(title.value, content.value)
+    console.log(response)
+    router.push({ name: 'BoardView' })
+  } catch (error) {
+    console.log(error)
+  }
 }
-
 </script>
 
-<style>
-
+<style scoped>
+/* 스타일을 여기에 추가하세요 */
 </style>
