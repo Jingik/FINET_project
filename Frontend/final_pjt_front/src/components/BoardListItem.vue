@@ -1,21 +1,25 @@
 <template>
-  <div>
-    <h5>{{ board.id }}</h5>
-    <p>{{ board.title }}</p>
+  <div class="board-item">
+    <h4>{{ board.title }}</h4>
     <p>{{ board.content }}</p>
-    <RouterLink 
-      :to="{ name: 'DetailView', params: { id: board.id }}"
-    >
-      [DETAIL]
-    </RouterLink>
-    <hr>
+    <router-link :to="{ name: 'DetailView', params: { id: board.id } }">View Details</router-link>
   </div>
 </template>
 
 <script setup>
-import { RouterLink } from 'vue-router'
-
 defineProps({
-  board: Object
-})
+  board: {
+    type: Object,
+    required: true
+  }
+});
 </script>
+
+<style scoped>
+.board-item {
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+</style>

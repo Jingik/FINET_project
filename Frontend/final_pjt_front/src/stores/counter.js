@@ -9,7 +9,7 @@ export const useCounterStore = defineStore('counter', () => {
   const getBoards = function () {
     axios({
       method: 'get',
-      url: `${API_URL}`
+      url: `${API_URL}/posts`
     })
       .then(response => {
         console.log(response)

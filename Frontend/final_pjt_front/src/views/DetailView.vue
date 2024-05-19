@@ -1,40 +1,45 @@
 <template>
   <div>
     <h1>DetailView</h1>
-    <div v-if="board">
-      <p>{{ board.id }}</p>
-      <p>{{ board.title }}</p>
-      <p>{{ board.content }}</p>
-      <p>{{ board.created_at }}</p>
-      <p>{{ board.updated_at }}</p>
+    <div v-if="loading">Loading...</div>
+    <div v-else-if="error">{{ error }}</div>
+    <div v-else-if="board">
+      <p>ID: {{ board.id }}</p>
+      <p>Title: {{ board.title }}</p>
+      <p>Content: {{ board.content }}</p>
+      <p>Created At: {{ board.created_at }}</p>
+      <p>Updated At: {{ board.updated_at }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import axios from 'axios'
-import { onMounted, ref } from 'vue'
-import { useCounterStore } from '@/stores/counter'
-import { useRoute } from 'vue-router'
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
+import { useCounterStore } from '@/stores/counter';
+import { useRoute } from 'vue-router';
 
-const store = useCounterStore()
-const route = useRoute()
-const board = ref(null)
+const store = useCounterStore();
+const route = useRoute();
+const board = ref(null);
+const loading = ref(true);
+const error = ref(null);
 
-onMounted(() => {
-  axios({
-    method: 'get',
-    url: `${store.API_URL}/api/v1/boards/${route.params.id}/`
-  })
-    .then((response) => {
-      console.log(response.data)
-      board.value = response.data
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-})
-
+onMounted(async () => {
+  try {
+    const response = await axios.get(`${store.API_URL}/posts/${route.params.id}/`, {
+      headers: {
+        Authorization: `Token ${store.token}`
+      }
+    });
+    board.value = response.data;
+  } catch (err) {
+    console.error('An error occurred:', err);
+    error.value = 'Failed to load the board details.';
+  } finally {
+    loading.value = false;
+  }
+});
 </script>
 
 <style>
