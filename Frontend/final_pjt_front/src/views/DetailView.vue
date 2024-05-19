@@ -38,5 +38,52 @@ onMounted(() => {
 </script>
 
 <style>
+  /* 게시물 상세보기 스타일 */
+  .detail-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
 
+  .detail-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .detail-item {
+    margin-bottom: 10px;
+  }
+
+  .detail-item p {
+    margin: 0;
+    font-size: 16px;
+    color: #666;
+  }
+
+  /* 게시물 내용 스타일 */
+  .content {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+  .content p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+  }
+
+  /* 날짜 스타일 */
+  .date {
+    font-style: italic;
+    color: #888;
+  }
 </style>
+

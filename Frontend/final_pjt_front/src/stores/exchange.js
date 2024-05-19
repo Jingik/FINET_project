@@ -4,7 +4,7 @@ import { ref } from 'vue';
 
 export const useExchangeStore = defineStore('exchange', () => {
     const API_URL = 'http://127.0.0.1:8000';
-    const currencies = ['USD', 'JPY', 'EUR', 'GBP', 'CAD', 'CHF', 'HKD', 'AUD', 'CNY', 'SGD', 'NZD', 'THB', 'VND', 'TWD', 'PHP'];
+    const currencies = ['USD', 'JPY', 'EUR', 'GBP', 'CAD', 'CHF', 'HKD', 'AUD', 'CNY', 'SGD', 'NZD', 'THB'];
     const exchangerates = ref([]);
     const selectedExchangeRate = ref(null);
 

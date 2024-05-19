@@ -10,7 +10,7 @@
         중국 위안화(CNY)는 홍콩 외환시장에서 거래되는 위안화
         환율정보(CNH)를 고시합니다.
       </li>
-      <li>일본- 100엔, 베트남 - 100동을 기준으로 합니다.</li>
+      <li>일본은 100엔을 기준으로 합니다.</li>
     </ul>
     <div class="button-container">
       <div class="currency-buttons">
@@ -53,10 +53,10 @@ import { ref } from 'vue';
 import axios from 'axios';
 
 const currencies = [
-  'USD', 'JPY(100)', 'EUR', 'GBP', 'CAD', 'CHF', 'HKD', 'AUD', 'CNH', 'SGD', 'NZD', 'THB', 'VND', 'TWD', 'PHP'
-];
+  'USD', 'JPY(100)', 'EUR', 'GBP', 'CAD', 'CHF', 'HKD', 'AUD', 'CNH', 'SGD', 'NZD', 'THB']
+
 const currencyname = [
-  '미국달러', '일본엔', '유럽유로', '영국파운드', '캐나다달러', '스위스프랑', '홍콩달러', '호주달러', '중국위안', '싱가폴달러', '뉴질랜드달러', '태국바트', '베트남동', '대만달러', '필리핀페소'
+  '미국달러', '일본엔', '유럽유로', '영국파운드', '캐나다달러', '스위스프랑', '홍콩달러', '호주달러', '중국위안', '싱가폴달러', '뉴질랜드달러', '태국바트'
 ];
 const selectedExchangeRate = ref(null);
 const error = ref(null);
