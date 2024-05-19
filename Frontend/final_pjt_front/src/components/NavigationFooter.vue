@@ -18,7 +18,7 @@
           </p>
           <p class="copyright2008-finet-all-right">
             <span>
-              <span>Copyrightⓒ2008 FINET All rights reserved.</span>
+              <span>Copyrightⓒ2024 FINET All rights reserved.</span>
             </span>
           </p>
         </span>
