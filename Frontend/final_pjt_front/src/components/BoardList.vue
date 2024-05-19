@@ -10,8 +10,8 @@
 </template>
 
 <script setup>
-import { useCounterStore } from '@/stores/counter'
+import { usePostStore } from '@/stores/post'
 import BoardListItem from '@/components/BoardListItem.vue'
 
-const store = useCounterStore()
+const store = usePostStore()
 </script>

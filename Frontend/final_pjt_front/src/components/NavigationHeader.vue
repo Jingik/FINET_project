@@ -1,8 +1,8 @@
 <template>
   <div class="header">
     <div class="span" @click="handleSpanClick">
-      <div class="p4">FINET</div>
-      <img class="img-icon1" alt="" src="@/assets/img/img (1).png" />
+        <div class="p4">FINET</div>
+        <img class="img-icon1" alt="" src="@/assets/img/img (1).png" />
     </div>
     <div class="navbar">
       <div class="nav" @mouseover="showDropdown('deposit')" @mouseleave="hideDropdown('deposit')">
