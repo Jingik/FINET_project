@@ -48,47 +48,41 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import axios from 'axios';
 
-export default {
-  data() {
-    return {
-      currencies: ['USD', 'JPY', 'EUR', 'GBP', 'CAD', 'CHF', 'HKD', 'AUD', 'CNY', 'SGD', 'NZD', 'THB', 'VND', 'TWD', 'PHP'],
-      currencyname: ['미국달러', '일본엔', '유럽유로', '영국파운드', '캐나다달러', '스위스프랑', '홍콩달러', '호주달러', '중국위안', '싱가폴달러', '뉴질랜드달러', '태국바트', '베트남동', '대만달러', '필리핀페소'],
-      selectedExchangeRate: null,
-      error: null,
-      loading: false
-    };
-  },
-  methods: {
-    fetchExchangeRate(curUnit) {
-      this.loading = true;
-      axios.get(`/exchange/${curUnit}/`)
-        .then(response => {
-          this.selectedExchangeRate = {
-            cur_unit: response.data.cur_unit,
-            ttb: response.data.ttb,
-            tts: response.data.tts,
-            deal_bas_r: response.data.deal_bas_r
-          };
-          this.loading = false;
-        })
-        .catch(error => {
-          this.error = '데이터를 가져오는 중 오류가 발생했습니다.';
-          this.loading = false;
-          console.log(error);
-        });
-    }
+const currencies = [
+  'USD', 'JPY(100)', 'EUR', 'GBP', 'CAD', 'CHF', 'HKD', 'AUD', 'CNH', 'SGD', 'NZD', 'THB', 'VND', 'TWD', 'PHP'
+];
+const currencyname = [
+  '미국달러', '일본엔', '유럽유로', '영국파운드', '캐나다달러', '스위스프랑', '홍콩달러', '호주달러', '중국위안', '싱가폴달러', '뉴질랜드달러', '태국바트', '베트남동', '대만달러', '필리핀페소'
+];
+const selectedExchangeRate = ref(null);
+const error = ref(null);
+const loading = ref(false);
+
+const fetchExchangeRate = async (curUnit) => {
+  loading.value = true;
+  error.value = null;
+  selectedExchangeRate.value = null;
+
+  try {
+    const response = await axios.get(`http://127.0.0.1:8000/exchange/${curUnit}/`);
+    selectedExchangeRate.value = response.data;
+  } catch (err) {
+    error.value = '데이터를 가져오는 중 오류가 발생했습니다.';
+    console.error(err);
+  } finally {
+    loading.value = false;
   }
 };
 </script>
 
-
-<style>
+<style scoped>
 .exchange-rates-container {
   max-width: 1800px;
-  margin: 100pxs auto;
+  margin: 100px auto;
   padding: 2rem;
   background-color: #fff;
   border-radius: 8px;
@@ -110,14 +104,13 @@ export default {
   align-items: center;
   justify-content: center;
   background-color: #f4f4f4;
-  height:100px
+  height: 100px;
 }
 .currency-buttons {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-
 }
 
 .currency-button {
@@ -165,4 +158,3 @@ export default {
   font-size: 1.2rem;
 }
 </style>
-s
