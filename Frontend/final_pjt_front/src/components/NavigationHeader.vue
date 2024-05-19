@@ -36,7 +36,7 @@
           <div class="dropdown-item">환전계산기</div>
         </div>
       </div>
-      <div class="nav" @mouseover="showDropdown('lounge')" @mouseleave="hideDropdown('lounge')">
+      <RouterLink :to="{ name: 'BoardView'}"><div class="nav" @mouseover="showDropdown('lounge')" @mouseleave="hideDropdown('lounge')">
         라운지
         <div v-if="dropdownVisible.lounge" class="dropdown-content">
           <div class="dropdown-item">입주가능 주택찾기</div>
@@ -44,7 +44,7 @@
           <div class="dropdown-item">서비스 3</div>
           <div class="dropdown-item">서비스 4</div>
         </div>
-      </div>
+      </div></RouterLink>
       <div class="input-typetext">
         <div class="label">검색어를 입력해주세요.</div>
         <img class="button-typesubmit-icon" alt="" src="@/assets/img/button type=submit.svg" />
