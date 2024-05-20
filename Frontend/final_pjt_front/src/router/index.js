@@ -1,15 +1,25 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '@/views/MainView.vue'
-import KakaoView from '@/views/KakaoView.vue'
 import MainLoginView from '@/views/MainLoginView.vue'
+// 회원가입, 로그인
 import LogInView from '@/views/LogInView.vue'
 import FindIdView from '@/views/FindIdView.vue'
 import SignUpView from '@/views/SignUpView.vue'
+// 환전
 import ExchangeView from '@/views/ExchangeView.vue'
+// 금융상품 후기 게시판
 import BoardView from '@/views/BoardView.vue'
 import CreateView from '@/views/CreateView.vue'
 import DetailView from '@/views/DetailView.vue'
 import EditBoardView from '@/views/EditBoardView.vue'
+// 지역 은행 찾기
+import KakaoView from '@/views/KakaoView.vue'
+//예적금 조회
+import DepositView from '@/views/DepositView.vue'
+import DepositDetailView from '@/views/DepositDetailView.vue'
+import SavingsView from '@/views/SavingsView.vue'
+import CreditloanView from '@/views/CreditloanView.vue'
+
 import { useUserStore } from '@/stores/user'
 
 const routes = [
@@ -63,7 +73,28 @@ const routes = [
   {
     path: '/posts/:id/edit',
     name: 'EditBoardView',
-    component: EditBoardView}
+    component: EditBoardView
+  },
+  {
+    path: '/deposit',
+    name: 'DepositView',
+    component: DepositView
+  },
+  {
+    path: '/deposit/:id/',
+    name: 'DepositDetailView',
+    component: DepositDetailView
+  },
+  {
+    path: '/savings',
+    name: 'SavingsView',
+    component: SavingsView
+  },
+  {
+    path: '/creditloan',
+    name: 'CreditloanView',
+    component: CreditloanView
+  }
   
 ]
 

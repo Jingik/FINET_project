@@ -8,17 +8,16 @@
       <div class="nav" @mouseover="showDropdown('deposit')" @mouseleave="hideDropdown('deposit')">
         예적금
         <div v-if="dropdownVisible.deposit" class="dropdown-content">
-          <div class="dropdown-item">정기예금</div>
-          <div class="dropdown-item">정기적금</div>
-          <div class="dropdown-item">자유입출금</div>
+          <RouterLink :to="{ name: 'DepositView' }"><div class="dropdown-item">정기예금</div></RouterLink>
+          <RouterLink :to="{ name: 'SavingsView' }"><div class="dropdown-item">정기적금</div></RouterLink>
         </div>
       </div>
       <div class="nav" @mouseover="showDropdown('loan')" @mouseleave="hideDropdown('loan')">
         대출
         <div v-if="dropdownVisible.loan" class="dropdown-content">
-          <div class="dropdown-item">신용대출</div>
-          <div class="dropdown-item">전세자금대출</div>
-          <div class="dropdown-item">주택담보대출</div>
+          <RouterLink :to="{ name: 'CreditloanView' }"><div class="dropdown-item">신용대출</div></RouterLink>
+          <!-- <div class="dropdown-item">전세자금대출</div>
+          <div class="dropdown-item">주택담보대출</div> -->
         </div>
       </div>
       <div class="nav" @mouseover="showDropdown('creditCard')" @mouseleave="hideDropdown('creditCard')">
