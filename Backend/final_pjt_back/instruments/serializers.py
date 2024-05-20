@@ -1,41 +1,38 @@
 from rest_framework import serializers
 from .models import *
 
-## 개인 신용 대출
-## 모델도 아직 안 만듬
-## serializer도 아직 안 만듬
-
-class DepositProductsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DepositProducts
-        fields = '__all__'
-        
 class DepositOptionsSerializer(serializers.ModelSerializer):
-    class DepositSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = DepositProducts
-            fields = '__all__'
-    deposit = DepositSerializer()
-    
     class Meta:
         model = DepositOptions
         fields = '__all__'
-        read_only_fields = ('deposit',)
-        
-        
+
+class DepositProductsSerializer(serializers.ModelSerializer):
+    deposit_options = DepositOptionsSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = DepositProducts
+        fields = '__all__'
+
+class SavingOptionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SavingOptions
+        fields = '__all__'
+
 class SavingProductsSerializer(serializers.ModelSerializer):
+    saving_options = SavingOptionsSerializer(many=True, read_only=True)
+
     class Meta:
         model = SavingProducts
         fields = '__all__'
-        
-class SavingOptionsSerializer(serializers.ModelSerializer):
-    class SavingSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = SavingProducts
-            fields = '__all__'
-            
-    saving = SavingSerializer()
-    
+
+class CreditLoanOptionsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SavingOptions
+        model = CreditLoanOptions
+        fields = '__all__'
+
+class CreditLoanProductsSerializer(serializers.ModelSerializer):
+    creditloan_options = CreditLoanOptionsSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = CreditLoanProducts
         fields = '__all__'
