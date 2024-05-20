@@ -39,8 +39,8 @@
       <RouterLink :to="{ name: 'BoardView'}"><div class="nav" @mouseover="showDropdown('lounge')" @mouseleave="hideDropdown('lounge')">
         라운지
         <div v-if="dropdownVisible.lounge" class="dropdown-content">
-          <div class="dropdown-item">지역별 은행 찾기</div>
-          <div class="dropdown-item">금융상품 후기 게시판</div>
+          <RouterLink :to="{ name: 'maps'}"><div class="dropdown-item">지역별 은행 찾기</div></RouterLink>
+          <RouterLink :to="{ name: 'BoardView'}"><div class="dropdown-item">금융상품 후기 게시판</div></RouterLink>
 
         </div>
       </div></RouterLink>
