@@ -1,5 +1,5 @@
 <template>
-  <div class="jingi">
+  <div>
   <div class="searchcontainer">
     <div class="checkbox-options">
       <label>
@@ -20,7 +20,7 @@
     <div class="select">
       <label for="sort">정렬방식: </label>
       <select id="sort" v-model="sortBy" @change="sortProducts">
-        <option value="productNameAsc">이름 오름차순</option>
+        <option value="productNameAsc">가나다순</option>
         <option value="releaseDateDesc">최근 출시순</option>
       </select>
     </div>
@@ -120,10 +120,7 @@ onMounted(() => {
 
 
 <style scoped>
-/* .jingi{
-  align-items: center;
-  text-align: right;
-} */
+
 .searchcontainer {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;

@@ -86,7 +86,7 @@ const currencyname = [
 
 const currencyUnits = {
   'USD': '달러',
-  'JPY(100)': '엔',
+  'JPY(100)': '백엔',
   'EUR': '유로',
   'GBP': '파운드',
   'CAD': '캐나다 달러',

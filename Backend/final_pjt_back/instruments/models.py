@@ -1,8 +1,6 @@
 from django.db import models
 from django.conf import settings
 
-from django.conf import settings
-from django.db import models
 
 class DepositProducts(models.Model):
     deposit_code = models.CharField(unique=True, max_length=100)
@@ -25,7 +23,7 @@ class DepositProducts(models.Model):
 class DepositOptions(models.Model):
     deposit = models.ForeignKey(DepositProducts, on_delete=models.CASCADE)
     deposit_code = models.CharField(max_length=100)
-    intr_rate_type_nm = models.CharField(max_length=100)
+    intr_rate_type = models.CharField(max_length=100)
     intr_rate = models.FloatField(null=True)
     intr_rate2 = models.FloatField(null=True)
     save_trm = models.CharField(max_length=3)
@@ -62,7 +60,7 @@ class CreditLoanProducts(models.Model):
     kor_co_nm = models.CharField(max_length=100)
     fin_prdt_nm = models.CharField(max_length=100)
     dcls_month = models.CharField(max_length=20)
-    crdt_prdt_type = models.CharField(max_length=100)
+    crdt_prdt_type_nm = models.CharField(max_length=100) # 수정함
     join_way = models.CharField(max_length=100, blank=True, null=True)
     spcl_cnd = models.TextField(blank=True, null=True)
     max_limit = models.IntegerField(blank=True, null=True)
