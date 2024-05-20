@@ -29,20 +29,19 @@
           <div class="dropdown-item">내게 맞는 카드</div>
         </div>
       </div>
-      <div class="nav" @mouseover="showDropdown('exchange')" @mouseleave="hideDropdown('exchange')">
+      <RouterLink :to="{ name: 'ExchangeView' }"><div class="nav" @mouseover="showDropdown('exchange')" @mouseleave="hideDropdown('exchange')">
         외환/환전
         <div v-if="dropdownVisible.exchange" class="dropdown-content">
           <RouterLink :to="{ name: 'ExchangeView' }"><div class="dropdown-item">환율조회</div></RouterLink>
-          <div class="dropdown-item">환전계산기</div>
         </div>
       </div>
+      </RouterLink>
       <RouterLink :to="{ name: 'BoardView'}"><div class="nav" @mouseover="showDropdown('lounge')" @mouseleave="hideDropdown('lounge')">
         라운지
         <div v-if="dropdownVisible.lounge" class="dropdown-content">
-          <div class="dropdown-item">입주가능 주택찾기</div>
-          <div class="dropdown-item">금융상품후기</div>
-          <div class="dropdown-item">서비스 3</div>
-          <div class="dropdown-item">서비스 4</div>
+          <div class="dropdown-item">지역별 은행 찾기</div>
+          <div class="dropdown-item">금융상품 후기 게시판</div>
+
         </div>
       </div></RouterLink>
       <div class="input-typetext">

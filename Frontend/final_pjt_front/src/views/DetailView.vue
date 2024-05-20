@@ -13,6 +13,8 @@
         </p>
         <p class="card-text" style="padding-top: 50px; padding-bottom: 50px;">{{ board.content }}</p>
         <router-link :to="{ name: 'BoardView' }" class="btn btn-primary">뒤로가기</router-link> <!-- 뒤로가기 버튼 -->
+        <button v-if="isCurrentUserAuthor" @click="editBoard" class="btn btn-warning">수정</button>
+        <button v-if="isCurrentUserAuthor" @click="confirmDelete" class="btn btn-danger">삭제</button>
       </div>
     </div>
   </div>
@@ -22,10 +24,11 @@
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import { useCounterStore } from '@/stores/counter';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const store = useCounterStore();
 const route = useRoute();
+const router = useRouter();
 const board = ref(null);
 const loading = ref(true);
 const error = ref(null);
@@ -50,7 +53,35 @@ function formatDate(dateString) {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(dateString).toLocaleDateString('ko-KR', options);
 }
+
+function isCurrentUserAuthor() {
+  return board.value && store.currentUser && board.value.user_id === store.currentUser.id;
+}
+
+async function editBoard() {
+  router.push({ name: 'EditBoard', params: { id: board.value.id } });
+}
+
+async function deleteBoard() {
+  try {
+    await axios.delete(`${store.API_URL}/posts/${board.value.id}/`, {
+      headers: {
+        Authorization: `Token ${store.token}`
+      }
+    });
+    router.push({ name: 'BoardView', params: { id: board.value.id } }); // Redirect to BoardView with the deleted board's ID
+  } catch (err) {
+    console.error('An error occurred:', err);
+  }
+}
+
+function confirmDelete() {
+  if (confirm('정말로 이 게시물을 삭제하시겠습니까?')) {
+    deleteBoard();
+  }
+}
 </script>
+
 
 <style scoped>
 .container {

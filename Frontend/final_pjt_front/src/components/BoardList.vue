@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3 style="margin-bottom: 20px;">▼ 글 목록</h3>
-    <div v-if="store.boards.length === 0">No boards available.</div>
+    <div v-if="store.boards.length === 0">첫 게시글을 작성해 주세요.</div>
     <div v-else>
       <BoardListItem 
         v-for="board in store.boards"

@@ -9,6 +9,7 @@ import ExchangeView from '@/views/ExchangeView.vue'
 import BoardView from '@/views/BoardView.vue'
 import CreateView from '@/views/CreateView.vue'
 import DetailView from '@/views/DetailView.vue'
+import EditBoardView from '@/views/EditBoardView.vue'
 import { useUserStore } from '@/stores/user'
 
 const routes = [
@@ -58,7 +59,12 @@ const routes = [
     path: '/posts/create',
     name: 'CreateView',
     component: CreateView
-  }
+  },
+  {
+    path: '/posts/:id/edit',
+    name: 'EditBoardView',
+    component: EditBoardView}
+  
 ]
 
 const router = createRouter({
