@@ -19,14 +19,16 @@
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { useCounterStore } from '@/stores/counter';
 
 const route = useRoute();
 const router = useRouter();
 const editedBoard = ref({ title: '', content: '' });
+const store = useCounterStore();
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`/api/posts/${route.params.id}/`);
+    const response = await axios.get(`${store.API_URL}/posts/${route.params.id}/`);
     editedBoard.value = response.data;
   } catch (err) {
     console.error('An error occurred:', err);
@@ -35,8 +37,8 @@ onMounted(async () => {
 
 async function updateBoard() {
   try {
-    await axios.put(`/api/posts/${route.params.id}/`, editedBoard.value);
-    router.push({ name: 'BoardView', params: { id: route.params.id } });
+    await axios.put(`${store.API_URL}/posts/${route.params.id}/update/`, editedBoard.value);
+    router.push({ name: 'DetailView', params: { id: route.params.id } });
   } catch (err) {
     console.error('An error occurred:', err);
   }
@@ -44,68 +46,22 @@ async function updateBoard() {
 </script>
 
 <style scoped>
-/* 폼 컨테이너 스타일 */
-.post-container {
-  max-width: 1000px;
-  margin: 100px auto 20px;
+.container {
+  max-width: 800px;
+  margin: 50px auto;
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-/* 가운데 정렬을 위한 클래스 */
-.center-content {
-  text-align: center;
+.form-group {
+  margin-bottom: 15px;
 }
-
-/* 게시판 제목 스타일 */
-.board-title {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #000000;
-}
-
-/* 게시글 작성 폼 스타일 */
-.post-form label {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.post-form input[type="text"],
-.post-form textarea {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #e1e2e3;
-  border-radius: 4px;
-  font-size: 16px;
-}
-
-.post-form textarea {
-  height: 200px; /* 기본 높이를 원하는 값으로 설정 */
-}
-
-.post-form input[type="submit"] {
-  padding: 12px 0;
+.form-control {
   width: 100%;
-  font-size: 20px;
-  font-weight: bold;
-  color: #fff;
-  background-color: #007bff;
-  border: none;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.post-form input[type="submit"]:hover {
-  background-color: #0056b3;
-}
-
-.img {
-  width: 200px; /* 원하는 너비로 설정 */
-  height: auto; /* 이미지 비율을 유지하면서 높이 자동 조정 */
-  margin-bottom: 20px; /* 이미지와 텍스트 사이에 여백 추가 */
 }
 </style>

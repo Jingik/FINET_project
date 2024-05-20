@@ -71,9 +71,10 @@ const routes = [
     component: CreateView
   },
   {
-    path: '/posts/:id/edit',
+    path: '/posts/:id/update',
     name: 'EditBoardView',
     component: EditBoardView
+<<<<<<< HEAD
   },
   {
     path: '/deposit',
@@ -96,6 +97,9 @@ const routes = [
     component: CreditloanView
   }
   
+=======
+  }
+>>>>>>> a93973e0876ff9216845f735c15d069ac5472e8d
 ]
 
 const router = createRouter({
