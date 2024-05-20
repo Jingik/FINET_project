@@ -21,11 +21,18 @@ def save_deposit_products(request):
 
     base_list_data = []  # Collect base list data for response
     option_list_data = []  # Collect option list data for response
-
+    print(response)
     for item in base_list:
         if DepositProducts.objects.filter(deposit_code=item.get('fin_prdt_cd')).exists():
             continue
         item['deposit_code'] = item.pop('fin_prdt_cd')  # Change key to match the model field
+        
+        # Ensure all required fields are present and valid
+        required_fields = ['fin_co_no', 'kor_co_nm', 'fin_prdt_nm', 'dcls_month', 'join_way', 'mtrt_int', 'spcl_cnd', 'join_deny', 'join_member', 'etc_note', 'max_limit', 'dcls_strt_day', 'dcls_end_day', 'fin_co_subm_day']
+        for field in required_fields:
+            if field not in item:
+                item[field] = '' if isinstance(item.get(field), str) else None  # Set default value if field is missing
+
         serializer = DepositProductsSerializer(data=item)
         if serializer.is_valid():
             deposit_product = serializer.save()
@@ -38,13 +45,20 @@ def save_deposit_products(request):
         deposit_product = get_object_or_404(DepositProducts, deposit_code=fin_prdt_cd)
         option['deposit'] = deposit_product.id  # deposit 필드에 DepositProducts 인스턴스의 ID 할당
         option['deposit_code'] = fin_prdt_cd  # deposit_code 필드에 금융 상품 코드 할당
+        
+        # Ensure all required fields are present and valid
+        required_fields = ['intr_rate_type_nm', 'intr_rate', 'intr_rate2', 'save_trm']
+        for field in required_fields:
+            if field not in option:
+                option[field] = 0.0 if 'rate' in field else ''  # Set default value if field is missing
+
         serializer = DepositOptionsSerializer(data=option)
         if serializer.is_valid():
             deposit_option = serializer.save()
             option_list_data.append(serializer.data)
         else:
             print("DepositOptionsSerializer errors:", serializer.errors)
-
+            
     response_data = {
         'message': 'Data saved successfully',
         'base_list_data': base_list_data,  # Include collected base list data
@@ -52,6 +66,7 @@ def save_deposit_products(request):
     }
 
     return JsonResponse(response_data)
+
 
 @api_view(['GET', 'POST'])
 def deposit_products(request):
