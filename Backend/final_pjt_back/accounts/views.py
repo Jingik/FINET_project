@@ -8,6 +8,13 @@ from django.contrib.auth.hashers import check_password
 from .models import User
 from rest_framework.authtoken.models import Token
 import traceback
+from rest_framework.response import Response
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def current_user(request):
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def id_check_exists(request):
