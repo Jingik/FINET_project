@@ -61,10 +61,10 @@ const routes = [
     component: CreateView
   },
   {
-    path: '/posts/:id/edit',
+    path: '/posts/:id/update',
     name: 'EditBoardView',
-    component: EditBoardView}
-  
+    component: EditBoardView
+  }
 ]
 
 const router = createRouter({

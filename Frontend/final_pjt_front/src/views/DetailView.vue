@@ -59,7 +59,7 @@ function isCurrentUserAuthor() {
 }
 
 async function editBoard() {
-  router.push({ name: 'EditBoard', params: { id: board.value.id } });
+  router.push({ name: 'EditBoardView', params: { id: board.value.id } });
 }
 
 async function deleteBoard() {

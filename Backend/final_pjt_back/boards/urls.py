@@ -9,4 +9,5 @@ urlpatterns = [
     path('user/boards/', views.user_boards, name='user_boards'),  
     path('user/comments/', views.user_comments, name='user_comments'), 
     path('create/', views.create_board, name='create_board'),
+    path('<int:pk>/update/', views.update_board, name='update_board'),  # 추가된 경로
 ]
