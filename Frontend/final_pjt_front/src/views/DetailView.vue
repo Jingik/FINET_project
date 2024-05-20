@@ -109,25 +109,14 @@ function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString('ko-KR', options);
 }
 
-// function isCurrentUserAuthor() {
-//   console.log("Board 정보 :",board.value)
-//   console.log("store 정보 :",store.currentUser)
-//   return board.value && store.currentUser && board.value.user_id === store.currentUser.id;
-// }
 
 function isCurrentUserAuthor() {
-  // console.log("Board 정보 :",board.value.user)
-  // console.log("store 정보 :",store.currentUser)
   return board.value && store.currentUser && board.value.user.id === store.currentUser.id;
 }
 
-// function isCurrentUserCommentAuthor(comment) {
-//   return comment && store.currentUser && comment.user_id === store.currentUser.id;
-// }
+
 
 function isCurrentUserCommentAuthor(comment) {
-  // console.log("Comment",comment.user)
-  // console.log("Store",store.currentUser)
   return comment.user && store.currentUser && comment.user.id === store.currentUser.id;
 }
 
