@@ -12,7 +12,7 @@ node_modules
 dist
 dist-ssr
 coverage
-*.local
+# *.local # 나중에 주석 풀어줘야 함.
 
 /cypress/videos/
 /cypress/screenshots/
