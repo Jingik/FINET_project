@@ -13,5 +13,10 @@ urlpatterns = [
 
     # 사용자가 작성한 게시글 및 댓글 조회
     path('user/boards/', views.user_boards, name='user_boards'),  
-    path('user/comments/', views.user_comments, name='user_comments'), 
+    path('user/comments/', views.user_comments, name='user_comments'),
+    
+    # 사용자가 좋아요 누른 글 및 댓글 확인하기
+    path('like_board/<int:board_id>/', views.like_board, name='like_board'),
+    path('like_comment/<int:comment_id>/', views.like_comment, name='like_comment'), 
+    path('liked_content/', views.liked_content, name='liked_content'),
 ]

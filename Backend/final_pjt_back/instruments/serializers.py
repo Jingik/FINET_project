@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from .models import *
+from .models import DepositProducts, DepositOptions, SavingProducts, SavingOptions, CreditLoanProducts, CreditLoanOptions, DepositSubscription, SavingSubscription, CreditLoanSubscription
+from accounts.models import User
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'name', 'phone_number', 'email', 'user_age_group', 'service_purpose', 'asset']
 
 class DepositOptionsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,6 +17,11 @@ class DepositProductsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DepositProducts
+        fields = '__all__'
+
+class DepositSubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DepositSubscription
         fields = '__all__'
 
 class SavingOptionsSerializer(serializers.ModelSerializer):
@@ -25,6 +36,11 @@ class SavingProductsSerializer(serializers.ModelSerializer):
         model = SavingProducts
         fields = '__all__'
 
+class SavingSubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SavingSubscription
+        fields = '__all__'
+
 class CreditLoanOptionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CreditLoanOptions
@@ -35,4 +51,9 @@ class CreditLoanProductsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CreditLoanProducts
+        fields = '__all__'
+
+class CreditLoanSubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreditLoanSubscription
         fields = '__all__'

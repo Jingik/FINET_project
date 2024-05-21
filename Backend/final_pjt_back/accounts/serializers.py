@@ -1,15 +1,33 @@
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
-from .models import User
+from .models import User, Product, UserProduct
 
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'description', 'interest_rate']
+
+class UserProductSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    product = ProductSerializer(read_only=True)
+    product_id = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all(), source='product', write_only=True)
+
+    class Meta:
+        model = UserProduct
+        fields = ['id', 'user', 'product', 'product_id', 'subscribed_at']
+        
 class UserSerializer(serializers.ModelSerializer):
     password_confirm = serializers.CharField(write_only=True)
+    subscribed_products = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Product.objects.all(), write_only=True
+    )
 
     class Meta:
         model = User
         fields = [
-            'id','username', 'password', 'password_confirm', 'name', 'phone_number', 'email', 
-            'user_age_group', 'service_purpose', 'asset'
+            'id', 'username', 'password', 'password_confirm', 'name', 
+            'phone_number', 'email', 'user_age_group', 'service_purpose', 
+            'asset', 'subscribed_products'
         ]
         extra_kwargs = {'password': {'write_only': True}}
 
@@ -19,6 +37,17 @@ class UserSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        validated_data.pop('password_confirm')  # password_confirm 필드를 제거
+        subscribed_products = validated_data.pop('subscribed_products', [])
+        validated_data.pop('password_confirm')
         validated_data['password'] = make_password(validated_data['password'])
-        return super(UserSerializer, self).create(validated_data)
+        user = super(UserSerializer, self).create(validated_data)
+        for product in subscribed_products:
+            UserProduct.objects.create(user=user, product=product)
+        return user
+
+    def update(self, instance, validated_data):
+        subscribed_products = validated_data.pop('subscribed_products', None)
+        instance = super(UserSerializer, self).update(instance, validated_data)
+        if subscribed_products is not None:
+            instance.subscribed_products.set(subscribed_products)
+        return instance
