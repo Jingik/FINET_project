@@ -1,84 +1,83 @@
 <template>
-  <div>
-    <div class="searchcontainer">
-      <div class="filter-container">
-        <div class="filter-section">
-          <div class="filter-title">[가입기간]</div>
-          <div class="filter-options">
-            <div class="filter-row">
-              <div class="checkbox-container">
-                <input class="checkbox" type="checkbox" v-model="searchOptions" value="1개월" />
-                <label class="checkbox-label">1개월</label>
+    <div class="content">
+      <div class="searchcontainer">
+        <div class="filter-container">
+          <div class="filter-section">
+              <div class="filter-title">[가입방법]</div>
+              <div class="filter-row">
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="영업점" />
+                  <label class="checkbox-label">영업점</label>
+                </div>
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="모바일" />
+                  <label class="checkbox-label">모바일</label>
+                </div>
               </div>
-              <div class="checkbox-container">
-                <input class="checkbox" type="checkbox" v-model="searchOptions" value="12개월" />
-                <label class="checkbox-label">12개월</label>
+              <div class="filter-title">[이자 계산 방식]</div>
+              <div class="filter-row">
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="단리" />
+                  <label class="checkbox-label">단리</label>
+                </div>
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="복리" />
+                  <label class="checkbox-label">복리</label>
+                </div>
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="인터넷" />
+                  <label class="checkbox-label">인터넷</label>
+                </div>
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="전화가입" />
+                  <label class="checkbox-label">전화가입</label>
+                </div>
               </div>
-              <div class="checkbox-container">
-                <input class="checkbox" type="checkbox" v-model="searchOptions" value="3개월" />
-                <label class="checkbox-label">3개월</label>
-              </div>
-              <div class="checkbox-container">
-                <input class="checkbox" type="checkbox" v-model="searchOptions" value="24개월" />
-                <label class="checkbox-label">24개월</label>
-              </div>
-              <div class="checkbox-container">
-                <input class="checkbox" type="checkbox" v-model="searchOptions" value="6개월" />
-                <label class="checkbox-label">6개월</label>
-              </div>
-              <div class="checkbox-container">
-                <input class="checkbox" type="checkbox" v-model="searchOptions" value="36개월" />
-                <label class="checkbox-label">36개월</label>
-              </div>
-            </div>
-            <div class="filter-title">[가입방법]</div>
-            <div class="filter-row">
-              <div class="checkbox-container">
-                <input class="checkbox" type="checkbox" v-model="searchOptions" value="영업점" />
-                <label class="checkbox-label">영업점</label>
-              </div>
-              <div class="checkbox-container">
-                <input class="checkbox" type="checkbox" v-model="searchOptions" value="모바일" />
-                <label class="checkbox-label">모바일</label>
-              </div>
-            </div>
-            <div class="filter-title">[이자 계산 방식]</div>
-            <div class="filter-row">
-              <div class="checkbox-container">
-                <input class="checkbox" type="checkbox" v-model="searchOptions" value="단리" />
-                <label class="checkbox-label">단리</label>
-              </div>
-              <div class="checkbox-container">
-                <input class="checkbox" type="checkbox" v-model="searchOptions" value="복리" />
-                <label class="checkbox-label">복리</label>
-              </div>
-            </div>
-            <div class="filter-row">
-              <div class="checkbox-container">
-                <input class="checkbox" type="checkbox" v-model="searchOptions" value="인터넷" />
-                <label class="checkbox-label">인터넷</label>
-              </div>
-              <div class="checkbox-container">
-                <input class="checkbox" type="checkbox" v-model="searchOptions" value="전화가입" />
-                <label class="checkbox-label">전화가입</label>
+              <div class="filter-title">[가입기간]</div>
+            <div class="filter-options">
+              <div class="filter-row">
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="1개월" />
+                  <label class="checkbox-label">1개월</label>
+                </div>
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="12개월" />
+                  <label class="checkbox-label">12개월</label>
+                </div>
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="3개월" />
+                  <label class="checkbox-label">3개월</label>
+                </div>
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="24개월" />
+                  <label class="checkbox-label">24개월</label>
+                </div>
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="6개월" />
+                  <label class="checkbox-label">6개월</label>
+                </div>
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="36개월" />
+                  <label class="checkbox-label">36개월</label>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <ComparisonSection 
+          :comparisonProducts="comparisonProducts" 
+          @removeFromComparison="removeFromComparison"
+          @compareProducts="showComparisonModal = true"
+        />
       </div>
-      <ComparisonSection 
-        :comparisonProducts="comparisonProducts" 
-        @removeFromComparison="removeFromComparison"
-        @compareProducts="showComparisonModal = true"
-      />
-    </div>
-    <div class="selectcontainer">
-      <div class="select">
-        <label for="sort">정렬방식: </label>
-        <select id="sort" v-model="sortBy" @change="sortProducts">
-          <option value="productNameAsc">가나다순</option>
-          <option value="releaseDateDesc">최근 출시순</option>
-        </select>
+      <div class="selectcontainer">
+        <div class="select">
+          <label for="sort">정렬방식: </label>
+          <select id="sort" v-model="sortBy" @change="sortProducts">
+            <option value="productNameAsc">가나다순</option>
+            <option value="releaseDateDesc">최근 출시순</option>
+          </select>
+        </div>
       </div>
     </div>
     
@@ -102,7 +101,14 @@
                 <p v-if="selectedInterestRates[product.id]">금리: {{ selectedInterestRates[product.id] }}%</p>
                 
               </div>
+              <img 
+                :src="wishlist.includes(product.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
+                class="wishlist-button" 
+                @click="toggleWishlist(product.id)" 
+                alt="wishlist icon">
+              <button class="comparison-button" @click="addToComparison(product)" :disabled="isInComparison(product.id)">비교함 담기</button>
             </div>
+
             <img 
             :src="wishlist.includes(product.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
             class="wishlist-button" 
@@ -128,9 +134,14 @@
                     {{ option.save_trm }}개월
                   </option>
                 </select>
-                <p v-if="selectedInterestRates[product.id]">금리: {{ selectedInterestRates[product.id] }}%</p>
-                
+                <p v-if="selectedInterestRates[product.id]">금리: {{ selectedInterestRates[product.id] }}%</p>                
               </div>
+              <img 
+                :src="wishlist.includes(product.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
+                class="wishlist-button" 
+                @click="toggleWishlist(product.id)" 
+                alt="wishlist icon">
+              <button class="comparison-button" @click="addToComparison(product)" :disabled="isInComparison(product.id)">비교함 담기</button>
             </div>
             <img 
             :src="wishlist.includes(product.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
@@ -143,6 +154,9 @@
           </div>
         </li>
       </template>
+    <div class="footer">
+      <NavigationFooter />
+
     </div>
     <MyPageRemote />
     <ComparisonModal 
@@ -150,6 +164,7 @@
       :comparisonProducts="comparisonProducts" 
       @close="showComparisonModal = false"
     />
+
     <DepositDetailModal
     v-if="showDepositDetailModal"
     :selectedProduct="selectedProduct"
@@ -161,6 +176,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
+import NavigationFooter from '@/components/NavigationFooter.vue'
 import MyPageRemote from '@/components/MyPageRemote.vue';
 import ComparisonSection from '@/components/ComparisonSection.vue';
 import ComparisonModal from '@/components/ComparisonModal.vue';
@@ -282,11 +298,33 @@ onMounted(() => {
 });
 </script>
 
+<style src="@/assets/global.css"></style>
 <style scoped>
+
+.content {
+  padding-top: 0px; /* Adjust to match the height of your header */
+}
+.footer {
+  width: 83.33%; /* 화면 너비의 10/12를 차지 */
+  margin: 0 auto; /* 중앙 정렬 */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: 100%;
+  text-align: left;
+  font-size: var(--font-size-6xl);
+  color: var(--color4);
+  font-family: var(--small-text);
+  position: relative; /* 수정: absolute에서 relative로 변경 */
+}
+
+
 img {
   width:20px;
   height:20px;
 }
+
 .searchcontainer {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
