@@ -154,8 +154,6 @@
           </div>
         </li>
       </template>
-    <div class="footer">
-      <NavigationFooter />
 
     </div>
     <MyPageRemote />
@@ -170,13 +168,11 @@
     :selectedProduct="selectedProduct"
     @close="showDepositDetailModal = false"
   />
-  </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
-import NavigationFooter from '@/components/NavigationFooter.vue'
 import MyPageRemote from '@/components/MyPageRemote.vue';
 import ComparisonSection from '@/components/ComparisonSection.vue';
 import ComparisonModal from '@/components/ComparisonModal.vue';
@@ -304,21 +300,6 @@ onMounted(() => {
 .content {
   padding-top: 0px; /* Adjust to match the height of your header */
 }
-.footer {
-  width: 83.33%; /* 화면 너비의 10/12를 차지 */
-  margin: 0 auto; /* 중앙 정렬 */
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  max-width: 100%;
-  text-align: left;
-  font-size: var(--font-size-6xl);
-  color: var(--color4);
-  font-family: var(--small-text);
-  position: relative; /* 수정: absolute에서 relative로 변경 */
-}
-
 
 img {
   width:20px;
@@ -372,16 +353,18 @@ img {
 .container {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  margin-bottom: 20px;
+  margin: 0 auto 20px auto; /* 위, 아래는 20px, 좌우는 자동으로 가운데 정렬 */
   display: flex; /* Flexbox 레이아웃 사용 */
   flex-wrap: wrap; /* 내용이 넘치면 다음 줄로 감 */
   gap: 20px; /* 카드 간격 */
   justify-content: flex-start; /* 카드 왼쪽 정렬 */
+  width: 80%; /* 너비를 90%로 설정하여 반응형으로 조정 */
 }
+
 
 .selectcontainer {
   margin-bottom: 20px;
-  width: 100%;
+  width: 85%;
   text-align: end;
 }
 
