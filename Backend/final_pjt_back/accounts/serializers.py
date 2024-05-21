@@ -18,16 +18,12 @@ class UserProductSerializer(serializers.ModelSerializer):
         
 class UserSerializer(serializers.ModelSerializer):
     password_confirm = serializers.CharField(write_only=True)
-    subscribed_products = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Product.objects.all(), write_only=True
-    )
-
     class Meta:
         model = User
         fields = [
             'id', 'username', 'password', 'password_confirm', 'name', 
             'phone_number', 'email', 'user_age_group', 'service_purpose', 
-            'asset', 'subscribed_products'
+            'asset'
         ]
         extra_kwargs = {'password': {'write_only': True}}
 
