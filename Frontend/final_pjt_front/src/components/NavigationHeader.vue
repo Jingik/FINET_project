@@ -31,7 +31,7 @@
       <RouterLink :to="{ name: 'ExchangeView' }"><div class="nav" @mouseover="showDropdown('exchange')" @mouseleave="hideDropdown('exchange')">
         외환/환전
         <div v-if="dropdownVisible.exchange" class="dropdown-content">
-          <RouterLink :to="{ name: 'ExchangeView' }"><div class="dropdown-item">환율조회</div></RouterLink>
+          <RouterLink :to="{ name: 'ExchangeView' }"><div class="dropdown-item">환전계산기</div></RouterLink>
         </div>
       </div>
       </RouterLink>
@@ -50,7 +50,7 @@
       <div class="button-group">
         <RouterLink :to="isLogin ? { name: 'ProfilePage' } : { name: 'LogInView' }">
           <div class="button">
-            <div class="nav">{{ isLogin ? '마이페이지 가기' : '로그인/회원가입' }}</div>
+            <div class="nav">{{ isLogin ? '마이페이지' : '로그인/회원가입' }}</div>
           </div>
         </RouterLink>
         <button v-if="isLogin" @click="logOut" class="button">로그아웃</button>

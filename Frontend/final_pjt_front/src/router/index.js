@@ -19,7 +19,8 @@ import DepositView from '@/views/DepositView.vue'
 import DepositDetailView from '@/views/DepositDetailView.vue'
 import SavingsView from '@/views/SavingsView.vue'
 import CreditloanView from '@/views/CreditloanView.vue'
-
+//마이페이지
+import MyPageView from '@/views/MyPageView.vue'
 import { useUserStore } from '@/stores/user'
 
 const routes = [
@@ -94,6 +95,11 @@ const routes = [
     path: '/creditloan',
     name: 'CreditloanView',
     component: CreditloanView
+  },
+  {
+    path: '/mypage',
+    name: 'ProfilePage',
+    component: MyPageView
   }
   
 ]
