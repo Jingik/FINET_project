@@ -16,7 +16,7 @@ import EditBoardView from '@/views/EditBoardView.vue'
 import KakaoView from '@/views/KakaoView.vue'
 //예적금 조회
 import DepositView from '@/views/DepositView.vue'
-import DepositDetailView from '@/views/DepositDetailView.vue'
+// import DepositDetailView from '@/views/DepositDetailView.vue'
 import SavingsView from '@/views/SavingsView.vue'
 import CreditloanView from '@/views/CreditloanView.vue'
 //마이페이지
@@ -81,11 +81,11 @@ const routes = [
     name: 'DepositView',
     component: DepositView
   },
-  {
-    path: '/deposit/:id/',
-    name: 'DepositDetailView',
-    component: DepositDetailView
-  },
+  // {
+  //   path: '/deposit/:id/',
+  //   name: 'DepositDetailView',
+  //   component: DepositDetailView
+  // },
   {
     path: '/savings',
     name: 'SavingsView',

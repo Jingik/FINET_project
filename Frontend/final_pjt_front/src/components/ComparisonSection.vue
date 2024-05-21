@@ -94,6 +94,16 @@ function formatProductName(productName) {
   position: relative;
 }
 
+.image-parent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  position: relative;
+  z-index: 0; /* Ensure this is at the lowest z-index */
+}
+
 .image-icon {
   height: 40px;
   width: 40px;
@@ -101,7 +111,6 @@ function formatProductName(productName) {
   overflow: hidden;
   flex-shrink: 0;
   object-fit: cover;
-  z-index: 1;
 }
 
 .bank-name {
@@ -110,7 +119,6 @@ function formatProductName(productName) {
   color: #777;
   line-height: 24px;
   display: inline-block;
-  z-index: 1;
 }
 
 .product-name {
@@ -119,7 +127,6 @@ function formatProductName(productName) {
   line-height: 24px;
   display: inline-block;
   color: #000;
-  z-index: 1;
 }
 
 .product-details {
@@ -128,14 +135,6 @@ function formatProductName(productName) {
   align-items: flex-start;
   justify-content: flex-start;
   gap: 5px;
-}
-
-.image-parent {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 10px;
 }
 
 .interest-rates {
@@ -189,6 +188,55 @@ function formatProductName(productName) {
 
 .compare-button:hover {
   background-color: #005cac;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* 높은 z-index 값으로 설정하여 최상단에 위치 */
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 800px;
+  overflow-y: auto;
+  max-height: 90vh;
+  position: relative; /* 추가 */
+  z-index: 1001; /* 추가 */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ddd;
 }
 
 @media screen and (max-width: 900px) {
