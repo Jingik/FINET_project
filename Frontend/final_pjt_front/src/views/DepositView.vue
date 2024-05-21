@@ -10,8 +10,16 @@
                   <label class="checkbox-label">영업점</label>
                 </div>
                 <div class="checkbox-container">
-                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="모바일" />
-                  <label class="checkbox-label">모바일</label>
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="스마트폰" />
+                  <label class="checkbox-label">스마트폰</label>
+                </div>
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="인터넷" />
+                  <label class="checkbox-label">인터넷</label>
+                </div>
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="전화(텔레뱅킹)" />
+                  <label class="checkbox-label">전화(텔레뱅킹)</label>
                 </div>
               </div>
               <div class="filter-title">[이자 계산 방식]</div>
@@ -24,14 +32,6 @@
                   <input class="checkbox" type="checkbox" v-model="searchOptions" value="복리" />
                   <label class="checkbox-label">복리</label>
                 </div>
-                <div class="checkbox-container">
-                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="인터넷" />
-                  <label class="checkbox-label">인터넷</label>
-                </div>
-                <div class="checkbox-container">
-                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="전화가입" />
-                  <label class="checkbox-label">전화가입</label>
-                </div>
               </div>
               <div class="filter-title">[가입기간]</div>
             <div class="filter-options">
@@ -41,20 +41,20 @@
                   <label class="checkbox-label">1개월</label>
                 </div>
                 <div class="checkbox-container">
-                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="12개월" />
-                  <label class="checkbox-label">12개월</label>
-                </div>
-                <div class="checkbox-container">
                   <input class="checkbox" type="checkbox" v-model="searchOptions" value="3개월" />
                   <label class="checkbox-label">3개월</label>
                 </div>
                 <div class="checkbox-container">
-                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="24개월" />
-                  <label class="checkbox-label">24개월</label>
-                </div>
-                <div class="checkbox-container">
                   <input class="checkbox" type="checkbox" v-model="searchOptions" value="6개월" />
                   <label class="checkbox-label">6개월</label>
+                </div>
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="12개월" />
+                  <label class="checkbox-label">12개월</label>
+                </div>
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="24개월" />
+                  <label class="checkbox-label">24개월</label>
                 </div>
                 <div class="checkbox-container">
                   <input class="checkbox" type="checkbox" v-model="searchOptions" value="36개월" />
@@ -89,7 +89,8 @@
             <img :src="`/src/assets/img/${product.kor_co_nm}.png`" alt="" class="product-image">
             <div class="product-info" >
               <h2 v-html="formatProductName(product.fin_prdt_nm)"></h2>
-              <h3>{{ getProductBankName(product.kor_co_nm) }}</h3>
+              <h4>{{ getProductBankName(product.kor_co_nm) }}</h4>
+              
               <p>{{ product.join_way }}</p>
               <div>
                 <label for="term">기간 선택: </label>
@@ -98,8 +99,13 @@
                     {{ option.save_trm }}개월
                   </option>
                 </select>
-                <p v-if="selectedInterestRates[product.id]">금리: {{ selectedInterestRates[product.id] }}%</p>
-                
+                <br>
+                <br>
+                <p v-if="selectedInterestRates[product.id]" class="strong">기본금리 <span class="highlight">{{ selectedInterestRates[product.id] }}%</span>
+                <span v-if="selectedTerms[product.id]" class="superstrong">
+                최고금리 <span class="highlight2">{{ uniqueTerms(product).find(option => option.save_trm === selectedTerms[product.id]).intr_rate2 }}%</span>
+              </span></p>
+
               </div>
               <img 
                 :src="wishlist.includes(product.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
@@ -114,18 +120,20 @@
             class="wishlist-button" 
             @click="toggleWishlist(product.id)" 
             alt="wishlist icon">
+            <div class="align">
             <button class="detail-button" @click="openModal(product)">상세보기</button>
             <button class="comparison-button" @click="addToComparison(product)" :disabled="isInComparison(product.id)">비교함 담기</button>
+          </div>
           </div>
         </p>
       </template>
       <template v-else>
-        <li v-for="product in products" :key="product.id">
+        <p v-for="product in products" :key="product.id">
           <div class="card">
             <img :src="`/src/assets/img/${product.kor_co_nm}.png`" alt="" class="product-image">
             <div class="product-info">
-              <h2>{{ product.fin_prdt_nm }}</h2>
-              <h3>{{ getProductBankName(product.kor_co_nm) }}</h3>
+              <h3>{{ product.fin_prdt_nm }}</h3>
+              <h4>{{ getProductBankName(product.kor_co_nm) }}</h4>
               <p>{{ product.join_way }}</p>
               <div>
                 <label for="term">기간 선택: </label>
@@ -134,7 +142,12 @@
                     {{ option.save_trm }}개월
                   </option>
                 </select>
-                <p v-if="selectedInterestRates[product.id]">금리: {{ selectedInterestRates[product.id] }}%</p>                
+                <br>
+                <br>
+                <p v-if="selectedInterestRates[product.id]" class="strong">기본금리 <span class="highlight">{{ selectedInterestRates[product.id] }}%</span>
+                <span v-if="selectedTerms[product.id]" class="superstrong">
+                최고금리 <span class="highlight2">{{ uniqueTerms(product).find(option => option.save_trm === selectedTerms[product.id]).intr_rate2 }}%</span>
+              </span></p>       
               </div>
               <img 
                 :src="wishlist.includes(product.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
@@ -148,11 +161,12 @@
             class="wishlist-button" 
             @click="toggleWishlist(product.id)" 
             alt="wishlist icon">
-            <img src="@/assets/img/info.png" @click="openDepositDetailModal">
+            <div class="align">
             <button class="detail-button" @click="openModal(product)">상세보기</button>
             <button class="comparison-button" @click="addToComparison(product)" :disabled="isInComparison(product.id)">비교함 담기</button>
           </div>
-        </li>
+          </div>
+        </p>
       </template>
 
     </div>
@@ -271,7 +285,8 @@ function uniqueTerms(product) {
   const terms = product.deposit_options.map(option => option.save_trm);
   return [...new Set(terms)].map(term => ({
     save_trm: term,
-    intr_rate: product.deposit_options.find(option => option.save_trm === term).intr_rate
+    intr_rate: product.deposit_options.find(option => option.save_trm === term).intr_rate,
+    intr_rate2: product.deposit_options.find(option => option.save_trm === term).intr_rate2
   }));
 }
 
@@ -374,6 +389,8 @@ img {
   margin-bottom: 10px;
 }
 
+
+
 .card {
   display: flex;
   flex-direction: column; /* 반응형으로 변경 */
@@ -383,8 +400,28 @@ img {
   border-radius: 5px;
   padding: 20px; /* 패딩을 키움 */
   margin: 15px auto;
-  width: 350px; /* 고정 너비 */
-  height: 300px; /* 고정 높이 */
+  width: 360px; /* 고정 너비 */
+  height: 360px; /* 고정 높이 */
+}
+
+
+.highlight {
+  color: #393434;
+  font-size: 30px;
+  font-weight: bold;
+
+}
+.highlight2 {
+  color:#005cac;
+  font-size: 30px;
+  font-weight: bold;
+}
+.strong {
+  font-size: 15px;
+}
+
+.superstrong {
+  font-size: 15px;
 }
 
 .product-image {
@@ -410,11 +447,14 @@ button {
   border-radius: 3px;
   cursor: pointer;
   margin-top: 10px; /* 버튼 위에 여백 추가 */
+  margin-right : 10px;
+
 }
 
 button:hover {
   background-color: #ddd;
 }
+
 
 .wishlist-button {
   position: absolute;
@@ -425,7 +465,7 @@ button:hover {
   cursor: pointer;
 }
 
-.comparison-button {
+.comparison-button .detail-button {
   position: absolute;
   bottom: 10px;
   right: 10px;
