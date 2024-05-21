@@ -16,17 +16,19 @@
       <div class="bigcontainer">
         <div class="sidemenu">
         </div>
-        <Profile/>
+        <EditProfile />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import Profile from '@/components/Profile.vue';
+import EditProfile from "@/components/EditProfile.vue";
+import { ref } from "vue";
 </script>
 
 <style scoped>
+
 .mypage-container {
   align-items: center;
   justify-content: center;
@@ -50,9 +52,8 @@ import Profile from '@/components/Profile.vue';
   width:10%
 }
 .sidemenu-item1 {
-  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
   text-align: center;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   padding: 10px;
   margin-top: 20px;;
@@ -61,8 +62,9 @@ import Profile from '@/components/Profile.vue';
   border-radius: 10px;
 }
 .sidemenu-item2 {
+  font-size: 24px;
+  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
   text-align: center;
-  font-size: 20px;
   font-weight: bold;
   padding: 10px;
   margin-top: 20px;;

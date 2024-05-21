@@ -389,7 +389,9 @@ img {
   margin-bottom: 10px;
 }
 
-
+.align{
+  align-items: self-end;
+}
 
 .card {
   display: flex;
