@@ -23,10 +23,10 @@ class DepositProducts(models.Model):
 class DepositOptions(models.Model):
     deposit = models.ForeignKey(DepositProducts, on_delete=models.CASCADE)
     deposit_code = models.CharField(max_length=100)
-    intr_rate_type = models.CharField(max_length=100)
-    intr_rate = models.FloatField(null=True)
-    intr_rate2 = models.FloatField(null=True)
-    save_trm = models.CharField(max_length=3)
+    intr_rate_type = models.CharField(max_length=100) # 저축 금리 유형명
+    intr_rate = models.FloatField(null=True) # 저축 금리
+    intr_rate2 = models.FloatField(null=True) # 저축 최대금리
+    save_trm = models.CharField(max_length=3) # 저축 기간
 
 
 # 적금

@@ -44,20 +44,19 @@
             </div>
             <div class="frame-div">
               <div class="div11">한눈에 보기</div>
-              <div class="div12">환율조회</div>
+              <div class="div12">환전계산기</div>
             </div>
             <div class="frame-group">
               <div class="parent1">
                 <div class="div13">추천카드</div>
-                <div class="div14">환전계산기</div>
               </div>
               <div class="div15">내게 맞는 카드</div>
             </div>
           </div>
           <div class="parent2">
             <div class="div16">라운지</div>
-            <div class="page">Page</div>
-            <div class="page1">Page</div>
+            <div class="page"> 은행 찾기</div>
+            <div class="page1">커뮤니티</div>
             <div class="page2">Page</div>
           </div>
         </div>

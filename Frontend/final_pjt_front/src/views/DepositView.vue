@@ -79,65 +79,84 @@
           </select>
         </div>
       </div>
-      <div class="container">
-        <template v-if="filteredProducts.length > 0">
-          <p v-for="product in filteredProducts" :key="product.id">
-            <div class="card">
-              <img :src="`/src/assets/img/${product.kor_co_nm}.png`" alt="" class="product-image">
-              <div class="product-info">
-                <h2 v-html="formatProductName(product.fin_prdt_nm)"></h2>
-                <h3>{{ getProductBankName(product.kor_co_nm) }}</h3>
-                <p>{{ product.join_way }}</p>
-                <div>
-                  <label for="term">기간 선택: </label>
-                  <select v-model="selectedTerms[product.id]" @change="updateInterestRate(product)">
-                    <option v-for="option in uniqueTerms(product)" :key="option.save_trm" :value="option.save_trm">
-                      {{ option.save_trm }}개월
-                    </option>
-                  </select>
-                  <p v-if="selectedInterestRates[product.id]">금리: {{ selectedInterestRates[product.id] }}%</p>
-                </div>
-              </div>
-              <img 
-                :src="wishlist.includes(product.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
-                class="wishlist-button" 
-                @click="toggleWishlist(product.id)" 
-                alt="wishlist icon">
-              <button class="comparison-button" @click="addToComparison(product)" :disabled="isInComparison(product.id)">비교함 담기</button>
-            </div>
-          </p>
-        </template>
-        <template v-else>
-          <p v-for="product in products" :key="product.id">
-            <div class="card">
-              <img :src="`/src/assets/img/${product.kor_co_nm}.png`" alt="" class="product-image">
-              <div class="product-info">
-                <h2>{{ product.fin_prdt_nm }}</h2>
-                <h3>{{ getProductBankName(product.kor_co_nm) }}</h3>
-                <p>{{ product.join_way }}</p>
-                <div>
-                  <label for="term">기간 선택: </label>
-                  <select v-model="selectedTerms[product.id]" @change="updateInterestRate(product)">
-                    <option v-for="option in uniqueTerms(product)" :key="option.save_trm" :value="option.save_trm">
-                      {{ option.save_trm }}개월
-                    </option>
-                  </select>
-                  <p v-if="selectedInterestRates[product.id]">금리: {{ selectedInterestRates[product.id] }}%</p>
-                </div>
-              </div>
-              <img 
-                :src="wishlist.includes(product.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
-                class="wishlist-button" 
-                @click="toggleWishlist(product.id)" 
-                alt="wishlist icon">
-              <button class="comparison-button" @click="addToComparison(product)" :disabled="isInComparison(product.id)">비교함 담기</button>
-            </div>
-          </p>
-        </template>
-      </div>
     </div>
+    
+    <!-- 상품 카드 목록 -->
+    <div class="container">
+      <template v-if="filteredProducts.length > 0">
+        <p v-for="product in filteredProducts" :key="product.id">
+          <div class="card">
+            <img :src="`/src/assets/img/${product.kor_co_nm}.png`" alt="" class="product-image">
+            <div class="product-info" >
+              <h2 v-html="formatProductName(product.fin_prdt_nm)"></h2>
+              <h3>{{ getProductBankName(product.kor_co_nm) }}</h3>
+              <p>{{ product.join_way }}</p>
+              <div>
+                <label for="term">기간 선택: </label>
+                <select v-model="selectedTerms[product.id]" @change="updateInterestRate(product)">
+                  <option v-for="option in uniqueTerms(product)" :key="option.save_trm" :value="option.save_trm">
+                    {{ option.save_trm }}개월
+                  </option>
+                </select>
+                <p v-if="selectedInterestRates[product.id]">금리: {{ selectedInterestRates[product.id] }}%</p>
+                
+              </div>
+              <img 
+                :src="wishlist.includes(product.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
+                class="wishlist-button" 
+                @click="toggleWishlist(product.id)" 
+                alt="wishlist icon">
+              <button class="comparison-button" @click="addToComparison(product)" :disabled="isInComparison(product.id)">비교함 담기</button>
+            </div>
+
+            <img 
+            :src="wishlist.includes(product.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
+            class="wishlist-button" 
+            @click="toggleWishlist(product.id)" 
+            alt="wishlist icon">
+            <button class="detail-button" @click="openModal(product)">상세보기</button>
+            <button class="comparison-button" @click="addToComparison(product)" :disabled="isInComparison(product.id)">비교함 담기</button>
+          </div>
+        </p>
+      </template>
+      <template v-else>
+        <li v-for="product in products" :key="product.id">
+          <div class="card">
+            <img :src="`/src/assets/img/${product.kor_co_nm}.png`" alt="" class="product-image">
+            <div class="product-info">
+              <h2>{{ product.fin_prdt_nm }}</h2>
+              <h3>{{ getProductBankName(product.kor_co_nm) }}</h3>
+              <p>{{ product.join_way }}</p>
+              <div>
+                <label for="term">기간 선택: </label>
+                <select v-model="selectedTerms[product.id]" @change="updateInterestRate(product)">
+                  <option v-for="option in uniqueTerms(product)" :key="option.save_trm" :value="option.save_trm">
+                    {{ option.save_trm }}개월
+                  </option>
+                </select>
+                <p v-if="selectedInterestRates[product.id]">금리: {{ selectedInterestRates[product.id] }}%</p>                
+              </div>
+              <img 
+                :src="wishlist.includes(product.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
+                class="wishlist-button" 
+                @click="toggleWishlist(product.id)" 
+                alt="wishlist icon">
+              <button class="comparison-button" @click="addToComparison(product)" :disabled="isInComparison(product.id)">비교함 담기</button>
+            </div>
+            <img 
+            :src="wishlist.includes(product.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
+            class="wishlist-button" 
+            @click="toggleWishlist(product.id)" 
+            alt="wishlist icon">
+            <img src="@/assets/img/info.png" @click="openDepositDetailModal">
+            <button class="detail-button" @click="openModal(product)">상세보기</button>
+            <button class="comparison-button" @click="addToComparison(product)" :disabled="isInComparison(product.id)">비교함 담기</button>
+          </div>
+        </li>
+      </template>
     <div class="footer">
       <NavigationFooter />
+
     </div>
     <MyPageRemote />
     <ComparisonModal 
@@ -145,18 +164,26 @@
       :comparisonProducts="comparisonProducts" 
       @close="showComparisonModal = false"
     />
+
+    <DepositDetailModal
+    v-if="showDepositDetailModal"
+    :selectedProduct="selectedProduct"
+    @close="showDepositDetailModal = false"
+  />
+  </div>
 </template>
 
 <script setup>
-
+import { ref, computed, onMounted } from 'vue';
+import axios from 'axios';
 import NavigationFooter from '@/components/NavigationFooter.vue'
-import ComparisonSection from '@/components/ComparisonSection.vue'
-import ComparisonModal from '@/components/ComparisonModal.vue'
-import MyPageRemote from '@/components/MyPageRemote.vue'
-import { ref, computed, onMounted } from 'vue'
-import axios from 'axios'
+import MyPageRemote from '@/components/MyPageRemote.vue';
+import ComparisonSection from '@/components/ComparisonSection.vue';
+import ComparisonModal from '@/components/ComparisonModal.vue';
+import DepositDetailModal from '@/components/DepositDetailModal.vue'
 
 const products = ref([]);
+const selectedProduct = ref(null);
 const sortBy = ref('productNameAsc');
 const searchOptions = ref([]);
 const wishlist = ref([]);
@@ -164,6 +191,13 @@ const selectedTerms = ref({});
 const selectedInterestRates = ref({});
 const comparisonProducts = ref([]);
 const showComparisonModal = ref(false);
+const showDepositDetailModal = ref(false);
+
+function openModal(product) {
+  selectedProduct.value = product;
+  showDepositDetailModal.value = true;
+  console.log(selectedProduct.value)
+}
 
 const sortedProducts = computed(() => {
   const sorted = [...products.value];
@@ -266,6 +300,7 @@ onMounted(() => {
 
 <style src="@/assets/global.css"></style>
 <style scoped>
+
 .content {
   padding-top: 0px; /* Adjust to match the height of your header */
 }
@@ -282,6 +317,12 @@ onMounted(() => {
   color: var(--color4);
   font-family: var(--small-text);
   position: relative; /* 수정: absolute에서 relative로 변경 */
+}
+
+
+img {
+  width:20px;
+  height:20px;
 }
 
 .searchcontainer {
@@ -429,6 +470,10 @@ button:hover {
 @media (max-width: 767px) {
   .wishlist-button,
   .comparison-button {
+    position: static; /* 작은 화면에서는 버튼의 위치를 고정하지 않음 */
+    margin-top: 10px; /* 버튼 위에 여백 추가 */
+  }
+  .detail-button {
     position: static; /* 작은 화면에서는 버튼의 위치를 고정하지 않음 */
     margin-top: 10px; /* 버튼 위에 여백 추가 */
   }

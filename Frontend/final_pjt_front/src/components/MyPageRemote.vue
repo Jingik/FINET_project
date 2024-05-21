@@ -1,5 +1,5 @@
 <template>
-  <div class="remocon" >
+  <div class="remocon">
     <div @click="goToMypage" class="shortcut">
       <img src="/src/assets/img/filledheart.png" alt="Mypage Remocon" class="remocon-image">
       <p>관심목록</p>
@@ -15,7 +15,6 @@
       <p>커뮤니티</p>
     </div>
   </div>
-
 </template>
 
 <script setup>
