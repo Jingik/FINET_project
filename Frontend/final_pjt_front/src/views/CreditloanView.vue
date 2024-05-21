@@ -36,21 +36,31 @@
                 <p>{{ getCreditLoanType(creditloan.crdt_prdt_type_nm) }}</p>
                 <p>{{ creditloan.join_way }}</p>
               </div>
+              <img 
+                :src="wishlist.includes(creditloan.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
+                class="wishlist-button" 
+                @click="toggleWishlist(creditloan.id)" 
+                alt="wishlist icon">
+              <button class="btn btn-primary comparison-button" @click="addToComparison(creditloan)">비교함담기</button>
             </div>
           </li>
         </template>
       </ul>
     </div>
+    <MyPageRemote />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
+import MyPageRemote from '@/components/MyPageRemote.vue';
 
 const creditLoans = ref([]);
 const sortBy = ref('productNameAsc');
 const searchOptions = ref([]);
+const wishlist = ref([]);
+const comparisonList = ref([]);
 
 const sortedCreditLoans = computed(() => {
   const sorted = [...creditLoans.value];
@@ -105,6 +115,20 @@ function getCreditLoanType(type) {
   }
 }
 
+function toggleWishlist(creditloanId) {
+  if (wishlist.value.includes(creditloanId)) {
+    wishlist.value = wishlist.value.filter(id => id !== creditloanId);
+  } else {
+    wishlist.value.push(creditloanId);
+  }
+}
+
+function addToComparison(creditloan) {
+  if (!comparisonList.value.includes(creditloan)) {
+    comparisonList.value.push(creditloan);
+  }
+}
+
 onMounted(() => {
   fetchCreditLoans();
 });
@@ -126,26 +150,28 @@ onMounted(() => {
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .selectcontainer {
   margin-bottom: 20px;
-  align-items: center;
   width: 100%;
+  text-align: end;
 }
 
 .select {
+  display: inline-block;
   text-align: center;
   margin-bottom: 10px;
 }
-
 .card {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  position: relative;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 10px;
+  padding: 10px 20px;
   margin: 15px auto;
   width: 1400px;
   height: 100px;
@@ -161,5 +187,31 @@ onMounted(() => {
 
 .creditloan-info h2 {
   font-weight: bold;
+}
+
+button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ddd;
+}
+
+.wishlist-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.comparison-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 </style>

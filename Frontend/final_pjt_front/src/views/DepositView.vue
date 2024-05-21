@@ -1,70 +1,83 @@
 <template>
   <div>
-  <div class="searchcontainer">
-    <div class="checkbox-options">
-      <label>
-        <input type="checkbox" v-model="searchOptions" value="인터넷"> 인터넷
-      </label>
-      <label>
-        <input type="checkbox" v-model="searchOptions" value="스마트폰"> 스마트폰
-      </label>
-      <label>
-        <input type="checkbox" v-model="searchOptions" value="영업점"> 영업점
-      </label>
-      <label>
-        <input type="checkbox" v-model="searchOptions" value="전화(텔레뱅킹)"> 전화(텔레뱅킹)
-      </label>
+    <div class="searchcontainer">
+      <div class="checkbox-options">
+        <label>
+          <input type="checkbox" v-model="searchOptions" value="인터넷"> 인터넷
+        </label>
+        <label>
+          <input type="checkbox" v-model="searchOptions" value="스마트폰"> 스마트폰
+        </label>
+        <label>
+          <input type="checkbox" v-model="searchOptions" value="영업점"> 영업점
+        </label>
+        <label>
+          <input type="checkbox" v-model="searchOptions" value="전화(텔레뱅킹)"> 전화(텔레뱅킹)
+        </label>
+      </div>
     </div>
-  </div>
-  <div class="selectcontainer">
-    <div class="select">
-      <label for="sort">정렬방식: </label>
-      <select id="sort" v-model="sortBy" @change="sortProducts">
-        <option value="productNameAsc">가나다순</option>
-        <option value="releaseDateDesc">최근 출시순</option>
-      </select>
+    <div class="selectcontainer">
+      <div class="select">
+        <label for="sort">정렬방식: </label>
+        <select id="sort" v-model="sortBy" @change="sortProducts">
+          <option value="productNameAsc">가나다순</option>
+          <option value="releaseDateDesc">최근 출시순</option>
+        </select>
+      </div>
     </div>
-  </div>
-  <div class="container">
-    <ul>
-      <!-- 전체 결과가 있는 경우 -->
-      <template v-if="filteredProducts.length > 0">
-        <li v-for="product in filteredProducts" :key="product.id">
-          <div class="card">
-            <img :src="`/src/assets/img/${product.kor_co_nm}.png`" alt="" class="product-image">
-            <div class="product-info">
-              <h2>{{ product.fin_prdt_nm }}</h2>
-              <h3>{{ getProductBankName(product.kor_co_nm) }}</h3>
-              <p>{{ product.join_way }}</p>
+    <div class="container">
+      <ul>
+        <template v-if="filteredProducts.length > 0">
+          <li v-for="product in filteredProducts" :key="product.id">
+            <div class="card">
+              <img :src="`/src/assets/img/${product.kor_co_nm}.png`" alt="" class="product-image">
+              <div class="product-info">
+                <h2>{{ product.fin_prdt_nm }}</h2>
+                <h3>{{ getProductBankName(product.kor_co_nm) }}</h3>
+                <p>{{ product.join_way }}</p>
+              </div>
+              <img 
+                :src="wishlist.includes(product.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
+                class="wishlist-button" 
+                @click="toggleWishlist(product.id)" 
+                alt="wishlist icon">
+              <button class="comparison-button" @click="addToComparison(product)">비교함담기</button>
             </div>
-          </div>
-        </li>
-      </template>
-      <!-- 전체 결과가 없는 경우 -->
-      <template v-else>
-        <li v-for="product in products" :key="product.id">
-          <div class="card">
-            <img :src="`/src/assets/img/${product.kor_co_nm}.png`" alt="" class="product-image">
-            <div class="product-info">
-              <h2>{{ product.fin_prdt_nm }}</h2>
-              <h3>{{ getProductBankName(product.kor_co_nm) }}</h3>
-              <p>{{ product.join_way }}</p>
+          </li>
+        </template>
+        <template v-else>
+          <li v-for="product in products" :key="product.id">
+            <div class="card">
+              <img :src="`/src/assets/img/${product.kor_co_nm}.png`" alt="" class="product-image">
+              <div class="product-info">
+                <h2>{{ product.fin_prdt_nm }}</h2>
+                <h3>{{ getProductBankName(product.kor_co_nm) }}</h3>
+                <p>{{ product.join_way }}</p>
+              </div>
+              <img 
+                :src="wishlist.includes(product.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
+                class="wishlist-button" 
+                @click="toggleWishlist(product.id)" 
+                alt="wishlist icon">
+              <button class="comparison-button" @click="addToComparison(product)">비교함담기</button>
             </div>
-          </div>
-        </li>
-      </template>
-    </ul>
+          </li>
+        </template>
+      </ul>
+    </div>
+    <MyPageRemote />
   </div>
-</div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
+import MyPageRemote from '@/components/MyPageRemote.vue';
 
 const products = ref([]);
-const sortBy = ref('productNameAsc'); // Default sort by name ascending
-const searchOptions = ref([]); // 배열로 변경
+const sortBy = ref('productNameAsc');
+const searchOptions = ref([]);
+const wishlist = ref([]);
 
 const sortedProducts = computed(() => {
   const sorted = [...products.value];
@@ -79,7 +92,6 @@ const sortedProducts = computed(() => {
 const filteredProducts = computed(() => {
   if (!searchOptions.value.length) return sortedProducts.value;
   return sortedProducts.value.filter(product => {
-    // OR 연산으로 필터링
     return searchOptions.value.some(option => product.join_way.includes(option));
   });
 });
@@ -96,7 +108,6 @@ async function fetchProducts() {
   }
 }
 
-
 function sortProducts() {
   // No need to do anything here since computed property 'sortedProducts' will react to changes in 'sortBy'
 }
@@ -112,50 +123,68 @@ function getProductBankName(bankName) {
   }
 }
 
+function addToComparison(product) {
+  console.log('비교함에 담기:', product);
+}
+
+function toggleWishlist(productId) {
+  if (wishlist.value.includes(productId)) {
+    wishlist.value = wishlist.value.filter(id => id !== productId);
+  } else {
+    wishlist.value.push(productId);
+  }
+}
+
 onMounted(() => {
-  // 페이지가 로드될 때 자동으로 조회
   fetchProducts();
 });
 </script>
 
-
 <style scoped>
-
 .searchcontainer {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
   align-items: center;
   justify-content: center;
-  margin: 50px auto; /* 페이지의 가운데 정렬 */
+  margin: 50px auto;
   width: 1500px;
 }
+
+img{
+  margin-right: 10px;
+}
+
 .container {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  margin-bottom: 20px; /* 각 container 사이에 간격 추가 */
-  display: flex; /* 가로 정렬 */
-  justify-content: space-between; /* 양쪽 정렬 */
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .selectcontainer {
-  margin-bottom: 20px; /* 각 container 사이에 간격 추가 */
-  align-items: center; /* 수직 중앙 정렬 */
-  width:100%;
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: end;
 }
+
 .select {
+  display: inline-block;
   text-align: center;
-  margin-bottom: 10px; /* 선택 박스와 카드 사이 간격 */
+  margin-bottom: 10px;
 }
 
 .card {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  position: relative;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 10px auto;
+  padding: 10px 20px;
   margin: 15px auto;
-  width: 1400px; /* 카드 너비를 100%로 설정하여 부모 컨테이너에 맞춤 */
+  width: 1400px;
   height: 100px;
 }
 
@@ -169,5 +198,31 @@ onMounted(() => {
 
 .product-info h2 {
   font-weight: bold;
+}
+
+button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ddd;
+}
+
+.wishlist-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.comparison-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 </style>

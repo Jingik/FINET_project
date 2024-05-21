@@ -3,7 +3,7 @@
     <div class="community-board">
       <div class="header">
         <img class="logo" src="@/assets/img/community.png" alt="communitylogo">
-        <h1>커뮤니티 게시판</h1>
+        <h1>커뮤니티</h1>
       </div>
       <RouterLink :to="{ name: 'CreateView' }" class="btn-create">새 글 작성</RouterLink>
       <BoardList />

@@ -36,6 +36,12 @@
                 <h3>{{ getProductBankName(saving.kor_co_nm) }}</h3>
                 <p>{{ saving.join_way }}</p>
               </div>
+              <img 
+                :src="wishlist.includes(saving.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
+                class="wishlist-button" 
+                @click="toggleWishlist(saving.id)" 
+                alt="wishlist icon">
+              <button class="comparison-button" @click="addToComparison(saving)">비교함담기</button>
             </div>
           </li>
         </template>
@@ -48,21 +54,31 @@
                 <h3>{{ getProductBankName(saving.kor_co_nm) }}</h3>
                 <p>{{ saving.join_way }}</p>
               </div>
+              <img 
+                :src="wishlist.includes(saving.id) ? '/src/assets/img/filledheart.png' : '/src/assets/img/heart.png'" 
+                class="wishlist-button" 
+                @click="toggleWishlist(saving.id)" 
+                alt="wishlist icon">
+                <button class="comparison-button" @click="addToComparison(saving)">비교함담기</button>
             </div>
           </li>
         </template>
       </ul>
     </div>
+    <MyPageRemote />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
+import MyPageRemote from '@/components/MyPageRemote.vue';
 
 const savings = ref([]);
 const sortBy = ref('productNameAsc');
 const searchOptions = ref([]);
+const wishlist = ref([]);
+const comparisonList = ref([]);
 
 const sortedSavings = computed(() => {
   const sorted = [...savings.value];
@@ -108,13 +124,26 @@ function getProductBankName(bankName) {
   }
 }
 
+function toggleWishlist(savingId) {
+  if (wishlist.value.includes(savingId)) {
+    wishlist.value = wishlist.value.filter(id => id !== savingId);
+  } else {
+    wishlist.value.push(savingId);
+  }
+}
+
+function addToComparison(saving) {
+  if (!comparisonList.value.includes(saving)) {
+    comparisonList.value.push(saving);
+  }
+}
+
 onMounted(() => {
   fetchSavings();
 });
 </script>
 
 <style scoped>
-
 
 .searchcontainer {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -131,15 +160,16 @@ onMounted(() => {
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
-
 .selectcontainer {
   margin-bottom: 20px;
-  align-items: center;
   width: 100%;
+  text-align: end;
 }
 
 .select {
+  display: inline-block;
   text-align: center;
   margin-bottom: 10px;
 }
@@ -147,10 +177,11 @@ onMounted(() => {
 .card {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  position: relative;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 10px;
+  padding: 10px 20px;
   margin: 15px auto;
   width: 1400px;
   height: 100px;
@@ -166,5 +197,31 @@ onMounted(() => {
 
 .saving-info h2 {
   font-weight: bold;
+}
+
+button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ddd;
+}
+
+.wishlist-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.comparison-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 </style>
