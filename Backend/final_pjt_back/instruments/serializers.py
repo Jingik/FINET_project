@@ -7,7 +7,7 @@ class DepositOptionsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class DepositProductsSerializer(serializers.ModelSerializer):
-    deposit_options = DepositOptionsSerializer(many=True, read_only=True)
+    deposit_options = DepositOptionsSerializer(many=True, read_only=True, source='depositoptions_set')
 
     class Meta:
         model = DepositProducts
