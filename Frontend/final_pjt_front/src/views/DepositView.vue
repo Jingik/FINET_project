@@ -1,20 +1,76 @@
 <template>
   <div>
     <div class="searchcontainer">
-      <div class="checkbox-options">
-        <label>
-          <input type="checkbox" v-model="searchOptions" value="인터넷"> 인터넷
-        </label>
-        <label>
-          <input type="checkbox" v-model="searchOptions" value="스마트폰"> 스마트폰
-        </label>
-        <label>
-          <input type="checkbox" v-model="searchOptions" value="영업점"> 영업점
-        </label>
-        <label>
-          <input type="checkbox" v-model="searchOptions" value="전화(텔레뱅킹)"> 전화(텔레뱅킹)
-        </label>
+      <div class="filter-container">
+        <div class="filter-section">
+          <div class="filter-title">[가입기간]</div>
+          <div class="filter-options">
+            <div class="filter-row">
+              <div class="checkbox-container">
+                <input class="checkbox" type="checkbox" v-model="searchOptions" value="1개월" />
+                <label class="checkbox-label">1개월</label>
+              </div>
+              <div class="checkbox-container">
+                <input class="checkbox" type="checkbox" v-model="searchOptions" value="12개월" />
+                <label class="checkbox-label">12개월</label>
+              </div>
+              <div class="checkbox-container">
+                <input class="checkbox" type="checkbox" v-model="searchOptions" value="3개월" />
+                <label class="checkbox-label">3개월</label>
+              </div>
+              <div class="checkbox-container">
+                <input class="checkbox" type="checkbox" v-model="searchOptions" value="24개월" />
+                <label class="checkbox-label">24개월</label>
+              </div>
+              <div class="checkbox-container">
+                <input class="checkbox" type="checkbox" v-model="searchOptions" value="6개월" />
+                <label class="checkbox-label">6개월</label>
+              </div>
+              <div class="checkbox-container">
+                <input class="checkbox" type="checkbox" v-model="searchOptions" value="36개월" />
+                <label class="checkbox-label">36개월</label>
+              </div>
+            </div>
+            <div class="filter-title">[가입방법]</div>
+            <div class="filter-row">
+              <div class="checkbox-container">
+                <input class="checkbox" type="checkbox" v-model="searchOptions" value="영업점" />
+                <label class="checkbox-label">영업점</label>
+              </div>
+              <div class="checkbox-container">
+                <input class="checkbox" type="checkbox" v-model="searchOptions" value="모바일" />
+                <label class="checkbox-label">모바일</label>
+              </div>
+            </div>
+            <div class="filter-title">[이자 계산 방식]</div>
+            <div class="filter-row">
+              <div class="checkbox-container">
+                <input class="checkbox" type="checkbox" v-model="searchOptions" value="단리" />
+                <label class="checkbox-label">단리</label>
+              </div>
+              <div class="checkbox-container">
+                <input class="checkbox" type="checkbox" v-model="searchOptions" value="복리" />
+                <label class="checkbox-label">복리</label>
+              </div>
+            </div>
+            <div class="filter-row">
+              <div class="checkbox-container">
+                <input class="checkbox" type="checkbox" v-model="searchOptions" value="인터넷" />
+                <label class="checkbox-label">인터넷</label>
+              </div>
+              <div class="checkbox-container">
+                <input class="checkbox" type="checkbox" v-model="searchOptions" value="전화가입" />
+                <label class="checkbox-label">전화가입</label>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      <ComparisonSection 
+        :comparisonProducts="comparisonProducts" 
+        @removeFromComparison="removeFromComparison"
+        @compareProducts="showComparisonModal = true"
+      />
     </div>
     <div class="selectcontainer">
       <div class="select">
@@ -49,7 +105,7 @@
               class="wishlist-button" 
               @click="toggleWishlist(product.id)" 
               alt="wishlist icon">
-            <button class="comparison-button" @click="addToComparison(product)">비교함 담기</button>
+            <button class="comparison-button" @click="addToComparison(product)" :disabled="isInComparison(product.id)">비교함 담기</button>
           </div>
         </p>
       </template>
@@ -76,20 +132,26 @@
               class="wishlist-button" 
               @click="toggleWishlist(product.id)" 
               alt="wishlist icon">
-            <button class="comparison-button" @click="addToComparison(product)">비교함 담기</button>
+            <button class="comparison-button" @click="addToComparison(product)" :disabled="isInComparison(product.id)">비교함 담기</button>
           </div>
         </li>
       </template>
     </div>
     <MyPageRemote />
+    <ComparisonModal 
+      v-if="showComparisonModal" 
+      :comparisonProducts="comparisonProducts" 
+      @close="showComparisonModal = false"
+    />
   </div>
 </template>
-
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import MyPageRemote from '@/components/MyPageRemote.vue';
+import ComparisonSection from '@/components/ComparisonSection.vue';
+import ComparisonModal from '@/components/ComparisonModal.vue';
 
 const products = ref([]);
 const sortBy = ref('productNameAsc');
@@ -97,6 +159,8 @@ const searchOptions = ref([]);
 const wishlist = ref([]);
 const selectedTerms = ref({});
 const selectedInterestRates = ref({});
+const comparisonProducts = ref([]);
+const showComparisonModal = ref(false);
 
 const sortedProducts = computed(() => {
   const sorted = [...products.value];
@@ -149,7 +213,17 @@ function getProductBankName(bankName) {
 }
 
 function addToComparison(product) {
-  console.log('비교함에 담기:', product);
+  if (comparisonProducts.value.length < 5 && !isInComparison(product.id)) {
+    comparisonProducts.value.push(product);
+  }
+}
+
+function removeFromComparison(productId) {
+  comparisonProducts.value = comparisonProducts.value.filter(product => product.id !== productId);
+}
+
+function isInComparison(productId) {
+  return comparisonProducts.value.some(product => product.id === productId);
 }
 
 function toggleWishlist(productId) {
@@ -182,12 +256,10 @@ function formatProductName(productName) {
   return productName.replace(/ *\([^)]*\) */g, '<br>');
 }
 
-
 onMounted(() => {
   fetchProducts();
 });
 </script>
-
 
 <style scoped>
 .searchcontainer {
@@ -198,6 +270,36 @@ onMounted(() => {
   margin: 50px auto;
   width: 90%; /* 너비를 90%로 설정하여 반응형으로 조정 */
   max-width: 1500px; /* 최대 너비를 설정 */
+}
+
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-title {
+  width: 100%;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 img {
@@ -310,4 +412,3 @@ button:hover {
   }
 }
 </style>
-
