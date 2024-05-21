@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 import requests
@@ -263,3 +264,68 @@ def creditloan_top_rate(request):
     }
     
     return Response(response_data)
+
+
+# 상품 가입 저장
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def subscribe_deposit(request, deposit_id):
+    user = request.user
+    try:
+        deposit_product = DepositProducts.objects.get(id=deposit_id)
+        subscription, created = DepositSubscription.objects.get_or_create(user=user, deposit_product=deposit_product)
+        if not created:
+            return Response({'detail': 'Already subscribed'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = DepositSubscriptionSerializer(subscription)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    except DepositProducts.DoesNotExist:
+        return Response({'detail': 'Deposit product not found'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def subscribe_saving(request, saving_id):
+    user = request.user
+    try:
+        saving_product = SavingProducts.objects.get(id=saving_id)
+        subscription, created = SavingSubscription.objects.get_or_create(user=user, saving_product=saving_product)
+        if not created:
+            return Response({'detail': 'Already subscribed'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = SavingSubscriptionSerializer(subscription)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    except SavingProducts.DoesNotExist:
+        return Response({'detail': 'Saving product not found'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def subscribe_creditloan(request, creditloan_id):
+    user = request.user
+    try:
+        creditloan_product = CreditLoanProducts.objects.get(id=creditloan_id)
+        subscription, created = CreditLoanSubscription.objects.get_or_create(user=user, creditloan_product=creditloan_product)
+        if not created:
+            return Response({'detail': 'Already subscribed'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = CreditLoanSubscriptionSerializer(subscription)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    except CreditLoanProducts.DoesNotExist:
+        return Response({'detail': 'Credit loan product not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+
+# 사용자가 가입한 상품 조회
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_subscriptions(request):
+    user = request.user
+    
+    deposit_subscriptions = DepositSubscription.objects.filter(user=user)
+    saving_subscriptions = SavingSubscription.objects.filter(user=user)
+    creditloan_subscriptions = CreditLoanSubscription.objects.filter(user=user)
+    
+    deposit_serializer = DepositSubscriptionSerializer(deposit_subscriptions, many=True)
+    saving_serializer = SavingSubscriptionSerializer(saving_subscriptions, many=True)
+    creditloan_serializer = CreditLoanSubscriptionSerializer(creditloan_subscriptions, many=True)
+    
+    return Response({
+        'deposit_subscriptions': deposit_serializer.data,
+        'saving_subscriptions': saving_serializer.data,
+        'creditloan_subscriptions': creditloan_serializer.data,
+    }, status=status.HTTP_200_OK)

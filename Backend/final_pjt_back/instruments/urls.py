@@ -19,4 +19,12 @@ urlpatterns = [
     path('creditloan-products/', views.creditloan_products, name='creditloan_products'),
     path('creditloan-product-options/<str:fin_prdt_cd>/', views.creditloan_product_options, name='creditloan_product_options'),
     path('creditloan-top-rate/', views.creditloan_top_rate, name='creditloan_top_rate'),
+    
+    # 상품 가입 저장
+    path('subscribe_deposit/<int:deposit_id>/', views.subscribe_deposit, name='subscribe_deposit'),
+    path('subscribe_saving/<int:saving_id>/', views.subscribe_saving, name='subscribe_saving'),
+    path('subscribe_creditloan/<int:creditloan_id>/', views.subscribe_creditloan, name='subscribe_creditloan'),
+    
+    # 가입 상품 조회
+    path('user_subscriptions/', views.user_subscriptions, name='user_subscriptions'),
 ]

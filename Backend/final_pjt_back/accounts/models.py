@@ -16,6 +16,22 @@ class UserManager(BaseUserManager):
         
         return self.create_user(username, password, **extra_fields)
 
+class Product(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    interest_rate = models.FloatField()
+
+    def __str__(self):
+        return self.name
+
+class UserProduct(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.product.name}"
+
 class User(AbstractBaseUser):
     username = models.CharField(unique=True, max_length=50)
     password = models.CharField(max_length=100)
@@ -35,6 +51,7 @@ class User(AbstractBaseUser):
         ('C', '서비스 목적 C')
     ])
     asset = models.BigIntegerField(default=0)
+    subscribed_products = models.ManyToManyField(Product, through=UserProduct, related_name='subscribers')
 
     objects = UserManager()
 

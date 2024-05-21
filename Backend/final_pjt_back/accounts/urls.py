@@ -23,4 +23,6 @@ urlpatterns = [
     path('id_check_exists/', views.id_check_exists, name='id_check_exists'),
     path('login/', views.user_login, name='user_login'),
     path('profile/<str:username>/', views.user_profile, name='user_profile'),
+    path('subscribe_product/', views.subscribe_product, name='subscribe_product'),
+    path('user_subscriptions/', views.user_subscriptions, name='user_subscriptions'),
 ]

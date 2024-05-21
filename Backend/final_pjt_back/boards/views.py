@@ -4,8 +4,8 @@ from rest_framework.parsers import JSONParser
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
-from .models import Board, Comment
-from .serializers import BoardSerializer, CommentSerializer
+from .models import *
+from .serializers import *
 from django.shortcuts import get_object_or_404
 
 @api_view(['GET', 'POST'])
@@ -119,3 +119,46 @@ def update_board(request, pk):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def like_board(request, board_id):
+    user = request.user
+    try:
+        board = Board.objects.get(id=board_id)
+        like, created = BoardLike.objects.get_or_create(user=user, board=board)
+        if not created:
+            return Response({'detail': 'Already liked'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = BoardLikeSerializer(like)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    except Board.DoesNotExist:
+        return Response({'detail': 'Board not found'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def like_comment(request, comment_id):
+    user = request.user
+    try:
+        comment = Comment.objects.get(id=comment_id)
+        like, created = CommentLike.objects.get_or_create(user=user, comment=comment)
+        if not created:
+            return Response({'detail': 'Already liked'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = CommentLikeSerializer(like)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    except Comment.DoesNotExist:
+        return Response({'detail': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def liked_content(request):
+    user = request.user
+    liked_boards = Board.objects.filter(boardlike__user=user)
+    liked_comments = Comment.objects.filter(commentlike__user=user)
+    
+    board_serializer = BoardSerializer(liked_boards, many=True)
+    comment_serializer = CommentSerializer(liked_comments, many=True)
+    
+    return Response({
+        'liked_boards': board_serializer.data,
+        'liked_comments': comment_serializer.data,
+    }, status=status.HTTP_200_OK)
