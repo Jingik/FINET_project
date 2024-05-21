@@ -20,17 +20,22 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, defineProps, onMounted } from 'vue';
+const selectedProduct = ref(null)
+const props = defineProps(['selectedProduct'])
 
-const selectedProduct = ref(null);
-const selectedTerm = computed(() => selectedProduct.value ? selectedTerms.value[selectedProduct.value.id] : null);
-const selectedOption = computed(() => {
-  if (selectedProduct.value) {
-    const term = selectedTerms.value[selectedProduct.value.id];
-    return selectedProduct.value.deposit_options.find(option => option.save_trm === term);
-  }
-  return null;
-});
+onMounted(()=> {
+  selectedProduct.value  = props.selectedProduct
+})
+
+// const selectedTerm = computed(() => selectedProduct.value ? selectedTerms.value[selectedProduct.value.id] : null);
+// const selectedOption = computed(() => {
+//   if (selectedProduct.value) {
+//     const term = selectedTerms.value[selectedProduct.value.id];
+//     return selectedProduct.value.deposit_options.find(option => option.save_trm === term);
+//   }
+//   return null;
+// });
 
 function closeModal() {
   selectedProduct.value = null;
@@ -39,7 +44,7 @@ function closeModal() {
 
 <style scoped>
 .modal {
-  display: none; /* 모달은 기본적으로 숨김 */
+  display: block; /* 모달은 기본적으로 숨김 */
   position: fixed;
   z-index: 1;
   left: 0;
