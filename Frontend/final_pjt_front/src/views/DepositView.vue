@@ -30,7 +30,7 @@
         <p v-for="product in filteredProducts" :key="product.id">
           <div class="card">
             <img :src="`/src/assets/img/${product.kor_co_nm}.png`" alt="" class="product-image">
-            <div class="product-info">
+            <div class="product-info" @click="openModal(product)">
               <h2 v-html="formatProductName(product.fin_prdt_nm)"></h2>
               <h3>{{ getProductBankName(product.kor_co_nm) }}</h3>
               <p>{{ product.join_way }}</p>
@@ -57,7 +57,7 @@
         <li v-for="product in products" :key="product.id">
           <div class="card">
             <img :src="`/src/assets/img/${product.kor_co_nm}.png`" alt="" class="product-image">
-            <div class="product-info">
+            <div class="product-info" @click="openModal(product)">
               <h2>{{ product.fin_prdt_nm }}</h2>
               <h3>{{ getProductBankName(product.kor_co_nm) }}</h3>
               <p>{{ product.join_way }}</p>
@@ -82,6 +82,8 @@
       </template>
     </div>
     <MyPageRemote />
+    <DepositDetailModal :selectedProduct="selectedProduct" @close="closeModal" />
+
   </div>
 </template>
 
@@ -90,6 +92,8 @@
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import MyPageRemote from '@/components/MyPageRemote.vue';
+import DepositDetailModal from '@/components/DepositDetailModal.vue';
+
 
 const products = ref([]);
 const sortBy = ref('productNameAsc');
