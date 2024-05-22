@@ -36,12 +36,13 @@ export const useCounterStore = defineStore('counter', () => {
     }
   };
 
+  
   const subscribeToProduct = async (depositId) => {
     if (!token.value) {
       throw new Error('User not authenticated');
     }
     try {
-      console.log('Attempting to subscribe with token:', token.value);
+      // console.log('Attempting to subscribe with token:', token.value);
       const response = await axios.post(
         `${API_URL}/financial/subscribe_deposit/${depositId}/`,
         {},
@@ -80,18 +81,110 @@ export const useCounterStore = defineStore('counter', () => {
     }
   };
 
-  const fetchProducts = async () => {
+
+  const savingsubscribeToProduct = async (savingId) => {
+    if (!token.value) {
+      throw new Error('User not authenticated');
+    }
     try {
-      const response = await axios.get(`${API_URL}/financial/deposit-products/`);
+      // console.log('Attempting to subscribe with token:', token.value);
+      const response = await axios.post(
+        `${API_URL}/financial/subscribe_saving/${savingId}/`,
+        {},
+        {
+          headers: {
+            Authorization: `Token ${token.value}`
+          }
+        }
+      );
       return response.data;
     } catch (error) {
       if (error.response && error.response.data) {
         throw new Error(error.response.data.detail);
       } else {
-        throw new Error('An error occurred while fetching the products');
+        throw new Error('An error occurred while subscribing to the product');
       }
     }
   };
+
+  const savingisSubscribedToProduct = async (savingId) => {
+    if (!token.value) {
+      throw new Error('User not authenticated');
+    }
+    try {
+      console.log('Checking subscription status for product:', savingId);
+      const response = await axios.get(`${API_URL}/financial/check_subscription/${savingId}/`, {
+        headers: {
+          Authorization: `Token ${token.value}`
+        }
+      });
+      console.log('Subscription status response:', response.data);
+      return response.data.is_subscribed;
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+      return false;
+    }
+  };
+
+
+  const creditloansubscribeToProduct = async (creditloanId) => {
+    if (!token.value) {
+      throw new Error('User not authenticated');
+    }
+    try {
+      // console.log('Attempting to subscribe with token:', token.value);
+      const response = await axios.post(
+        `${API_URL}/financial/subscribe_creditloan/${creditloanId}/`,
+        {},
+        {
+          headers: {
+            Authorization: `Token ${token.value}`
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        throw new Error(error.response.data.detail);
+      } else {
+        throw new Error('An error occurred while subscribing to the product');
+      }
+    }
+  };
+
+  const creditloanisSubscribedToProduct = async (creditloanId) => {
+    if (!token.value) {
+      throw new Error('User not authenticated');
+    }
+    try {
+      console.log('Checking subscription status for product:', creditloanId);
+      const response = await axios.get(`${API_URL}/financial/check_subscription/${creditloanId}/`, {
+        headers: {
+          Authorization: `Token ${token.value}`
+        }
+      });
+      console.log('Subscription status response:', response.data);
+      return response.data.is_subscribed;
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+      return false;
+    }
+  };
+
+
+
+  // const fetchProducts = async () => {
+  //   try {
+  //     const response = await axios.get(`${API_URL}/financial/deposit-products/`);
+  //     return response.data;
+  //   } catch (error) {
+  //     if (error.response && error.response.data) {
+  //       throw new Error(error.response.data.detail);
+  //     } else {
+  //       throw new Error('An error occurred while fetching the products');
+  //     }
+  //   }
+  // };
 
   return {
     boards,
@@ -101,7 +194,11 @@ export const useCounterStore = defineStore('counter', () => {
     getBoards,
     fetchCurrentUser,
     subscribeToProduct,
-    fetchProducts,
-    isSubscribedToProduct
+    // fetchProducts,
+    isSubscribedToProduct,
+    savingsubscribeToProduct,
+    savingisSubscribedToProduct,
+    creditloanisSubscribedToProduct,
+    creditloansubscribeToProduct,
   };
 }, { persist: true });

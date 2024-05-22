@@ -28,20 +28,13 @@
           <li><strong>특별 조건:</strong> {{ localSelectedProduct.spcl_cnd }}</li>
         </ul>
         <div class="term-select">
-          <label for="term-select">신용 등급 선택:</label>
-          <div class="button-group">
-            <button
-              v-for="term in uniqueTerms(localSelectedProduct)"
-              :key="term"
-              :class="{'selected-button': selectedTerm === term}"
-              @click="selectedTerm = term"
-            >
-              {{ term }} 등급
-            </button>
-          </div>
+          <label for="term-select">가입 기간 선택:</label>
+          <select id="term-select" v-model="selectedTerm">
+            <option v-for="term in uniqueTerms(localSelectedProduct)" :key="term" :value="term">{{ term }} 개월</option>
+          </select>
         </div>
         <canvas ref="chartCanvas" width="400" height="200"></canvas>
-        <button @click="subscribeProduct">상품 가입</button>
+        <button @click="savingsubscribeToProduct">상품 가입</button>
       </div>
     </div>
   </div>
@@ -50,7 +43,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 import { Chart } from 'chart.js/auto';
-import { useCounterStore } from '@/stores/counter'; // Adjust the path as necessary
+import { useCounterStore } from '@/stores/counter'; 
 
 const props = defineProps({
   selectedProduct: {
@@ -68,31 +61,31 @@ const chart = ref(null);
 const chartCanvas = ref(null);
 
 const selectedOption = computed(() => {
-  if (localSelectedProduct.value && localSelectedProduct.value.deposit_options) {
-    return localSelectedProduct.value.deposit_options.find(option => option.save_trm === selectedTerm.value) || null;
+  if (localSelectedProduct.value && localSelectedProduct.value.saving_options) {
+    return localSelectedProduct.value.saving_options.find(option => option.save_trm === selectedTerm.value) || null;
   }
   return null;
 });
 
 const rate12Months = computed(() => {
-  if (localSelectedProduct.value && localSelectedProduct.value.deposit_options) {
-    const option = localSelectedProduct.value.deposit_options.find(option => option.save_trm === "12");
+  if (localSelectedProduct.value && localSelectedProduct.value.saving_options) {
+    const option = localSelectedProduct.value.saving_options.find(option => option.save_trm === "12");
     return option ? option.intr_rate : null;
   }
   return null;
 });
 
 const uniqueTerms = (product) => {
-  if (product && product.deposit_options) {
-    const terms = product.deposit_options.map(option => option.save_trm);
+  if (product && product.saving_options) {
+    const terms = product.saving_options.map(option => option.save_trm);
     return [...new Set(terms)].sort((a, b) => a - b);
   }
   return [];
 };
 
 watch(localSelectedProduct, (newProduct) => {
-  if (newProduct && newProduct.deposit_options) {
-    selectedTerm.value = newProduct.deposit_options[0]?.save_trm || null;
+  if (newProduct && newProduct.saving_options) {
+    selectedTerm.value = newProduct.saving_options[0]?.save_trm || null;
     if (selectedTerm.value) {
       renderChart();
     }
@@ -103,10 +96,10 @@ function renderChart() {
   if (chart.value) {
     chart.value.destroy();
   }
-  if (localSelectedProduct.value && localSelectedProduct.value.deposit_options) {
+  if (localSelectedProduct.value && localSelectedProduct.value.saving_options) {
     const terms = uniqueTerms(localSelectedProduct.value);
     const rates = terms.map(term => {
-      const option = localSelectedProduct.value.deposit_options.find(option => option.save_trm === term);
+      const option = localSelectedProduct.value.saving_options.find(option => option.save_trm === term);
       return option ? option.intr_rate : 0;
     });
 
@@ -148,16 +141,16 @@ function closeModal() {
   emit('close');
 }
 
-async function subscribeProduct() {
+async function savingsubscribeToProduct() {
   try {
-    const alreadySubscribed = await counterStore.isSubscribedToProduct(localSelectedProduct.value.id);
+    const alreadySubscribed = await counterStore.savingisSubscribedToProduct(localSelectedProduct.value.id);
     if (alreadySubscribed) {
       alert('이미 가입된 상품입니다.');
       closeModal();
       return;
     }
 
-    const response = await counterStore.subscribeToProduct(localSelectedProduct.value.id);
+    const response = await counterStore.savingsubscribeToProduct(localSelectedProduct.value.id);
     alert('상품 가입이 성공적으로 완료되었습니다!');
     closeModal();
   } catch (error) {
@@ -167,8 +160,8 @@ async function subscribeProduct() {
 }
 
 onMounted(() => {
-  if (localSelectedProduct.value && localSelectedProduct.value.deposit_options) {
-    selectedTerm.value = localSelectedProduct.value.deposit_options[0]?.save_trm || null;
+  if (localSelectedProduct.value && localSelectedProduct.value.saving_options) {
+    selectedTerm.value = localSelectedProduct.value.saving_options[0]?.save_trm || null;
     if (selectedTerm.value) {
       renderChart();
     }

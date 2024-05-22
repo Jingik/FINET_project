@@ -9,10 +9,7 @@
         <ul>
           <li><strong>은행:</strong> {{ localSelectedProduct.kor_co_nm }}</li>
           <li><strong>계약기간:</strong> 최소 1개월, 최대 2년 이하</li>
-          <li><strong>적금종류:</strong> 자유적립식</li>
-          <li v-if="rate12Months">
-            <strong>금리안내:</strong> <span class="highlight">{{ rate12Months }}% (세전, 연 12개월)</span>
-          </li>
+          <li><strong>대출종류:</strong> 일반신용대출</li>
           <li v-if="selectedOption">
             <strong>이자 계산 방식:</strong> {{ selectedOption.crdt_lend_rate_type_nm }}
             <br>
@@ -32,7 +29,7 @@
           </select>
         </div>
         <canvas ref="chartCanvas" width="400" height="200"></canvas>
-        <button @click="subscribeProduct">상품 가입</button>
+        <button @click="creditloansubscribeToProduct">상품 가입</button>
       </div>
     </div>
   </div>
@@ -59,52 +56,45 @@ const chart = ref(null);
 const chartCanvas = ref(null);
 
 const selectedOption = computed(() => {
-  if (localSelectedProduct.value && localSelectedProduct.value.credit_loan_options) {
-    return localSelectedProduct.value.credit_loan_options.find(option => option.save_trm === selectedTerm.value);
-  }
-  return null;
-});
-
-const rate12Months = computed(() => {
-  if (localSelectedProduct.value && localSelectedProduct.value.credit_loan_options) {
-    const option = localSelectedProduct.value.credit_loan_options.find(option => option.save_trm === "12");
-    return option ? option.crdt_grad_avg : null;
+  if (localSelectedProduct.value && localSelectedProduct.value.creditloan_options) {
+    return localSelectedProduct.value.creditloan_options.find(option => option[`crdt_grad_${selectedTerm.value}`]);
   }
   return null;
 });
 
 const uniqueTerms = (product) => {
-  if (product && product.credit_loan_options) {
-    const terms = product.credit_loan_options.map(option => option.save_trm);
-    return [...new Set(terms)].sort((a, b) => a - b);
-  }
-  return [];
+  const terms = [1, 4, 5, 6, 10, 11, 12, 13];
+  return terms.filter(term => product.creditloan_options.some(option => option[`crdt_grad_${term}`] !== undefined));
 };
 
 watch(localSelectedProduct, (newProduct) => {
-  if (newProduct && newProduct.credit_loan_options) {
-    selectedTerm.value = newProduct.credit_loan_options[0]?.save_trm || null;
+  if (newProduct && newProduct.creditloan_options) {
+    selectedTerm.value = uniqueTerms(newProduct)[0] || null;
     renderChart();
   }
+});
+
+watch(selectedTerm, () => {
+  renderChart();
 });
 
 function renderChart() {
   if (chart.value) {
     chart.value.destroy();
   }
-  if (localSelectedProduct.value && localSelectedProduct.value.credit_loan_options) {
+  if (localSelectedProduct.value && localSelectedProduct.value.creditloan_options) {
     const terms = uniqueTerms(localSelectedProduct.value);
     const rates = terms.map(term => {
-      const option = localSelectedProduct.value.credit_loan_options.find(option => option.save_trm === term);
-      return option ? option.crdt_grad_avg : 0;
+      const option = localSelectedProduct.value.creditloan_options.find(option => option[`crdt_grad_${term}`] !== undefined);
+      return option ? option[`crdt_grad_${term}`] : 0;
     });
 
     chart.value = new Chart(chartCanvas.value, {
       type: 'line',
       data: {
-        labels: terms,
+        labels: terms.map(term => `${term} 등급`),
         datasets: [{
-          label: 'Interest Rates by Term',
+          label: 'Interest Rates by Credit Grade',
           data: rates,
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 1,
@@ -117,7 +107,7 @@ function renderChart() {
           x: {
             title: {
               display: true,
-              text: 'Term (Months)'
+              text: 'Credit Grade'
             }
           },
           y: {
@@ -137,16 +127,16 @@ function closeModal() {
   emit('close');
 }
 
-async function subscribeProduct() {
+async function creditloansubscribeToProduct() {
   try {
-    const alreadySubscribed = await counterStore.isSubscribedToProduct(localSelectedProduct.value.id);
+    const alreadySubscribed = await counterStore.creditloanisSubscribedToProduct(localSelectedProduct.value.id);
     if (alreadySubscribed) {
       alert('이미 가입된 상품입니다.');
       closeModal();
       return;
     }
 
-    const response = await counterStore.subscribeToProduct(localSelectedProduct.value.id);
+    const response = await counterStore.creditloansubscribeToProduct(localSelectedProduct.value.id);
     alert('상품 가입이 성공적으로 완료되었습니다!');
     closeModal();
   } catch (error) {

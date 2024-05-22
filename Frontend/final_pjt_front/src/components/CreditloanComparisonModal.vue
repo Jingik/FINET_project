@@ -15,8 +15,8 @@
           <tr v-for="product in comparisonProducts" :key="product.id">
             <td>{{ product.fin_prdt_nm }}</td>
             <td>{{ product.kor_co_nm }}</td>
-            <td>{{ getInterestRate(product, '12') }}%</td>
-            <td>{{ getInterestRate(product, '24') }}%</td>
+            <td>{{ getInterestRate(product, 'crdt_grad_1') }}%</td>
+            <td>{{ getInterestRate(product, 'crdt_grad_4') }}%</td>
           </tr>
         </tbody>
       </table>
@@ -28,7 +28,7 @@
 
 <script setup>
 import { defineProps, defineEmits } from 'vue';
-import BarChart from './DepositCompareBarChart.vue';
+import BarChart from './CreditloanCompareBarChart.vue';
 
 const props = defineProps({
   comparisonProducts: {
@@ -43,8 +43,8 @@ function close() {
   emits('close');
 }
 
-function getInterestRate(product, months) {
-  return product.deposit_options.find(option => option.save_trm === months)?.intr_rate || 0;
+function getInterestRate(product, gradeKey) {
+  return product.creditloan_options.find(option => option[gradeKey])?.[gradeKey] || 0;
 }
 </script>
 

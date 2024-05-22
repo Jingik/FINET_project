@@ -34,19 +34,19 @@
           <div class="margintop">
             <label for="user_age_group">연령대</label>
             <select v-model="user_age_group" id="user_age_group" required>
-              <option value="10s">10대</option>
-              <option value="20s">20대</option>
-              <option value="30s">30대</option>
-              <option value="40s">40대</option>
-              <option value="50s">50대</option>
+              <option value="10대">10대</option>
+              <option value="20대">20대</option>
+              <option value="30대">30대</option>
+              <option value="40대">40대</option>
+              <option value="50대">50대</option>
             </select>
           </div>
           <div class="margintop">
             <label for="service_purpose">서비스 목적</label>
             <select v-model="service_purpose" id="service_purpose" required>
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
+              <option value="예금 가입">예금 가입</option>
+              <option value="적금 가입">적금 가입</option>
+              <option value="대출 가입">대출 가입</option>
             </select>
           </div>
           <div class="margintop">
@@ -86,8 +86,12 @@ const store = useUserStore();
 
 const checkDuplicateUsername = async () => {
   isUsernameChecked.value = true;
-  const response = await store.checkUsername(username.value);
-  isDuplicateUsername.value = response.isDuplicate;
+  try {
+    const response = await store.checkUsername(username.value);
+    isDuplicateUsername.value = response.isDuplicate;
+  } catch (error) {
+    console.error('Error checking username:', error);
+  }
 };
 
 const signUp = async () => {
@@ -107,7 +111,14 @@ const signUp = async () => {
     email: email.value,
     assets: assets.value
   };
-  await store.signUp(payload);
+
+  try {
+    await store.signUp(payload);
+    alert('회원가입이 완료되었습니다.');
+  } catch (error) {
+    console.error('Error signing up:', error);
+    alert('회원가입에 실패했습니다.');
+  }
 };
 </script>
 

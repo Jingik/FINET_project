@@ -3,6 +3,17 @@
       <div class="searchcontainer">
         <div class="filter-container">
           <div class="filter-section">
+              <div class="filter-title">[이자 계산 방식]</div>
+              <div class="filter-row">
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="단리" />
+                  <label class="checkbox-label">단리</label>
+                </div>
+                <div class="checkbox-container">
+                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="복리" />
+                  <label class="checkbox-label">복리</label>
+                </div>
+              </div>
               <div class="filter-title">[가입방법]</div>
               <div class="filter-row">
                 <div class="checkbox-container">
@@ -20,17 +31,6 @@
                 <div class="checkbox-container">
                   <input class="checkbox" type="checkbox" v-model="searchOptions" value="전화(텔레뱅킹)" />
                   <label class="checkbox-label">전화(텔레뱅킹)</label>
-                </div>
-              </div>
-              <div class="filter-title">[이자 계산 방식]</div>
-              <div class="filter-row">
-                <div class="checkbox-container">
-                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="단리" />
-                  <label class="checkbox-label">단리</label>
-                </div>
-                <div class="checkbox-container">
-                  <input class="checkbox" type="checkbox" v-model="searchOptions" value="복리" />
-                  <label class="checkbox-label">복리</label>
                 </div>
               </div>
               <div class="filter-title">[가입기간]</div>

@@ -47,13 +47,13 @@ function compareProducts() {
 }
 
 function getMaxRate(product) {
-  if (!product || !product.deposit_options) return 0;
-  return Math.max(...product.deposit_options.map(option => option.intr_rate || 0));
+  if (!product || !product.creditloan_options) return 0;
+  return Math.max(...product.creditloan_options.map(option => option.crdt_grad_1 || 0));
 }
 
 function getAvgRate(product) {
-  if (!product || !product.deposit_options) return 0;
-  const rates = product.deposit_options.map(option => option.intr_rate || 0);
+  if (!product || !product.creditloan_options) return 0;
+  const rates = product.creditloan_options.map(option => option.crdt_grad_1 || 0);
   return (rates.reduce((a, b) => a + b, 0) / rates.length).toFixed(2);
 }
 

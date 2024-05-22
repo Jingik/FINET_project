@@ -28,7 +28,7 @@
 
 <script setup>
 import { defineProps, defineEmits } from 'vue';
-import BarChart from './DepositCompareBarChart.vue';
+import BarChart from './SavingCompareBarChart.vue';
 
 const props = defineProps({
   comparisonProducts: {
@@ -44,7 +44,7 @@ function close() {
 }
 
 function getInterestRate(product, months) {
-  return product.deposit_options.find(option => option.save_trm === months)?.intr_rate || 0;
+  return product.saving_options.find(option => option.save_trm === months)?.intr_rate || 0;
 }
 </script>
 

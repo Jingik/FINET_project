@@ -100,7 +100,7 @@
   };
   
   function getInterestRate(product, months) {
-    return product.deposit_options.find(option => option.save_trm === months)?.intr_rate || 0;
+    return product.saving_options.find(option => option.save_trm === months)?.intr_rate || 0;
   }
   </script>
   
