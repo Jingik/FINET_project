@@ -43,20 +43,20 @@ const routes = [
   { path: '/users/login', name: 'LogInView', component: LogInView },
   { path: '/users/findid', name: 'FindIdView', component: FindIdView },
   { path: '/exchange', name: 'ExchangeView', component: ExchangeView },
-  {
-    path: '/mypage/:username*',
-    // 아직 MyPage 구현 안되어 있음 우선 maps로 가게 구현
-    // component: MyPageView,
-    component: KakaoView,
-    name: 'ProfilePage',
-    beforeEnter: (to, from) => {
-      const userStore = useUserStore()
-      if (!userStore.isLogin) {
-        alert('로그인 후 이용 가능합니다.')
-        return { name: 'LogInView' }
-      }
-    }
-  },
+  // {
+  //   path: '/mypage/:username*',
+  //   // 아직 MyPage 구현 안되어 있음 우선 maps로 가게 구현
+  //   // component: MyPageView,
+  //   component: KakaoView,
+  //   name: 'ProfilePage',
+  //   beforeEnter: (to, from) => {
+  //     const userStore = useUserStore()
+  //     if (!userStore.isLogin) {
+  //       alert('로그인 후 이용 가능합니다.')
+  //       return { name: 'LogInView' }
+  //     }
+  //   }
+  // },
   {
     path: '/posts',
     name: 'BoardView',

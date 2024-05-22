@@ -31,28 +31,36 @@ import Profile from '@/components/Profile.vue';
   align-items: center;
   justify-content: center;
   padding: 20px;
-  margin: 50px auto;
+  margin : 60px auto;
   width: 1920px;
 }
 
 .mypage {
+  margin : 60px auto;
   display: flex;
   flex-direction: row;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   background-color: #0599f1;
-  height: 900px;
+  height: 700px;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-
+  width: 1500px;
 }
+.bigcontainer {
+  display:flex;
+  flex-direction: column;
+  height:100%;
+  width:90%;
+}
+
 .sidemenu {
   width:10%
 }
 .sidemenu-item1 {
   box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
   text-align: center;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: bold;
   padding: 10px;
   margin-top: 20px;;
@@ -62,18 +70,12 @@ import Profile from '@/components/Profile.vue';
 }
 .sidemenu-item2 {
   text-align: center;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
   padding: 10px;
   margin-top: 20px;;
   height:50px;
   background-color: white;
   border-radius: 10px;
-}
-.bigcontainer {
-  display:flex;
-  flex-direction: column;
-  height:100%;
-  width:90%;
 }
 </style>

@@ -97,8 +97,8 @@ const selectedType = ref(productTypes.value[0]);
 
 <style scoped>
 img {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 }
 
 span {
@@ -140,7 +140,7 @@ span {
 } */
 
 h2 {
-  font-size: 1.5em;
+  font-size: 1em;
   margin: 15px 20px 15px;
 }
 
