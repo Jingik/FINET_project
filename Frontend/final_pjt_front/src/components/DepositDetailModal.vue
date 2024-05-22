@@ -41,8 +41,9 @@
 </template>
 
 <script setup>
-import { ref, computed, defineProps, watch, defineEmits, onMounted } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { Chart } from 'chart.js/auto';
+import { useCounterStore } from '@/stores/counter'; // Adjust the path as necessary
 
 const props = defineProps({
   selectedProduct: {
@@ -52,6 +53,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close']);
+const counterStore = useCounterStore();
 
 const localSelectedProduct = ref(props.selectedProduct);
 const selectedTerm = ref(null);
@@ -78,10 +80,8 @@ const uniqueTerms = (product) => {
   return [...new Set(terms)].sort((a, b) => a - b);
 };
 
-watch(props.selectedProduct, (newProduct) => {
+watch(localSelectedProduct, (newProduct) => {
   if (newProduct) {
-    localSelectedProduct.value = newProduct;
-    // Set default term to the first available option's term
     selectedTerm.value = newProduct.deposit_options[0]?.save_trm || null;
     renderChart();
   }
@@ -131,13 +131,25 @@ function renderChart() {
 }
 
 function closeModal() {
-  // Emit a close event to the parent
-  localSelectedProduct.value = null;
   emit('close');
 }
 
-function subscribeProduct() {
-  alert('상품 가입 버튼이 클릭되었습니다!');
+async function subscribeProduct() {
+  try {
+    const alreadySubscribed = await counterStore.isSubscribedToProduct(localSelectedProduct.value.id);
+    if (alreadySubscribed) {
+      alert('이미 가입된 상품입니다.');
+      closeModal();
+      return;
+    }
+
+    const response = await counterStore.subscribeToProduct(localSelectedProduct.value.id);
+    alert('상품 가입이 성공적으로 완료되었습니다!');
+    closeModal();
+  } catch (error) {
+    alert(`상품 가입에 실패했습니다: ${error.message}`);
+    closeModal();
+  }
 }
 
 onMounted(() => {

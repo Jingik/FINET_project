@@ -5,75 +5,85 @@ import { useRouter } from 'vue-router';
 
 export const useUserStore = defineStore('user', () => {
   const articles = ref([]);
-  const API_URL = 'http://127.0.0.1:8000/users';  // 여기서 API URL을 정확하게 설정합니다.
-  const token = ref(localStorage.getItem('auth_token') || null);
+  const API_URL = 'http://127.0.0.1:8000/users';  // 정확한 API URL 설정
+  const token = ref(null)
   const isLogin = computed(() => !!token.value);
   const router = useRouter();
 
-  const getArticles = async function () {
-    try {
-      const response = await axios.get(`${API_URL}/api/v1/posts/`, {
-        headers: {
-          Authorization: `Token ${token.value}`
-        }
-      });
-      articles.value = response.data;
-    } catch (error) {
-      console.log(error);
-    }
+  // 토큰 초기화
+  const clearToken = () => {
+    token.value = null;
+    localStorage.removeItem('auth_token');
+    delete axios.defaults.headers.common['Authorization'];
   };
 
-  const signUp = async function (payload) {
+  // 회원가입
+  const signUp = async (payload) => {
     const { username, password1, password2, phone_number, name, user_age_group, service_purpose, email, assets } = payload;
 
     try {
       const response = await axios.post(`${API_URL}/signup/`, {
-        username, password: password1, password_confirm: password2, phone_number, name, user_age_group, service_purpose, email, assets
+        username,
+        password: password1,
+        password_confirm: password2,
+        phone_number,
+        name,
+        user_age_group,
+        service_purpose,
+        email,
+        assets
       });
       console.log('회원가입 성공!');
-      const password = password1;
-      await logIn({ username, password });
+      await logIn({ username, password: password1 });
     } catch (error) {
-      console.log(error);
+      console.error('회원가입 실패:', error);
     }
   };
 
-  const logIn = async function (payload) {
+  // 로그인
+  const logIn = async (payload) => {
     const { username, password } = payload;
 
     try {
       const response = await axios.post(`${API_URL}/login/`, { username, password });
-
-      token.value = response.data.token;  // Assuming the response contains a field 'token'
-      localStorage.setItem('auth_token', response.data.token);
-      axios.defaults.headers.common['Authorization'] = `Token ${response.data.token}`;
-
-      console.log('로그인 성공, 토큰:', token.value);  // 로그인 상태 확인
+      token.value = response.data.key
+      console.log('로그인 성공, 토큰:', token.value);
       console.log('isLogin:', isLogin.value);
-
       router.push({ name: 'MainLogin' });
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error('로그인 실패:', error);
     }
   };
 
-  const logOut = function () {
-    token.value = null;
-    localStorage.removeItem('auth_token');
-    delete axios.defaults.headers.common['Authorization'];
+  // 로그아웃
+  const logOut = () => {
+    clearToken();
     console.log('로그아웃 성공');
     router.push({ name: 'LogInView' });
   };
 
-  const checkUsername = async function (username) {
+  // 사용자명 중복 확인
+  const checkUsername = async (username) => {
     try {
       const response = await axios.get(`${API_URL}/id_check_exists/`, { params: { username } });
       return { isDuplicate: response.data.exists };
     } catch (error) {
-      console.error('Username check failed:', error);
+      console.error('사용자명 중복 확인 실패:', error);
       return { isDuplicate: true };
     }
   };
 
-  return { articles, API_URL, getArticles, signUp, logIn, logOut, token, isLogin, checkUsername };
-}, { persist: true });
+  return {
+    articles,
+    API_URL,
+    signUp,
+    logIn,
+    logOut,
+    token,
+    isLogin,
+    checkUsername,
+    clearToken
+  };
+}, {
+  persist: true
+});

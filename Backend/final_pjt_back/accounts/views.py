@@ -92,33 +92,3 @@ def user_profile(request, username):
             serializer.save()
             return JsonResponse({'message': 'Profile updated successfully'}, status=status.HTTP_200_OK)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def subscribe_product(request):
-    user = request.user
-    product_id = request.data.get('product_id')
-
-    if not product_id:
-        return Response({'detail': 'Product ID is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-    try:
-        product = Product.objects.get(id=product_id)
-    except Product.DoesNotExist:
-        return Response({'detail': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
-
-    user_product, created = UserProduct.objects.get_or_create(user=user, product=product)
-
-    if not created:
-        return Response({'detail': 'Already subscribed'}, status=status.HTTP_400_BAD_REQUEST)
-
-    serializer = UserProductSerializer(user_product)
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def user_subscriptions(request):
-    user = request.user
-    subscriptions = UserProduct.objects.filter(user=user)
-    serializer = UserProductSerializer(subscriptions, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)

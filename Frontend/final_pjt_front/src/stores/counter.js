@@ -1,44 +1,107 @@
-import { ref } from 'vue'
-import { defineStore } from 'pinia'
-import axios from 'axios'
+import { ref, computed } from 'vue';
+import { defineStore } from 'pinia';
+import axios from 'axios';
+import { useUserStore } from "@/stores/user";
 
 export const useCounterStore = defineStore('counter', () => {
-  const boards = ref([])
-  const currentUser = ref(null)
-  const token = ref(null)
-  const API_URL = 'http://127.0.0.1:8000'
+  const boards = ref([]);
+  const currentUser = ref(null);
+  const useuserstore = useUserStore();
+  const token = computed(() => useuserstore.token);
+  const API_URL = 'http://127.0.0.1:8000';
 
-  const getBoards = function () {
-    axios({
-      method: 'get',
-      url: `${API_URL}/posts`
-    })
-      .then(response => {
-        console.log(response)
-        console.log(response.data)
-        boards.value = response.data
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }
+  const getBoards = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/posts`, {
+        headers: {
+          Authorization: `Token ${token.value}`
+        }
+      });
+      boards.value = response.data;
+    } catch (error) {
+      console.error('Error fetching boards:', error);
+    }
+  };
 
-  const fetchCurrentUser = async function () {
+  const fetchCurrentUser = async () => {
     try {
       const response = await axios.get(`${API_URL}/users/me/`, {
         headers: {
           Authorization: `Token ${token.value}`
         }
-      })
-      currentUser.value = response.data
-    } catch (err) {
-      console.error('An error occurred while fetching the current user:', err)
+      });
+      currentUser.value = response.data;
+    } catch (error) {
+      console.error('An error occurred while fetching the current user:', error);
     }
-  }
+  };
 
-  const setToken = function (newToken) {
-    token.value = newToken
-  }
+  const subscribeToProduct = async (depositId) => {
+    if (!token.value) {
+      throw new Error('User not authenticated');
+    }
+    try {
+      console.log('Attempting to subscribe with token:', token.value);
+      const response = await axios.post(
+        `${API_URL}/financial/subscribe_deposit/${depositId}/`,
+        {},
+        {
+          headers: {
+            Authorization: `Token ${token.value}`
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        throw new Error(error.response.data.detail);
+      } else {
+        throw new Error('An error occurred while subscribing to the product');
+      }
+    }
+  };
 
-  return { boards, currentUser, token, API_URL, getBoards, fetchCurrentUser, setToken }
-}, { persist: true })
+  const isSubscribedToProduct = async (depositId) => {
+    if (!token.value) {
+      throw new Error('User not authenticated');
+    }
+    try {
+      console.log('Checking subscription status for product:', depositId);
+      const response = await axios.get(`${API_URL}/financial/check_subscription/${depositId}/`, {
+        headers: {
+          Authorization: `Token ${token.value}`
+        }
+      });
+      console.log('Subscription status response:', response.data);
+      return response.data.is_subscribed;
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+      return false;
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/financial/deposit-products/`);
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        throw new Error(error.response.data.detail);
+      } else {
+        throw new Error('An error occurred while fetching the products');
+      }
+    }
+  };
+
+  return {
+    boards,
+    currentUser,
+    token,
+    API_URL,
+    getBoards,
+    fetchCurrentUser,
+    subscribeToProduct,
+    fetchProducts,
+    isSubscribedToProduct
+  };
+}, { persist: true });

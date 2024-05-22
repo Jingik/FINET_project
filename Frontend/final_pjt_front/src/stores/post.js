@@ -1,22 +1,17 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import { useUserStore } from "@/stores/user";
 
 export const usePostStore = defineStore('post', () => {
   const API_URL = 'http://127.0.0.1:8000/posts';
-  const token = ref(localStorage.getItem('auth_token') || null);
+  const useuserstroe = useUserStore()
+  const token = computed(()=>{
+    return useuserstroe.token
+})
   const boards = ref([]);
 
-  const setToken = (newToken) => {
-    token.value = newToken;
-    localStorage.setItem('auth_token', newToken);
-  };
-
-  const clearToken = () => {
-    token.value = null;
-    localStorage.removeItem('auth_token');
-  };
-
+  // 게시판 목록 가져오기
   const fetchBoards = async () => {
     try {
       const response = await axios.get(API_URL, {
@@ -30,6 +25,7 @@ export const usePostStore = defineStore('post', () => {
     }
   };
 
+  // 게시판 생성
   const createBoard = async (title, content) => {
     try {
       const response = await axios.post(`${API_URL}/create/`, {
@@ -47,5 +43,5 @@ export const usePostStore = defineStore('post', () => {
     }
   };
 
-  return { API_URL, boards, fetchBoards, createBoard, token, setToken, clearToken };
+  return { API_URL, boards, fetchBoards, createBoard, token };
 }, { persist: true });
