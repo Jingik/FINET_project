@@ -1,24 +1,37 @@
 <template>
-  <div class="div29">
-    <img class="nh-ci-1" alt="" src="@/assets/img/NH농협은행 CI 시그니처_국문 1.png" />
-    <img class="png-ai-1-icon" alt="" src="@/assets/img/하나은행_로고_PNG_AI_원본_다운 1.png" />
-    <img class="png-ai-1-icon1" alt="" src="@/assets/img/우리은행_로고_PNG_AI_원본_다운 1.png" />
-    <img class="png-ai-1-1-icon" alt="" src="@/assets/img/기업은행_로고_PNG_AI_원본_다운1 1.png" />
-    <img class="png-ai-1-icon2" alt="" src="@/assets/img/국민은행_로고_PNG_AI_원본_다운 1.png" />
-    <img class="png-ai-1-icon3" alt="" src="@/assets/img/신한뱅크_로고_PNG_AI_원본_다운 1.png" />
-    <img class="png-ai-1-icon4" alt="" src="@/assets/img/새마을금고_로고_PNG_AI_원본_다운 1.png" />
-  </div>
+<div class="div29">
+  <a href="https://www.nhbank.com/nhmn/KO_NHMN_01.do">
+    <img class="banklogo" alt="NH농협은행" src="@/assets/img/NH농협은행 CI 시그니처_국문 1.png" />
+  </a>
+  <a href="https://www.hanabank.com">
+    <img class="banklogo" alt="하나은행" src="@/assets/img/하나은행_로고_PNG_AI_원본_다운 1.png" />
+  </a>
+  <a href="https://www.wooribank.com">
+    <img class="banklogo" alt="우리은행" src="@/assets/img/우리은행_로고_PNG_AI_원본_다운 1.png" />
+  </a>
+  <a href="https://www.ibk.co.kr">
+    <img class="banklogo" alt="기업은행" src="@/assets/img/기업은행_로고_PNG_AI_원본_다운1 1.png" />
+  </a>
+  <a href="https://www.kbstar.com">
+    <img class="banklogo" alt="국민은행" src="@/assets/img/국민은행_로고_PNG_AI_원본_다운 1.png" />
+  </a>
+  <a href="https://www.shinhan.com">
+    <img class="banklogo" alt="신한은행" src="@/assets/img/신한뱅크_로고_PNG_AI_원본_다운 1.png" />
+  </a>
+</div>
+
 </template>
 
 <script setup>
-import { defineComponent } from "vue";
+// import { defineComponent } from "vue";
 </script>
 
 <style scoped>
-.nh-ci-1, .png-ai-1-icon, .png-ai-1-icon1, .png-ai-1-1-icon, .png-ai-1-icon2, .png-ai-1-icon3, .png-ai-1-icon4 {
-height: 30px;
-object-fit: contain;
-max-width: 100%;
+.banklogo{
+  height: 40px;
+  object-fit: contain;
+  margin:20px;
+  max-width: 100%;
 }
 
 .div29 {

@@ -166,7 +166,7 @@ const goToPage = (pageName) => {
   align-items: flex-start;
   display: flex;
   gap: 10px;
-  height: 86px;
+  height: 80px;
   width: 83.33%;
   margin: 0 auto;
   top: 0;

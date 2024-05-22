@@ -1,15 +1,20 @@
 <template>
   <div class="board-list">
-    <div v-for="board in boards" :key="board.id" class="board-item">
-      <RouterLink :to="{ name: 'DetailView', params: { id: board.id } }">
-        <h3>{{ board.title }}</h3>
-        <p>{{ board.user.name }}</p>
-        <p>{{ board.content }}</p>
-      </RouterLink>
+    <div v-if="boards.length > 0">
+      <div v-for="board in boards" :key="board.id" class="board-item">
+        <RouterLink :to="{ name: 'DetailView', params: { id: board.id } }">
+          <h3>{{ board.title }}</h3>
+          <p>{{ board.user.name }}</p>
+          <p>{{ board.content }}</p>
+        </RouterLink>
+      </div>
+      <div class="pagination">
+        <button @click="fetchBoards(prevPageUrl)" :disabled="!prevPageUrl">Previous</button>
+        <button @click="fetchBoards(nextPageUrl)" :disabled="!nextPageUrl">Next</button>
+      </div>
     </div>
-    <div class="pagination">
-      <button @click="fetchBoards(prevPageUrl)" :disabled="!prevPageUrl">Previous</button>
-      <button @click="fetchBoards(nextPageUrl)" :disabled="!nextPageUrl">Next</button>
+    <div v-else>
+      <p>첫 번째 글을 작성해 주세요.</p>
     </div>
   </div>
 </template>

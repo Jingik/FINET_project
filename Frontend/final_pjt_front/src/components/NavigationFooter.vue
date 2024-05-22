@@ -23,44 +23,39 @@
           </p>
         </span>
       </div>
-      <div class="frame-wrapper">
-        <div class="frame-parent">
-          <div class="parent">
-            <div class="div1">예적금</div>
-            <div class="div2">정기예금</div>
-            <div class="div3">정기적금</div>
-            <div class="div4">자유입출금</div>
-          </div>
-          <div class="group">
-            <div class="div5">대출</div>
-            <div class="div6">신용대출</div>
-            <div class="div7">전세자금대출</div>
-            <div class="div8">주택담보대출</div>
-          </div>
-          <div class="finance-menu">
-            <div class="container">
-              <div class="div9">신용카드</div>
-              <div class="div10">외환/환전</div>
-            </div>
-            <div class="frame-div">
-              <div class="div11">한눈에 보기</div>
-              <div class="div12">환전계산기</div>
-            </div>
-            <div class="frame-group">
-              <div class="parent1">
-                <div class="div13">추천카드</div>
-              </div>
-              <div class="div15">내게 맞는 카드</div>
-            </div>
-          </div>
-          <div class="parent2">
-            <div class="div16">라운지</div>
-            <div class="page"> 은행 찾기</div>
-            <div class="page1">커뮤니티</div>
-            <div class="page2">Page</div>
-          </div>
+      <div class="footer-menu">
+        <div class="menu-item">
+            <span class="menu-title">예금</span>
+            <ul>
+                <li>예적금</li>
+                <li>정기예금</li>
+                <li>정기적금</li>
+            </ul>
         </div>
-      </div>
+        <div class="menu-item">
+            <span class="menu-title">대출</span>
+            <ul>
+                <li>대출</li>
+                <li>신용대출</li>
+                <li>전세자금대출</li>
+                <li>주택담보대출</li>
+            </ul>
+        </div>
+        <div class="menu-item">
+            <span class="menu-title">외환/환전</span>
+            <ul>
+                <li>환전계산기</li>
+            </ul>
+        </div>
+        <div class="menu-item">
+            <span class="menu-title">라운지</span>
+            <ul>
+                <li>은행 찾기</li>
+                <li>커뮤니티</li>
+            </ul>
+        </div>
+        
+    </div>
     </div>
   </footer>
 </template>
@@ -356,4 +351,34 @@
       line-height: 30px;
     }
   }
+  .footer-menu {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px; /* 각 부모 요소들 간의 간격 조정 */
+}
+
+.menu-item {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    margin-left : 25px;
+}
+
+.menu-title {
+    font-weight: bold;
+    color: black;
+    margin-bottom : 5px
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: black;
+}
+
 </style>

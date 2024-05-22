@@ -17,6 +17,7 @@
         <div class="sidemenu">
         </div>
         <EditProfile />
+        
       </div>
     </div>
   </div>
@@ -30,22 +31,30 @@ import { ref } from "vue";
 <style scoped>
 
 .mypage-container {
+  margin : 60px auto;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  margin: 50px auto;
   width: 1920px;
+  align-items:center;
+  left:50%
+}
+.smallcontainer{
+  height:300px;
 }
 
 .mypage {
+  margin : 60px auto;
   display: flex;
   flex-direction: row;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   background-color: #0599f1;
-  height: 900px;
+  height: 700px;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  width: 1500px;
+  margin-bottom: 20px;
 
 }
 .sidemenu {
@@ -53,7 +62,7 @@ import { ref } from "vue";
 }
 .sidemenu-item1 {
   text-align: center;
-  font-size: 20px;
+  font-size: px;
   font-weight: bold;
   padding: 10px;
   margin-top: 20px;;
@@ -62,7 +71,7 @@ import { ref } from "vue";
   border-radius: 10px;
 }
 .sidemenu-item2 {
-  font-size: 24px;
+  font-size: 18px;
   box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
   text-align: center;
   font-weight: bold;
