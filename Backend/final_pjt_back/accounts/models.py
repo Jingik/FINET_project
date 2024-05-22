@@ -29,7 +29,7 @@ class User(AbstractBaseUser):
         ('40대', '40대'),
         ('50대', '50대')
     ])
-    service_purpose = models.CharField(max_length=1, choices=[
+    service_purpose = models.CharField(max_length=10, choices=[
         ('예금 가입', '예금 가입'),
         ('적금 가입', '적금 가입'),
         ('대출 가입', '대출 가입')
