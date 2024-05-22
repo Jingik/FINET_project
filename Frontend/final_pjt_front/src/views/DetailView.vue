@@ -1,71 +1,101 @@
 <template>
   <div class="container">
-    <div v-if="loading">Loading...</div>
-    <div v-else-if="error">{{ error }}</div>
-    <div v-else-if="board" class="card my-4">
-      <div class="card-body">
-        <h5 class="card-title">{{ board.title }}</h5>
-        <hr>
-        <p class="card-text">
-          <small class="text-muted">
-            작성자: {{ board.user_name }} | 작성일: {{ formatDate(board.created_at) }}
-          </small>
-        </p>
-        <p class="card-text" style="padding-top: 50px; padding-bottom: 50px;">{{ board.content }}</p>
-        <router-link :to="{ name: 'BoardView' }" class="btn btn-primary">뒤로가기</router-link>
-        <button v-if="isCurrentUserAuthor()" @click="editBoard" class="btn btn-warning">수정</button>
-        <button v-if="isCurrentUserAuthor()" @click="confirmDelete" class="btn btn-danger">삭제</button>
-      </div>
-      <!-- 댓글 목록 -->
-      <div class="comments">
-        <h5>댓글</h5>
-        <div v-for="comment in comments" :key="comment.id" class="comment">
-          <p>{{ comment.content }}</p>
-          <small class="text-muted">작성자: {{ comment.user_name }} | 작성일: {{ formatDate(comment.created_at) }}</small>
-          <div class="comment-actions">
-            <button v-if="isCurrentUserCommentAuthor(comment)" @click="startEditingComment(comment)" class="btn btn-warning btn-sm">수정</button>
-            <button v-if="isCurrentUserCommentAuthor(comment)" @click="confirmDeleteComment(comment.id)" class="btn btn-danger btn-sm">삭제</button>
-          </div>
+    <div class="post-buttons">
+      <button v-if="isCurrentUserAuthor()" @click="confirmDelete" class="post-button">삭제</button>
+      <button v-if="isCurrentUserAuthor()" @click="editBoard" class="post-button">수정</button>
+      <router-link :to="{ name: 'BoardView' }"><button class="post-button">뒤로가기</button></router-link>
+    </div>
+    <div v-if="loading" class="loading">Loading...</div>
+    <div v-else-if="error" class="error">{{ error }}</div>
+    <div v-else-if="board" class="post">
+      <div class="post-header" style="display: flex; justify-content: space-between">
+        <h1 class="post-title">{{ board.title }}</h1>
+        <div style="display: flex; flex-direction: column">
+          <br>
+          <p class="post-meta">
+            <span class="post-author">작성자 : {{ board.user_name }}</span>
+          </p>
+          <p class="post-meta">
+            <span class="post-date">{{ formatDate(board.created_at) }}</span>
+          </p>
         </div>
       </div>
-      <!-- 댓글 작성 폼 -->
-      <div class="comment-form">
-        <h5>댓글 작성</h5>
-        <form @submit.prevent="submitComment">
-          <div class="form-group">
-            <textarea v-model="newComment" class="form-control" rows="3" required></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary">댓글 작성</button>
-        </form>
+      <div class="post-body">
+        <div class="post-content">{{ board.content }}</div>
+        
+        <p class="post-meta">
+          <img 
+            :src="likeslist.includes(board.id) ? '@/assets/img/filledlike.png' : '@/assets/img/like.png'" 
+            class="likeslist-button" style="height: 20px; width:20px;"
+            @click="togglelikeslist(board.id)" 
+            alt="likeslist icon">
+          좋아요 <span class="like-count">{{ likeslist.length }}</span>
+          댓글 <span class="comment-count">{{ comments.length }}</span>
+        </p>
       </div>
-      <!-- 댓글 수정 폼 -->
-      <div v-if="editingComment" class="comment-form">
-        <h5>댓글 수정</h5>
-        <form @submit.prevent="submitEditedComment">
-          <div class="form-group">
-            <textarea v-model="editedComment.content" class="form-control" rows="3" required></textarea>
+      <div class="comments-section">
+        <h2>댓글</h2>
+        <div v-for="comment in comments" :key="comment.id" class="comment">
+          <div class="comment-content">
+            <span style="margin-right: auto">
+              {{ comment.content }}
+              <span class="comment-meta" style="margin-left: 10px">
+                {{ comment.user.name }} |
+                {{ formatDate(comment.created_at) }}
+              </span>
+            </span>
+            <img src="@/assets/img/like.png" style="width: 30px; width:30px; margin-right: 10px;"
+            alt="누르면 @/assets/img/filledlike.png로 전환되어야함">
+            <!-- :src="likeslist.includes(board.id) ? '@/assets/img/filledlike.png' : '@/assets/img/like.png'" 
+            class="likeslist-button" style="height: 20px; width:20px;"
+            @click="togglelikeslist(board.id)" 
+            alt="likeslist icon"> -->
+            <div v-if="isCurrentUserCommentAuthor(comment)" class="comment-actions">
+              <button @click="startEditingComment(comment)" class="post-button">수정</button>
+              <button @click="confirmDeleteComment(comment.id)" class="post-button">삭제</button>
+            </div>
           </div>
-          <button type="submit" class="btn btn-warning">댓글 수정</button>
-        </form>
+        </div>
+        <div v-if="editingComment" class="comment-form">
+          <h3>댓글 수정</h3>
+          <form @submit.prevent="submitEditedComment">
+            <div class="form-group">
+              <textarea v-model="editedComment.content" class="form-control" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">댓글 수정</button>
+            <button type="button" @click="cancelEditingComment" class="btn btn-secondary">취소</button>
+          </form>
+        </div>
+        <div v-else class="comment-form">
+          <h3>댓글 작성</h3>
+          <form @submit.prevent="submitComment">
+            <div class="form-group">
+              <textarea v-model="newComment" class="form-control" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">댓글 작성</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import axios from 'axios';
-import { onMounted, ref } from 'vue';
-import { useCounterStore } from '@/stores/counter';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import axios from "axios";
+import { useCounterStore } from "@/stores/counter";
 
 const store = useCounterStore();
 const route = useRoute();
 const router = useRouter();
+const likeslist = ref([]);
+
 const board = ref(null);
 const loading = ref(true);
 const error = ref(null);
 const comments = ref([]);
-const newComment = ref('');
+const newComment = ref("");
 const editingComment = ref(false);
 const editedComment = ref({});
 
@@ -73,19 +103,18 @@ onMounted(async () => {
   await store.fetchCurrentUser();
   await fetchBoard();
   await fetchComments();
+  await fetchLikeslist();
 });
 
 async function fetchBoard() {
   try {
     const response = await axios.get(`${store.API_URL}/posts/${route.params.id}/`, {
-      headers: {
-        Authorization: `Token ${store.token}`
-      }
+      headers: { Authorization: `Token ${store.token}` },
     });
     board.value = response.data;
   } catch (err) {
-    console.error('An error occurred:', err);
-    error.value = 'Failed to load the board details.';
+    console.error("An error occurred:", err);
+    error.value = "Failed to load the board details.";
   } finally {
     loading.value = false;
   }
@@ -94,52 +123,76 @@ async function fetchBoard() {
 async function fetchComments() {
   try {
     const response = await axios.get(`${store.API_URL}/posts/${route.params.id}/comments/`, {
-      headers: {
-        Authorization: `Token ${store.token}`
-      }
+      headers: { Authorization: `Token ${store.token}` },
     });
     comments.value = response.data;
   } catch (err) {
-    console.error('An error occurred:', err);
+    console.error("An error occurred:", err);
+  }
+}
+
+async function fetchLikeslist() {
+  try {
+    const response = await axios.get(`${store.API_URL}/posts/${route.params.id}/likeslist/`, {
+      headers: { Authorization: `Token ${store.token}` },
+    });
+    likeslist.value = response.data;
+  } catch (err) {
+    console.error("An error occurred while fetching the likes list:", err);
   }
 }
 
 function formatDate(dateString) {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString('ko-KR', options);
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  return new Date(dateString).toLocaleDateString("ko-KR", options);
 }
-
 
 function isCurrentUserAuthor() {
   return board.value && store.currentUser && board.value.user.id === store.currentUser.id;
 }
 
-
-
 function isCurrentUserCommentAuthor(comment) {
   return comment.user && store.currentUser && comment.user.id === store.currentUser.id;
 }
 
+function togglelikeslist(boardId) {
+  if (likeslist.value.includes(boardId)) {
+    likeslist.value = likeslist.value.filter(id => id !== boardId);
+  } else {
+    likeslist.value.push(boardId);
+  }
+  updateLikeslist(boardId);
+}
+
+async function updateLikeslist(boardId) {
+  try {
+    await axios.post(`${store.API_URL}/posts/${boardId}/toggle_like/`, {
+      user_name: store.currentUser.name,
+    }, {
+      headers: { Authorization: `Token ${store.token}` },
+    });
+  } catch (err) {
+    console.error("An error occurred while updating the likes list:", err);
+  }
+}
 
 async function editBoard() {
-  router.push({ name: 'EditBoardView', params: { id: board.value.id } });
+  router.push({ name: "EditBoardView", params: { id: board.value.id } });
 }
 
 async function deleteBoard() {
   try {
     await axios.delete(`${store.API_URL}/posts/${board.value.id}/`, {
-      headers: {
-        Authorization: `Token ${store.token}`
-      }
+      headers: { Authorization: `Token ${store.token}` },
     });
-    router.push({ name: 'BoardView' });
+    router.push({ name: "BoardView" });
   } catch (err) {
-    console.error('An error occurred:', err);
+    console.error("An error occurred:", err);
   }
 }
 
 function confirmDelete() {
-  if (confirm('정말로 이 게시물을 삭제하시겠습니까?')) {
+  if (confirm("정말로 이 게시물을 삭제하시겠습니까?")) {
     deleteBoard();
   }
 }
@@ -149,55 +202,54 @@ function startEditingComment(comment) {
   editedComment.value = { ...comment };
 }
 
+function cancelEditingComment() {
+  editingComment.value = false;
+  editedComment.value = {};
+}
+
 async function submitComment() {
   try {
     const response = await axios.post(`${store.API_URL}/posts/${board.value.id}/comments/`, {
-      content: newComment.value
+      content: newComment.value,
     }, {
-      headers: {
-        Authorization: `Token ${store.token}`
-      }
+      headers: { Authorization: `Token ${store.token}` },
     });
     comments.value.push(response.data);
-    newComment.value = '';
+    newComment.value = "";
   } catch (err) {
-    console.error('An error occurred while submitting the comment:', err);
+    console.error("An error occurred while submitting the comment:", err);
   }
 }
 
 async function submitEditedComment() {
   try {
     const response = await axios.put(`${store.API_URL}/posts/${board.value.id}/comments/${editedComment.value.id}/`, {
-      content: editedComment.value.content
+      content: editedComment.value.content,
     }, {
-      headers: {
-        Authorization: `Token ${store.token}`
-      }
+      headers: { Authorization: `Token ${store.token}` },
     });
-    const index = comments.value.findIndex(c => c.id === editedComment.value.id);
+    const index = comments.value.findIndex((c) => c.id === editedComment.value.id);
     comments.value[index] = response.data;
     editingComment.value = false;
     editedComment.value = {};
   } catch (err) {
-    console.error('An error occurred while editing the comment:', err);
+    console.error("An error occurred while editing the comment:", err);
   }
 }
 
 async function deleteComment(commentId) {
   try {
     await axios.delete(`${store.API_URL}/posts/${board.value.id}/comments/${commentId}/`, {
-      headers: {
-        Authorization: `Token ${store.token}`
-      }
+      headers: { Authorization: `Token ${store.token}` },
     });
-    comments.value = comments.value.filter(comment => comment.id !== commentId);
+    comments.value = comments.value.filter((comment) => comment.id !== commentId);
   } catch (err) {
-    console.error('An error occurred while deleting the comment:', err);
+    console.error("An error occurred while deleting the comment:", err);
   }
 }
 
 function confirmDeleteComment(commentId) {
-  if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+  if (confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
     deleteComment(commentId);
   }
 }
@@ -205,45 +257,81 @@ function confirmDeleteComment(commentId) {
 
 <style scoped>
 .container {
-  display: flex;
-  justify-content: center;
-  padding-top: 150px;
-  padding-bottom: 150px;
-}
-
-.card {
-  border-radius: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  transition: 0.3s;
-  width: 800px;
+  max-width: 1300px;
   margin: 0 auto;
+  padding: 50px 20px;
 }
 
-.card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+.loading,
+.error {
+  text-align: center;
+  font-size: 24px;
+  color: red;
 }
 
-.card-title {
+.post {
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-color: #fff;
+}
+
+.post-header {
+  padding: 20px;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.post-title {
+  font-size: 32px;
   font-weight: bold;
-  font-size: 60px;
+  color: #000;
 }
 
-.card-text {
-  font-size: 30px;
+.post-meta {
+  font-size: 14px;
+  color: #464646;
 }
 
-.text-muted {
-  font-size: 0.9rem;
+.post-body {
+  padding: 20px;
 }
 
-.comments {
-  margin-top: 30px;
+.post-content {
+  font-size: 16px;
+  margin: 20px 0;
+}
+
+.post-buttons {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.post-button {
+  background-color: white;
+  border: 1px solid #828282;
+}
+
+.comments-section {
+  padding: 20px;
+  border-top: 1px solid #e1e1e1;
 }
 
 .comment {
   margin-bottom: 15px;
   padding: 10px;
   border-top: 1px solid #ddd;
+}
+
+.comment-content {
+  display: flex;
+  font-size: 14px;
+}
+
+.comment-meta {
+  font-size: 12px;
+  color: #888;
 }
 
 .comment-actions {
@@ -264,7 +352,15 @@ function confirmDeleteComment(commentId) {
   border-radius: 4px;
 }
 
+
 .btn-sm {
   margin-left: 10px;
+}
+
+@media (max-width: 767px) {
+  .likeslist-button {
+    position: static; /* 작은 화면에서는 버튼의 위치를 고정하지 않음 */
+    margin-top: 10px; /* 버튼 위에 여백 추가 */
+  }
 }
 </style>

@@ -32,7 +32,7 @@
           </div>
           <div v-if="passwordError" class="error-message">{{ passwordError }}</div>
           <div class="margintop">
-            <label for="user_age_group">나이 그룹</label>
+            <label for="user_age_group">연령대</label>
             <select v-model="user_age_group" id="user_age_group" required>
               <option value="10s">10대</option>
               <option value="20s">20대</option>

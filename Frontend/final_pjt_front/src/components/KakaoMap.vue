@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <div class="search-section">
-      <h1 class="ercword">지역별 은행</h1>
       <div class="search-container">
         <select id="keyword" class="custom-border">
           <option value="">은행 선택</option>
@@ -97,7 +96,7 @@ export default {
         const mapContainer = document.getElementById("map");
         const mapOption = {
           center: new kakao.maps.LatLng(latitude, longitude), // Update center with current location
-          level: 2,
+          level: 1,
         };
 
         this.map = new kakao.maps.Map(mapContainer, mapOption);
@@ -256,7 +255,7 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 90vh;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -268,9 +267,20 @@ export default {
 
 .search-container {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-direction: row;
+  margin-bottom: 30px;
+  gap: 20px;
+  height:50px;
+}
+
+select{
+  font-size: 20px;
   width: 300px;
+  text-align: center;
+}
+
+option{
+  font-size: 20px;
 }
 
 .content {
@@ -281,13 +291,13 @@ export default {
 
 .map-container {
   width: 70%;
-  height: 700px;
+  height: 600px;
   margin-bottom: 20px;
 }
 
 .info-container {
-  width: 30%;
-  height: 700px;
+  width: 20%;
+  height: 600px;
   overflow-y: auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
@@ -313,6 +323,8 @@ export default {
 }
 
 button.custom-border {
+  font-size: 30px;
+  width:200px;
   cursor: pointer;
 }
 

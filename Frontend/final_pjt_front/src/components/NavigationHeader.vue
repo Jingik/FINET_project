@@ -1,26 +1,44 @@
 <template>
   <div class="header">
     <div class="span" @click="handleSpanClick">
-        <div class="p4">FINET</div>
-        <img class="img-icon1" alt="" src="@/assets/img/img (1).png" />
+      <div class="p4">FINET</div>
+      <img class="img-icon1" alt="" src="@/assets/img/img (1).png" />
     </div>
     <div class="navbar">
-      <div class="nav" @mouseover="showDropdown('deposit')" @mouseleave="hideDropdown('deposit')">
+      <div
+        class="nav"
+        @mouseover="showDropdown('deposit')"
+        @mouseleave="hideDropdown('deposit')"
+      >
         예적금
         <div v-if="dropdownVisible.deposit" class="dropdown-content">
-          <RouterLink :to="{ name: 'DepositView' }"><div class="dropdown-item">정기예금</div></RouterLink>
-          <RouterLink :to="{ name: 'SavingsView' }"><div class="dropdown-item">정기적금</div></RouterLink>
+          <RouterLink :to="{ name: 'DepositView' }"
+            ><div class="dropdown-item">정기예금</div></RouterLink
+          >
+          <RouterLink :to="{ name: 'SavingsView' }"
+            ><div class="dropdown-item">정기적금</div></RouterLink
+          >
         </div>
       </div>
-      <div class="nav" @mouseover="showDropdown('loan')" @mouseleave="hideDropdown('loan')">
+      <div
+        class="nav"
+        @mouseover="showDropdown('loan')"
+        @mouseleave="hideDropdown('loan')"
+      >
         대출
         <div v-if="dropdownVisible.loan" class="dropdown-content">
-          <RouterLink :to="{ name: 'CreditloanView' }"><div class="dropdown-item">신용대출</div></RouterLink>
+          <RouterLink :to="{ name: 'CreditloanView' }"
+            ><div class="dropdown-item">신용대출</div></RouterLink
+          >
           <!-- <div class="dropdown-item">전세자금대출</div>
           <div class="dropdown-item">주택담보대출</div> -->
         </div>
       </div>
-      <div class="nav" @mouseover="showDropdown('creditCard')" @mouseleave="hideDropdown('creditCard')">
+      <div
+        class="nav"
+        @mouseover="showDropdown('creditCard')"
+        @mouseleave="hideDropdown('creditCard')"
+      >
         신용카드
         <div v-if="dropdownVisible.creditCard" class="dropdown-content">
           <div class="dropdown-item">전체카드조회</div>
@@ -28,43 +46,78 @@
           <div class="dropdown-item">내게 맞는 카드</div>
         </div>
       </div>
-      <RouterLink :to="{ name: 'ExchangeView' }"><div class="nav" @mouseover="showDropdown('exchange')" @mouseleave="hideDropdown('exchange')">
-        외환/환전
-        <div v-if="dropdownVisible.exchange" class="dropdown-content">
-          <RouterLink :to="{ name: 'ExchangeView' }"><div class="dropdown-item">환전계산기</div></RouterLink>
+      <RouterLink :to="{ name: 'ExchangeView' }"
+        ><div
+          class="nav"
+          @mouseover="showDropdown('exchange')"
+          @mouseleave="hideDropdown('exchange')"
+        >
+          외환/환전
+          <div v-if="dropdownVisible.exchange" class="dropdown-content">
+            <RouterLink :to="{ name: 'ExchangeView' }"
+              ><div class="dropdown-item">환전계산기</div></RouterLink
+            >
+          </div>
         </div>
-      </div>
       </RouterLink>
-      <RouterLink :to="{ name: 'BoardView'}"><div class="nav" @mouseover="showDropdown('lounge')" @mouseleave="hideDropdown('lounge')">
-        라운지
-        <div v-if="dropdownVisible.lounge" class="dropdown-content">
-          <RouterLink :to="{ name: 'maps'}"><div class="dropdown-item">지역별 은행 찾기</div></RouterLink>
-          <RouterLink :to="{ name: 'BoardView'}"><div class="dropdown-item"> 커뮤니티</div></RouterLink>
-
-        </div>
-      </div></RouterLink>
+      <RouterLink :to="{ name: 'BoardView' }"
+        ><div
+          class="nav"
+          @mouseover="showDropdown('lounge')"
+          @mouseleave="hideDropdown('lounge')"
+        >
+          라운지
+          <div v-if="dropdownVisible.lounge" class="dropdown-content">
+            <RouterLink :to="{ name: 'maps' }"
+              ><div class="dropdown-item">지역별 은행 찾기</div></RouterLink
+            >
+            <RouterLink :to="{ name: 'BoardView' }"
+              ><div class="dropdown-item">커뮤니티</div></RouterLink
+            >
+          </div>
+        </div></RouterLink
+      >
       <div class="input-typetext">
         <div class="label">검색어를 입력해주세요.</div>
-        <img class="button-typesubmit-icon" alt="" src="@/assets/img/button type=submit.svg" />
+        <img
+          class="button-typesubmit-icon"
+          alt=""
+          src="@/assets/img/button type=submit.svg"
+        />
       </div>
       <div class="button-group">
+        <button v-if="isLogin" @click="logOut" class="button">로그아웃</button>
         <RouterLink :to="isLogin ? { name: 'ProfilePage' } : { name: 'LogInView' }">
-          <div class="button">
-            <div class="nav">{{ isLogin ? '마이페이지' : '로그인/회원가입' }}</div>
+          <div @mouseover="showDropdown('user')" @mouseleave="hideDropdown('user')">
+            <template v-if="isLogin">
+              <img
+              src="@/assets/img/user.png"
+              alt="User Icon"
+              class="icon-image"
+              style="width: 45px; height: 45px"
+              />
+              <div v-if="dropdownVisible.user" class="dropdown-content">
+                <RouterLink :to="{ name: 'ProfilePage' }"
+              ><div class="dropdown-item">마이페이지</div></RouterLink>
+              <RouterLink :to="{ name: 'EditProfilePage' }"
+              ><div class="dropdown-item">내정보 수정</div></RouterLink>
+              </div>
+            </template>
+            <template v-else> 로그인/회원가입 </template>
           </div>
         </RouterLink>
-        <button v-if="isLogin" @click="logOut" class="button">로그아웃</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/user';
+import { ref, computed } from "vue";
+import { RouterLink, useRouter } from "vue-router";
+import { useUserStore } from "@/stores/user";
 
 const dropdownVisible = ref({
+  user: false,
   deposit: false,
   loan: false,
   creditCard: false,
@@ -84,18 +137,29 @@ const hideDropdown = (key) => {
   dropdownVisible.value[key] = false;
 };
 
+const toggleDropdown = (key) => {
+  dropdownVisible.value[key] = !dropdownVisible.value[key];
+};
+
 const logOut = () => {
   userStore.logOut();
+  hideDropdown('user');
 };
 
 const handleSpanClick = () => {
   if (isLogin.value) {
-    router.push({ name: 'MainLogin' });
+    router.push({ name: "MainLogin" });
   } else {
-    router.push({ name: 'MainView' });
+    router.push({ name: "MainView" });
   }
 };
+
+const goToPage = (pageName) => {
+  router.push({ name: pageName });
+  hideDropdown('user'); // dropdown 닫기
+};
 </script>
+
 
 <style scoped>
 .header {
@@ -168,7 +232,7 @@ const handleSpanClick = () => {
   flex-direction: column;
   position: absolute;
   background-color: white;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   min-width: 160px;
 }
@@ -219,13 +283,13 @@ const handleSpanClick = () => {
 }
 
 .header .button {
-  color: white;
-  border: none;
+  color: black;
+  border: 1px solid #808080;
   padding: 8px 16px;
   font-size: 16px;
   border-radius: 4px;
   cursor: pointer;
-  margin-left: 10px;
+  margin-right: 20px;
 }
 
 .header .button:hover {

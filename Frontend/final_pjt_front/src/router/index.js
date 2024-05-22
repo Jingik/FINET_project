@@ -21,6 +21,7 @@ import SavingsView from '@/views/SavingsView.vue'
 import CreditloanView from '@/views/CreditloanView.vue'
 //마이페이지
 import MyPageView from '@/views/MyPageView.vue'
+import EditProfilePage from '@/views/EditProfilePage.vue'
 import { useUserStore } from '@/stores/user'
 
 const routes = [
@@ -100,6 +101,11 @@ const routes = [
     path: '/mypage',
     name: 'ProfilePage',
     component: MyPageView
+  },
+  {
+    path: '/editprofile',
+    name: 'EditProfilePage',
+    component: EditProfilePage
   }
   
 ]
