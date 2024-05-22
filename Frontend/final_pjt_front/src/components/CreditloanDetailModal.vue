@@ -129,12 +129,12 @@ function closeModal() {
 
 async function creditloansubscribeToProduct() {
   try {
-    const alreadySubscribed = await counterStore.creditloanisSubscribedToProduct(localSelectedProduct.value.id);
-    if (alreadySubscribed) {
-      alert('이미 가입된 상품입니다.');
-      closeModal();
-      return;
-    }
+    // const alreadySubscribed = await counterStore.creditloanisSubscribedToProduct(localSelectedProduct.value.id);
+    // if (alreadySubscribed) {
+    //   alert('이미 가입된 상품입니다.');
+    //   closeModal();
+    //   return;
+    // }
 
     const response = await counterStore.creditloansubscribeToProduct(localSelectedProduct.value.id);
     alert('상품 가입이 성공적으로 완료되었습니다!');

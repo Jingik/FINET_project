@@ -279,11 +279,11 @@ def subscribe_deposit(request, deposit_id):
         deposit_product = DepositProducts.objects.get(id=deposit_id)
         subscription, created = DepositSubscription.objects.get_or_create(user=user, deposit_product=deposit_product)
         if not created:
-            return Response({'detail': 'Already subscribed'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': '이미 가입된 상품입니다.'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = DepositSubscriptionSerializer(subscription)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     except DepositProducts.DoesNotExist:
-        return Response({'detail': 'Deposit product not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'detail': '상품을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -293,11 +293,11 @@ def subscribe_saving(request, saving_id):
         saving_product = SavingProducts.objects.get(id=saving_id)
         subscription, created = SavingSubscription.objects.get_or_create(user=user, saving_product=saving_product)
         if not created:
-            return Response({'detail': 'Already subscribed'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': '이미 가입된 상품입니다.'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = SavingSubscriptionSerializer(subscription)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     except SavingProducts.DoesNotExist:
-        return Response({'detail': 'Saving product not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'detail': '상품을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -307,11 +307,11 @@ def subscribe_creditloan(request, creditloan_id):
         creditloan_product = CreditLoanProducts.objects.get(id=creditloan_id)
         subscription, created = CreditLoanSubscription.objects.get_or_create(user=user, creditloan_product=creditloan_product)
         if not created:
-            return Response({'detail': 'Already subscribed'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': '이미 가입된 상품입니다.'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = CreditLoanSubscriptionSerializer(subscription)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     except CreditLoanProducts.DoesNotExist:
-        return Response({'detail': 'Credit loan product not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'detail': '상품을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
     
 
 # 사용자가 가입한 상품 조회
