@@ -23,16 +23,16 @@ class User(AbstractBaseUser):
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(max_length=50, blank=True, null=True)
     user_age_group = models.CharField(max_length=3, choices=[
-        ('10s', '10대'),
-        ('20s', '20대'),
-        ('30s', '30대'),
-        ('40s', '40대'),
-        ('50s', '50대')
+        ('10대', '10대'),
+        ('20대', '20대'),
+        ('30대', '30대'),
+        ('40대', '40대'),
+        ('50대', '50대')
     ])
     service_purpose = models.CharField(max_length=1, choices=[
-        ('A', '서비스 목적 A'),
-        ('B', '서비스 목적 B'),
-        ('C', '서비스 목적 C')
+        ('예금 가입', '예금 가입'),
+        ('적금 가입', '적금 가입'),
+        ('대출 가입', '대출 가입')
     ])
     asset = models.BigIntegerField(default=0)
 
