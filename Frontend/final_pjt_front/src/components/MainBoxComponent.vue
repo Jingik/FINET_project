@@ -3,23 +3,24 @@
     <div class="main">
       <div class="container">
         <div class="heading1">
-          <p class="finet">너만 모르고 있던</p>
-          <p class="finet">개꿀사이트 FINET</p>
+          <p class="finet">모든 금융 정보를 하나로</p>
+          <p class="finet">FINET</p>
         </div>
         <div class="p1">
-          <p class="finet">이제라도 안게 어디야 얼른 시작해보자</p>
-          <p class="finet">라떼는 이런거 없었어</p>
+          <p class="finet">FINET은 흩어진 금융 정보를 하나의 네트워크로 연결하여</p>
+          <p class="finet">사회초년생, 취업준비생, 신혼부부 등 청년들을 위한 </p>
+          <p class="finet">종합금융서비스를 제공합니다</p>
         </div>
         <div class="container1">
-          <div class="button1">
+          <RouterLink :to="{ name: 'DepositView' }"><div class="button1">
             <b class="btn-text">상품 비교하기</b>
-          </div>
-          <div class="button2">
+          </div></RouterLink>
+          <RouterLink :to="{ name: 'SignUpView' }"><div class="button2">
             <b class="btn-text1">회원가입</b>
-          </div>
+          </div></RouterLink>
         </div>
       </div>
-      <img class="img-icon" alt="" src="@/assets/img/main.png" />
+      <img class="img-icon" alt="" src="@/assets/img/img.png" />
     </div>
     <div class="quick-menu-container">
       <RouterLink :to="{ name: 'DepositView' }">
@@ -177,7 +178,7 @@ h3 {
 .container {
   position: absolute;
   top: 115px;
-  left: 10%;
+  left: 15%;
   width: 80%;
   overflow: hidden;
   display: flex;
@@ -189,9 +190,9 @@ h3 {
 
 .img-icon {
   position: absolute;
-  top: -66px;
-  left: 723px;
-  height: 600px;
+  top: -70px;
+  right: 8%;
+  height: 800px;
   object-fit: cover;
 }
 
