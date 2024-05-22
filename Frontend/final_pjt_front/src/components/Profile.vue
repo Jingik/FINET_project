@@ -8,9 +8,10 @@
         </span>
         <hr />
         <div class="cards">
-          <div v-for="post in myPosts" :key="post.id" class="card">
+          <div v-if="myPosts.length > 0" v-for="post in myPosts" :key="post.id" class="card">
             <p>{{ post.title }}</p>
           </div>
+          <p v-else>작성한 글이 없습니다.</p>
         </div>
       </div>
     </div>
@@ -23,9 +24,10 @@
         </span>
         <hr />
         <div class="cards">
-          <div v-for="comment in myComments" :key="comment.id" class="card">
-            <p>{{ comment.text }}</p>
+          <div v-if="myComments.length > 0" v-for="comment in myComments" :key="comment.id" class="card">
+            <p>{{ comment.content }}</p>
           </div>
+          <p v-else>작성한 댓글이 없습니다.</p>
         </div>
       </div>
     </div>
@@ -50,49 +52,127 @@
         </button>
       </div>
       <div class="cards">
-        <div
-          v-for="product in products[selectedType]"
-          :key="product.id"
-          class="card"
-        >
-          <p>{{ product.name }}</p>
+        <div v-if="products[selectedType].length > 0" v-for="product in products[selectedType]" :key="product.id" class="card">
+          <p>{{ getProductById(selectedType, product)?.fin_prdt_nm || "Unknown Product" }}
+            <span class="bank-name">{{ getProductById(selectedType, product)?.kor_co_nm }}</span>
+          </p>
         </div>
+        <p v-else>관심 상품이 없습니다.</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
+import axios from "axios";
+import { useUserStore } from "@/stores/user";
 
-// Example data
-const myPosts = ref([
-  { id: 1, title: "첫 번째 글" },
-  { id: 2, title: "두 번째 글" },
-]);
+const useuserstore = useUserStore();
+const token = computed(() => useuserstore.token);
 
-const myComments = ref([
-  { id: 1, text: "첫 번째 댓글" },
-  { id: 2, text: "두 번째 댓글" },
-]);
-
+const myPosts = ref([]);
+const myComments = ref([]);
 const products = ref({
-  예금: [
-    { id: 1, name: "예금 상품 1" },
-    { id: 2, name: "예금 상품 2" },
-  ],
-  적금: [
-    { id: 1, name: "적금 상품 1" },
-    { id: 2, name: "적금 상품 2" },
-  ],
-  신용대출: [
-    { id: 1, name: "신용대출 상품 1" },
-    { id: 2, name: "신용대출 상품 2" },
-  ],
+  deposits: [],
+  savings: [],
+  creditloans: []
+});
+const productTypes = ref(["deposits", "savings", "creditloans"]);
+const selectedType = ref(productTypes.value[0]);
+
+const depositProducts = ref([]);
+const savingProducts = ref([]);
+const creditloanProducts = ref([]);
+
+onMounted(async () => {
+  await fetchMyPosts();
+  await fetchMyComments();
+  await fetchFavorites();
+  await fetchAllProducts();
 });
 
-const productTypes = ref(Object.keys(products.value));
-const selectedType = ref(productTypes.value[0]);
+async function fetchMyPosts() {
+  try {
+    const response = await axios.get("http://127.0.0.1:8000/posts/user/boards/", {
+      headers: { Authorization: `Token ${token.value}` }
+    });
+    myPosts.value = response.data.results;
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+  }
+}
+
+async function fetchMyComments() {
+  try {
+    const response = await axios.get("http://127.0.0.1:8000/posts/user/comments/", {
+      headers: { Authorization: `Token ${token.value}` }
+    });
+    myComments.value = response.data.results;
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+  }
+}
+
+async function fetchFavorites() {
+  try {
+    const response = await axios.get("http://127.0.0.1:8000/financial/favorites/", {
+      headers: { Authorization: `Token ${token.value}` }
+    });
+    products.value.deposits = response.data.deposit_subscriptions;
+    products.value.savings = response.data.saving_subscriptions;
+    products.value.creditloans = response.data.creditloan_subscriptions;
+    console.log('Fetched Favorites:', products.value);
+  } catch (error) {
+    console.error("Error fetching favorite products:", error);
+  }
+}
+
+async function fetchAllProducts() {
+  try {
+    const depositResponse = await axios.get("http://127.0.0.1:8000/financial/deposit-products/", {
+      headers: { Authorization: `Token ${token.value}` }
+    });
+    depositProducts.value = depositResponse.data;
+    console.log('Deposit Products:', depositProducts.value);
+
+    const savingResponse = await axios.get("http://127.0.0.1:8000/financial/saving-products/", {
+      headers: { Authorization: `Token ${token.value}` }
+    });
+    savingProducts.value = savingResponse.data;
+    console.log('Saving Products:', savingProducts.value);
+
+    const creditloanResponse = await axios.get("http://127.0.0.1:8000/financial/creditloan-products/", {
+      headers: { Authorization: `Token ${token.value}` }
+    });
+    creditloanProducts.value = creditloanResponse.data;
+    console.log('Credit Loan Products:', creditloanProducts.value);
+  } catch (error) {
+    console.error("Error fetching product data:", error);
+  }
+}
+
+function getProductById(type, product) {
+  const productId = product[`${type.slice(0, -1)}_product`];
+  console.log(`Matching product in ${type} with ID: ${productId}`);
+  let productList;
+  switch (type) {
+    case "deposits":
+      productList = depositProducts.value;
+      break;
+    case "savings":
+      productList = savingProducts.value;
+      break;
+    case "creditloans":
+      productList = creditloanProducts.value;
+      break;
+    default:
+      productList = [];
+  }
+  const matchedProduct = productList.find(p => p.id === productId);
+  console.log(`Matched Product:`, matchedProduct);
+  return matchedProduct;
+}
 </script>
 
 <style scoped>
@@ -128,16 +208,12 @@ span {
   border-radius: 10px;
   height: 50%;
 }
+
 .articles {
   display: flex;
   height: 50%;
   width: 100%;
 }
-
-/* .posts {
-  display: flex;
-  justify-content: space-between;
-} */
 
 h2 {
   font-size: 1em;
@@ -155,6 +231,14 @@ h2 {
   padding: 10px;
   margin: 10px;
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bank-name {
+  margin-left: auto;
+  color: grey;
+  font-size: 0.9em;
 }
 
 .tabs {

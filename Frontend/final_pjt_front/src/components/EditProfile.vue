@@ -1,84 +1,127 @@
 <template>
   <div class="larger">
-  <div class="smallcontainer">
-    <span>
-      <img src="@/assets/img/user.png" alt="interest">
-      <h2>내 정보 수정</h2>
-    </span>
-    <hr />
-    <div class="content">
-      <div class="margintop">
-        <label for="phone_number">휴대폰 번호</label>
-        {{ user_name }}
-        <input type="tel" v-model.trim="phone_number" id="phone_number" required> <button @click="handleSubmit" class="submit-button">수정완료</button>
+    <div class="smallcontainer">
+      <span>
+        <img src="@/assets/img/user.png" alt="interest">
+        <h2>내 정보 수정</h2>
+      </span>
+      <hr />
+      <div class="content">
+        <div class="margintop">
+          <label for="phone_number">휴대폰 번호</label>
+          {{ user_name }}
+          <input type="tel" v-model.trim="phone_number" id="phone_number" required>
+          <button @click="handleSubmit" class="submit-button">수정완료</button>
+        </div>
+        <div class="margintop">
+          <label for="password1">새 비밀번호</label>
+          <input type="password" v-model.trim="password1" id="password1" required>
+        </div>
+        <div class="margintop">
+          <label for="password2">새 비밀번호 재입력</label>
+          <input type="password" v-model.trim="password2" id="password2" required>
+          <button @click="handleSubmit" class="submit-button">수정완료</button>
+        </div>
+        <div v-if="passwordError" class="error-message">{{ passwordError }}</div>
+        <div class="margintop">
+          <label for="user_age_group">연령대</label>
+          <select v-model="user_age_group" id="user_age_group" required>
+            <option value="10s">10대</option>
+            <option value="20s">20대</option>
+            <option value="30s">30대</option>
+            <option value="40s">40대</option>
+            <option value="50s">50대</option>
+          </select>
+          <button @click="handleSubmit" class="submit-button">수정완료</button>
+        </div>
+        <div class="margintop">
+          <label for="service_purpose">서비스 목적</label>
+          <select v-model="service_purpose" id="service_purpose" required>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </select>
+          <button @click="handleSubmit" class="submit-button">수정완료</button>
+        </div>
+        <div class="margintop">
+          <label for="email">이메일</label>
+          <input type="email" v-model.trim="email" id="email" required>
+          <button @click="handleSubmit" class="submit-button">수정완료</button>
+        </div>
+        <div class="margintop">
+          <label for="assets">자산</label>
+          <input type="number" v-model.trim="assets" id="assets" required>
+          <button @click="handleSubmit" class="submit-button">수정완료</button>
+        </div>
       </div>
-      <div class="margintop">
-        <label for="password1">새 비밀번호</label>
-        <input type="password" v-model.trim="password1" id="password1" required>
-      </div>
-      <div class="margintop">
-        <label for="password2">새 비밀번호 재입력</label>
-        <input type="password" v-model.trim="password2" id="password2" required> <button @click="handleSubmit" class="submit-button">수정완료</button>
-      </div>
-      <div v-if="passwordError" class="error-message">{{ passwordError }}</div>
-      <div class="margintop">
-        <label for="user_age_group">연령대</label>
-        <select v-model="user_age_group" id="user_age_group" required>
-          <option value="10s">10대</option>
-          <option value="20s">20대</option>
-          <option value="30s">30대</option>
-          <option value="40s">40대</option>
-          <option value="50s">50대</option>
-        </select>  <button @click="handleSubmit" class="submit-button">수정완료</button>
-      </div>
-      <div class="margintop">
-        <label for="service_purpose">서비스 목적</label>
-        <select v-model="service_purpose" id="service_purpose" required>  <button @click="handleSubmit" class="submit-button">수정완료</button>
-          <option value="A">A</option>
-          <option value="B">B</option>
-          <option value="C">C</option>
-        </select> <button @click="handleSubmit" class="submit-button">수정완료</button>
-      </div>
-      <div class="margintop">
-        <label for="email">이메일</label>
-        <input type="email" v-model.trim="email" id="email" required>  <button @click="handleSubmit" class="submit-button">수정완료</button>
-      </div>
-      <div class="margintop">
-        <label for="assets">자산</label>
-        <input type="number" v-model.trim="assets" id="assets" required> <button @click="handleSubmit" class="submit-button">수정완료</button>
+      <transition name="fade">
+        <div v-if="showToast" class="toast">수정이 완료되었습니다.</div>
+      </transition>
+    </div>
+    <div class="smallcontainer">
+      <span>
+        <img src="@/assets/img/deposit.png" alt="interest">
+        <h2>내 예금 상품</h2>
+      </span>
+      <hr />
+      <div class="cards">
+        <div v-for="product in subscribedProducts.deposits" :key="product.id" class="card">
+          <p>{{ getProductById('deposits', product.deposit_product)?.fin_prdt_nm || "Unknown Product" }}
+            <span class="bank-name">{{ getProductById('deposits', product.deposit_product)?.kor_co_nm }}</span>
+          </p>
+        </div>
+        <p v-if="subscribedProducts.deposits.length === 0">관심 상품이 없습니다.</p>
       </div>
     </div>
-    <transition name="fade">
-      <div v-if="showToast" class="toast">수정이 완료되었습니다.</div>
-    </transition>
   </div>
-  <div class="smallcontainer">
-    <span>
-      <img src="@/assets/img/deposit.png" alt="interest">
-      <h2> 내 예금 상품</h2>
-    </span>
-    <hr />
-  </div>
-</div>
-<div class="larger">
-  <div class="smallcontainer">
-    <span>
-      <img src="@/assets/img/saving.png" alt="interest">
-      <h2> 내 적금 상품</h2>
-    </span>
-    <hr />  </div>  <div class="smallcontainer">
+  <div class="larger">
+    <div class="smallcontainer">
       <span>
-      <img src="@/assets/img/loan.png" alt="interest">
-      <h2> 내 대출 상품</h2>
-    </span>
-    <hr />  </div>
-</div>
+        <img src="@/assets/img/saving.png" alt="interest">
+        <h2>내 적금 상품</h2>
+      </span>
+      <hr />
+      <div class="cards">
+        <div v-for="product in subscribedProducts.savings" :key="product.id" class="card">
+          <p>{{ getProductById('savings', product.saving_product)?.fin_prdt_nm || "Unknown Product" }}
+            <span class="bank-name">{{ getProductById('savings', product.saving_product)?.kor_co_nm }}</span>
+          </p>
+        </div>
+        <p v-if="subscribedProducts.savings.length === 0">관심 상품이 없습니다.</p>
+      </div>
+    </div>
+    <div class="smallcontainer">
+      <span>
+        <img src="@/assets/img/loan.png" alt="interest">
+        <h2>내 대출 상품</h2>
+      </span>
+      <hr />
+      <div class="cards">
+        <div v-for="product in subscribedProducts.creditloans" :key="product.id" class="card">
+          <p>{{ getProductById('creditloans', product.creditloan_product)?.fin_prdt_nm || "Unknown Product" }}
+            <span class="bank-name">{{ getProductById('creditloans', product.creditloan_product)?.kor_co_nm }}</span>
+          </p>
+        </div>
+        <p v-if="subscribedProducts.creditloans.length === 0">관심 상품이 없습니다.</p>
+      </div>
+    </div>
+  </div>
 </template>
+
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, computed } from "vue";
+import axios from "axios";
+import { useRoute } from "vue-router";
+import { useUserStore } from "@/stores/user";
+
+const route = useRoute();
+const username = computed(() => route.params.username);
+
+const userStore = useUserStore();
+const token = computed(() => userStore.token);
 
 const phone_number = ref('');
-const name = ref('');
+const user_name = ref('');
 const password1 = ref('');
 const password2 = ref('');
 const user_age_group = ref('');
@@ -88,18 +131,151 @@ const assets = ref('');
 const passwordError = ref('');
 const showToast = ref(false);
 
-const handleSubmit = () => {
-  // 여기에 폼 제출 로직 추가
-  showToast.value = true;
-  setTimeout(() => {
-    showToast.value = false;
-  }, 1000); // 3초 후에 토스트 메시지를 숨깁니다.
+const depositProducts = ref([]);
+const savingProducts = ref([]);
+const creditloanProducts = ref([]);
+
+const subscribedProducts = ref({
+  deposits: [],
+  savings: [],
+  creditloans: []
+});
+
+onMounted(async () => {
+  await fetchUserProfile();
+  await fetchAllProducts();
+  await fetchUserSubscriptions();
+});
+
+const fetchUserProfile = async () => {
+  try {
+    console.log("Fetching user profile for username:", username.value);
+    const response = await axios.get(`http://127.0.0.1:8000/users/profile/${username.value}/`, {
+      headers: { Authorization: `Token ${token.value}` },
+    });
+    console.log("Fetched user profile data:", response.data);
+    const userProfile = response.data.user_profile;
+    phone_number.value = userProfile.phone_number;
+    user_name.value = userProfile.username;
+    user_age_group.value = userProfile.user_age_group;
+    service_purpose.value = userProfile.service_purpose;
+    email.value = userProfile.email;
+    assets.value = userProfile.asset;
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+  }
+};
+
+const fetchAllProducts = async () => {
+  try {
+    const depositResponse = await axios.get("http://127.0.0.1:8000/financial/deposit-products/", {
+      headers: { Authorization: `Token ${token.value}` }
+    });
+    depositProducts.value = depositResponse.data;
+    console.log("Fetched deposit products:", depositResponse.data);
+
+    const savingResponse = await axios.get("http://127.0.0.1:8000/financial/saving-products/", {
+      headers: { Authorization: `Token ${token.value}` }
+    });
+    savingProducts.value = savingResponse.data;
+    console.log("Fetched saving products:", savingResponse.data);
+
+    const creditloanResponse = await axios.get("http://127.0.0.1:8000/financial/creditloan-products/", {
+      headers: { Authorization: `Token ${token.value}` }
+    });
+    creditloanProducts.value = creditloanResponse.data;
+    console.log("Fetched credit loan products:", creditloanResponse.data);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+  }
+};
+
+const fetchUserSubscriptions = async () => {
+  try {
+    const response = await axios.get("http://127.0.0.1:8000/financial/user_subscriptions/", {
+      headers: { Authorization: `Token ${token.value}` }
+    });
+    subscribedProducts.value.deposits = response.data.deposits;
+    subscribedProducts.value.savings = response.data.savings;
+    subscribedProducts.value.creditloans = response.data.creditloans;
+    console.log("Fetched user subscriptions:", response.data);
+  } catch (error) {
+    console.error("Error fetching user subscriptions:", error);
+  }
+};
+
+const getProductById = (type, productId) => {
+  let productList;
+  switch (type) {
+    case 'deposits':
+      productList = depositProducts.value;
+      break;
+    case 'savings':
+      productList = savingProducts.value;
+      break;
+    case 'creditloans':
+      productList = creditloanProducts.value;
+      break;
+    default:
+      productList = [];
+  }
+  return productList.find(product => product.id === productId);
+};
+
+const handleSubmit = async () => {
+  if (password1.value !== password2.value) {
+    passwordError.value = "Passwords do not match.";
+    return;
+  }
+  passwordError.value = '';
+
+  const updatedProfile = {
+    phone_number: phone_number.value,
+    user_age_group: user_age_group.value,
+    service_purpose: service_purpose.value,
+    email: email.value,
+    asset: assets.value,
+    password: password1.value || undefined,
+  };
+
+  try {
+    await axios.patch(`http://127.0.0.1:8000/users/profile/${username.value}/`, updatedProfile, {
+      headers: { Authorization: `Token ${token.value}` }
+    });
+    showToast.value = true;
+    setTimeout(() => {
+      showToast.value = false;
+    }, 3000);
+  } catch (error) {
+    console.error("Error updating profile:", error);
+  }
 };
 </script>
+
 <style scoped>
 img {
   width: 30px;
   height: 30px;
+}
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card {
+  background-color: #ffffff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  margin: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bank-name {
+  margin-left: auto;
+  color: grey;
+  font-size: 0.9em;
 }
 
 span {
@@ -113,10 +289,10 @@ h2 {
   margin: auto 20px;
 }
 
-.larger{
-  display:flex;
+.larger {
+  display: flex;
   flex-direction: row;
-  height:50%
+  height: 50%;
 }
 .smallcontainer {
   height: 90%;
@@ -126,7 +302,7 @@ h2 {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   justify-items: center;
-  width:50%;
+  width: 50%;
 }
 
 .content {
@@ -137,15 +313,16 @@ h2 {
 
 label {
   margin-right: 20px;
-  font-size:15px;
-  width : 140px;
+  font-size: 15px;
+  width: 140px;
   text-align: right;
 }
 
-input, select {
+input,
+select {
   height: 20px;
   width: 200px;
-  margin-right : 10px;
+  margin-right: 10px;
 }
 
 .margintop {
@@ -171,7 +348,7 @@ input, select {
   bottom: 20%;
   left: 54%;
   transform: translateX(-50%);
-  background-color: #black;
+  background-color: black;
   color: white;
   padding: 20px 30px;
   border-radius: 5px;
@@ -179,11 +356,13 @@ input, select {
   font-size: 1.2em;
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.5s;
 }
 
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 </style>
