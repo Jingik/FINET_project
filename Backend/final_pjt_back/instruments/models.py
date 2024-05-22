@@ -75,19 +75,24 @@ class CreditLoanProducts(models.Model):
     contract_user = models.ManyToManyField(settings.AUTH_USER_MODEL, through='CreditLoanSubscription', related_name='contract_creditloan', blank=True)
 
 class CreditLoanOptions(models.Model):
+    # CreditLoanProducts 모델과의 ForeignKey 관계, CreditLoanProducts가 삭제되면 관련된 CreditLoanRates도 삭제됨
     creditloan = models.ForeignKey(CreditLoanProducts, on_delete=models.CASCADE)
+    # 신용 대출 코드, 최대 길이 100자
     creditloan_code = models.CharField(max_length=100)
+    # 대출 이자율 유형, 한 글자로 저장, 기본값은 'A'
     crdt_lend_rate_type = models.CharField(max_length=1, default='A')
+    # 대출 이자율 유형 이름, 최대 길이 100자, 기본값은 '기본금리'
     crdt_lend_rate_type_nm = models.CharField(max_length=100, default='기본금리')
-    crdt_grad_1 = models.FloatField(null=True)
-    crdt_grad_4 = models.FloatField(null=True)
-    crdt_grad_5 = models.FloatField(null=True)
-    crdt_grad_6 = models.FloatField(null=True)
-    crdt_grad_10 = models.FloatField(null=True)
-    crdt_grad_11 = models.FloatField(null=True)
-    crdt_grad_12 = models.FloatField(null=True)
-    crdt_grad_13 = models.FloatField(null=True)
-    crdt_grad_avg = models.FloatField(null=True)
+    crdt_grad_1 = models.FloatField(null=True) # 신용 등급 1에 대한 이자율, null 허용
+    crdt_grad_4 = models.FloatField(null=True) # 신용 등급 4에 대한 이자율, null 허용
+    crdt_grad_5 = models.FloatField(null=True) # 신용 등급 5에 대한 이자율, null 허용
+    crdt_grad_6 = models.FloatField(null=True) # 신용 등급 6에 대한 이자율, null 허용
+    crdt_grad_10 = models.FloatField(null=True) # 신용 등급 10에 대한 이자율, null 허용
+    crdt_grad_11 = models.FloatField(null=True) # 신용 등급 11에 대한 이자율, null 허용
+    crdt_grad_12 = models.FloatField(null=True) # 신용 등급 12에 대한 이자율, null 허용
+    crdt_grad_13 = models.FloatField(null=True) # 신용 등급 13에 대한 이자율, null 허용
+    crdt_grad_avg = models.FloatField(null=True)  # 신용 등급 평균 이자율, null 허용
+
 
 class CreditLoanSubscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

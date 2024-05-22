@@ -64,10 +64,10 @@
             </div>
           </div>
         </div>
-        <ComparisonSection 
+        <DepositComparisonSection 
           :comparisonProducts="comparisonProducts" 
           @removeFromComparison="removeFromComparison"
-          @compareProducts="showComparisonModal = true"
+          @compareProducts="showDepositComparisonModal = true"
         />
       </div>
       <div class="selectcontainer">
@@ -171,10 +171,10 @@
 
     </div>
     <MyPageRemote />
-    <ComparisonModal 
-      v-if="showComparisonModal" 
+    <DepositComparisonModal 
+      v-if="showDepositComparisonModal" 
       :comparisonProducts="comparisonProducts" 
-      @close="showComparisonModal = false"
+      @close="showDepositComparisonModal = false"
     />
 
     <DepositDetailModal
@@ -188,8 +188,8 @@
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import MyPageRemote from '@/components/MyPageRemote.vue';
-import ComparisonSection from '@/components/ComparisonSection.vue';
-import ComparisonModal from '@/components/ComparisonModal.vue';
+import DepositComparisonSection from '@/components/DepositComparisonSection.vue';
+import DepositComparisonModal from '@/components/DepositComparisonModal.vue';
 import DepositDetailModal from '@/components/DepositDetailModal.vue'
 
 const products = ref([]);
@@ -200,7 +200,7 @@ const wishlist = ref([]);
 const selectedTerms = ref({});
 const selectedInterestRates = ref({});
 const comparisonProducts = ref([]);
-const showComparisonModal = ref(false);
+const showDepositComparisonModal = ref(false);
 const showDepositDetailModal = ref(false);
 
 function openModal(product) {

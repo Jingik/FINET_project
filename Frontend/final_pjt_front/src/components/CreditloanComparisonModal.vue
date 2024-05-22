@@ -28,7 +28,7 @@
 
 <script setup>
 import { defineProps, defineEmits } from 'vue';
-import BarChart from './CompareBarChart.vue';
+import BarChart from './DepositCompareBarChart.vue';
 
 const props = defineProps({
   comparisonProducts: {

@@ -57,4 +57,4 @@ class CreditLoanProductsSerializer(serializers.ModelSerializer):
 class CreditLoanSubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CreditLoanSubscription
-        fields = '__all__'
+        field1s = '__all__'
