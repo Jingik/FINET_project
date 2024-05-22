@@ -7,6 +7,7 @@ from rest_framework.pagination import PageNumberPagination
 from .models import *
 from .serializers import *
 from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import ValidationError
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
@@ -136,18 +137,59 @@ def like_board(request, board_id):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+def unlike_board(request, board_id):
+    user = request.user
+    try:
+        board = Board.objects.get(id=board_id)
+        like = BoardLike.objects.filter(user=user, board=board).first()
+        if like:
+            like.delete()
+            return Response({'detail': 'Unliked'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'detail': 'Not liked yet'}, status=status.HTTP_400_BAD_REQUEST)
+    except Board.DoesNotExist:
+        return Response({'detail': 'Board not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def like_comment(request, comment_id):
+    user = request.user
+    print(f"Received request to like comment with ID: {comment_id} from user: {user.id}")
+    try:
+        comment = Comment.objects.get(id=comment_id)
+        print(f"Found comment with ID: {comment_id}")
+        like, created = CommentLike.objects.get_or_create(user=user, comment=comment)
+        if not created:
+            print("Comment already liked by this user.")
+            return Response({'detail': 'Already liked'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = CommentLikeSerializer(like)
+        print("Comment liked successfully.")
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    except Comment.DoesNotExist:
+        print("Comment not found.")
+        return Response({'detail': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
+    except ValidationError as ve:
+        print(f"Validation error: {ve}")
+        return Response({'detail': str(ve)}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def unlike_comment(request, comment_id):
     user = request.user
     try:
         comment = Comment.objects.get(id=comment_id)
-        like, created = CommentLike.objects.get_or_create(user=user, comment=comment)
-        if not created:
-            return Response({'detail': 'Already liked'}, status=status.HTTP_400_BAD_REQUEST)
-        serializer = CommentLikeSerializer(like)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        like = CommentLike.objects.filter(user=user, comment=comment).first()
+        if like:
+            like.delete()
+            return Response({'detail': 'Unliked'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'detail': 'Not liked yet'}, status=status.HTTP_400_BAD_REQUEST)
     except Comment.DoesNotExist:
         return Response({'detail': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
-
+    
+    
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def liked_content(request):

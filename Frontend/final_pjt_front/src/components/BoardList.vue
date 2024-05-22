@@ -4,7 +4,7 @@
       <div v-for="board in boards" :key="board.id" class="board-item">
         <RouterLink :to="{ name: 'DetailView', params: { id: board.id } }">
           <h3>{{ board.title }}</h3>
-          <p>{{ board.user.name }}</p>
+          <p>{{ board.user.username }}</p>
           <p>{{ board.content }}</p>
         </RouterLink>
       </div>

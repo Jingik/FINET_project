@@ -13,7 +13,7 @@
         <div style="display: flex; flex-direction: column">
           <br>
           <p class="post-meta">
-            <span class="post-author">작성자 : {{ board.user_name }}</span>
+            <span class="post-author">작성자 : {{ board.user.username }}</span>
           </p>
           <p class="post-meta">
             <span class="post-date">{{ formatDate(board.created_at) }}</span>
@@ -25,9 +25,9 @@
         
         <p class="post-meta">
           <img 
-            :src="likeslist.includes(board.id) ? '@/assets/img/filledlike.png' : '@/assets/img/like.png'" 
+            :src="likeslist.includes(board.id) ? '/src/assets/img/filledlike.png' : '/src/assets/img/like.png'" 
             class="likeslist-button" style="height: 20px; width:20px;"
-            @click="togglelikeslist(board.id)" 
+            @click="toggleBoardLike(board.id)" 
             alt="likeslist icon">
           좋아요 <span class="like-count">{{ likeslist.length }}</span>
           댓글 <span class="comment-count">{{ comments.length }}</span>
@@ -40,16 +40,15 @@
             <span style="margin-right: auto">
               {{ comment.content }}
               <span class="comment-meta" style="margin-left: 10px">
-                {{ comment.user.name }} |
+                {{ comment.user.username }} |
                 {{ formatDate(comment.created_at) }}
               </span>
             </span>
-            <img src="@/assets/img/like.png" style="width: 30px; width:30px; margin-right: 10px;"
-            alt="누르면 @/assets/img/filledlike.png로 전환되어야함">
-            <!-- :src="likeslist.includes(board.id) ? '@/assets/img/filledlike.png' : '@/assets/img/like.png'" 
-            class="likeslist-button" style="height: 20px; width:20px;"
-            @click="togglelikeslist(board.id)" 
-            alt="likeslist icon"> -->
+            <img  
+              :src="commentLikes.includes(comment.id) ? '/src/assets/img/filledlike.png' : '/src/assets/img/like.png'" 
+              style="width: 20px; height: 20px; margin-right: 10px;"
+              @click="toggleCommentLike(comment.id)" 
+              alt="comment likes icon">
             <div v-if="isCurrentUserCommentAuthor(comment)" class="comment-actions">
               <button @click="startEditingComment(comment)" class="post-button">수정</button>
               <button @click="confirmDeleteComment(comment.id)" class="post-button">삭제</button>
@@ -90,6 +89,7 @@ const store = useCounterStore();
 const route = useRoute();
 const router = useRouter();
 const likeslist = ref([]);
+const commentLikes = ref([]);
 
 const board = ref(null);
 const loading = ref(true);
@@ -133,10 +133,12 @@ async function fetchComments() {
 
 async function fetchLikeslist() {
   try {
-    const response = await axios.get(`${store.API_URL}/posts/${route.params.id}/likeslist/`, {
+    const response = await axios.get(`${store.API_URL}/posts/liked_content/`, {
       headers: { Authorization: `Token ${store.token}` },
     });
-    likeslist.value = response.data;
+    const data = response.data;
+    likeslist.value = data.liked_boards.map(board => board.id);
+    commentLikes.value = data.liked_comments.map(comment => comment.id);
   } catch (err) {
     console.error("An error occurred while fetching the likes list:", err);
   }
@@ -155,24 +157,65 @@ function isCurrentUserCommentAuthor(comment) {
   return comment.user && store.currentUser && comment.user.id === store.currentUser.id;
 }
 
-function togglelikeslist(boardId) {
+function toggleBoardLike(boardId) {
   if (likeslist.value.includes(boardId)) {
     likeslist.value = likeslist.value.filter(id => id !== boardId);
+    updateBoardLikeslist(boardId, 'unlike');
   } else {
     likeslist.value.push(boardId);
+    updateBoardLikeslist(boardId, 'like');
   }
-  updateLikeslist(boardId);
 }
 
-async function updateLikeslist(boardId) {
+async function updateBoardLikeslist(boardId, action) {
   try {
-    await axios.post(`${store.API_URL}/posts/${boardId}/toggle_like/`, {
-      user_name: store.currentUser.name,
-    }, {
+    console.log(`Sending request to ${action} board with ID: ${boardId}`);
+    const url = `${store.API_URL}/posts/${action}_board/${boardId}/`;
+    const response = await axios.post(url, {}, {
       headers: { Authorization: `Token ${store.token}` },
     });
+    console.log('Response status:', response.status);
+    if (response.status === 201 && action === 'like') {
+      console.log("Board liked successfully.");
+    } else if (response.status === 204 && action === 'unlike') {
+      console.log("Board unliked successfully.");
+    } else if (response.status === 400) {
+      console.warn(action === 'like' ? "Already liked" : "Not liked yet");
+    }
   } catch (err) {
-    console.error("An error occurred while updating the likes list:", err);
+    console.error(`An error occurred while updating the board likes list: ${err.response ? err.response.data : err.message}`);
+  }
+}
+
+function toggleCommentLike(commentId) {
+  if (commentLikes.value.includes(commentId)) {
+    // Unlike the comment
+    commentLikes.value = commentLikes.value.filter(id => id !== commentId);
+    updateCommentLikeslist(commentId, 'unlike');
+  } else {
+    // Like the comment
+    commentLikes.value.push(commentId);
+    updateCommentLikeslist(commentId, 'like');
+  }
+}
+
+async function updateCommentLikeslist(commentId, action) {
+  try {
+    console.log(`Sending request to ${action} comment with ID: ${commentId}`);
+    const url = `${store.API_URL}/posts/${action}_comment/${commentId}/`;
+    const response = await axios.post(url, {}, {
+      headers: { Authorization: `Token ${store.token}` },
+    });
+    console.log('Response status:', response.status);
+    if (response.status === 201 && action === 'like') {
+      console.log("Comment liked successfully.");
+    } else if (response.status === 204 && action === 'unlike') {
+      console.log("Comment unliked successfully.");
+    } else if (response.status === 400) {
+      console.warn(action === 'like' ? "Already liked" : "Not liked yet");
+    }
+  } catch (err) {
+    console.error(`An error occurred while updating the comment likes list: ${err.response ? err.response.data : err.message}`);
   }
 }
 

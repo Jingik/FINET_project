@@ -17,6 +17,8 @@ urlpatterns = [
     
     # 사용자가 좋아요 누른 글 및 댓글 확인하기
     path('like_board/<int:board_id>/', views.like_board, name='like_board'),
+    path('unlike_board/<int:board_id>/', views.unlike_board, name='unlike_board'),
     path('like_comment/<int:comment_id>/', views.like_comment, name='like_comment'), 
+    path('unlike_comment/<int:comment_id>/', views.unlike_comment, name='unlike_comment'), 
     path('liked_content/', views.liked_content, name='liked_content'),
 ]
