@@ -136,7 +136,7 @@ function closeModal() {
 
 async function subscribeProduct() {
   try {
-    const alreadySubscribed = await counterStore.isSubscribedToProduct(localSelectedProduct.value.id);
+    const alreadySubscribed = await counterStore.isSubscribedToProduct(localSelectedProduct.value);
     if (alreadySubscribed) {
       alert('이미 가입된 상품입니다.');
       closeModal();

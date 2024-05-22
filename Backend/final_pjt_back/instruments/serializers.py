@@ -7,6 +7,8 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'name', 'phone_number', 'email', 'user_age_group', 'service_purpose', 'asset']
 
+## Deposit
+
 class DepositOptionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = DepositOptions
@@ -23,6 +25,14 @@ class DepositSubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = DepositSubscription
         fields = '__all__'
+
+class FavoriteDepositProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FavoriteDepositProduct
+        fields = '__all__'
+
+
+## Saving
 
 class SavingOptionsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,6 +52,14 @@ class SavingSubscriptionSerializer(serializers.ModelSerializer):
         model = SavingSubscription
         fields = '__all__'
 
+class FavoriteSavingProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FavoriteSavingProduct
+        fields = '__all__'
+        
+        
+## Creditloan
+
 class CreditLoanOptionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CreditLoanOptions
@@ -58,3 +76,8 @@ class CreditLoanSubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CreditLoanSubscription
         field1s = '__all__'
+
+class FavoriteCreditLoanProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FavoriteCreditLoanProduct
+        fields = '__all__'

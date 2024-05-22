@@ -68,13 +68,12 @@ export const useCounterStore = defineStore('counter', () => {
     }
     try {
       console.log('Checking subscription status for product:', depositId);
-      const response = await axios.get(`${API_URL}/financial/check_subscription/${depositId}/`, {
+      const response = await axios.get(`${API_URL}/financial/user_subscriptions/`, {
         headers: {
           Authorization: `Token ${token.value}`
         }
       });
-      console.log('Subscription status response:', response.data);
-      return response.data.is_subscribed;
+      return response.data.deposit_subscriptions;
     } catch (error) {
       console.error('Error checking subscription:', error);
       return false;
@@ -113,13 +112,13 @@ export const useCounterStore = defineStore('counter', () => {
     }
     try {
       console.log('Checking subscription status for product:', savingId);
-      const response = await axios.get(`${API_URL}/financial/check_subscription/${savingId}/`, {
+      const response = await axios.get(`${API_URL}/financial/user_subscriptions/`, {
         headers: {
           Authorization: `Token ${token.value}`
         }
       });
       console.log('Subscription status response:', response.data);
-      return response.data.is_subscribed;
+      return response.data.saving_subscriptions;
     } catch (error) {
       console.error('Error checking subscription:', error);
       return false;
@@ -158,13 +157,12 @@ export const useCounterStore = defineStore('counter', () => {
     }
     try {
       console.log('Checking subscription status for product:', creditloanId);
-      const response = await axios.get(`${API_URL}/financial/check_subscription/${creditloanId}/`, {
+      const response = await axios.get(`${API_URL}/financial/user_subscriptions/`, {
         headers: {
           Authorization: `Token ${token.value}`
         }
       });
-      console.log('Subscription status response:', response.data);
-      return response.data.is_subscribed;
+      return response.data.creditloan_subscriptions;
     } catch (error) {
       console.error('Error checking subscription:', error);
       return false;

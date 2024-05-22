@@ -333,3 +333,141 @@ def user_subscriptions(request):
         'saving_subscriptions': saving_serializer.data,
         'creditloan_subscriptions': creditloan_serializer.data,
     }, status=status.HTTP_200_OK)
+    
+    
+    
+## 찜한 상품 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def list_favorites(request):
+    user = request.user
+    deposit_favorites = FavoriteDepositProduct.objects.filter(user=user)
+    saving_favorites = FavoriteSavingProduct.objects.filter(user=user)
+    creditloan_favorites = FavoriteCreditLoanProduct.objects.filter(user=user)
+    
+    deposit_serializer = FavoriteDepositProductSerializer(deposit_favorites, many=True)
+    saving_serializer = FavoriteSavingProductSerializer(saving_favorites, many=True)
+    creditloan_serializer = FavoriteCreditLoanProductSerializer(creditloan_favorites, many=True)
+    
+    return Response({
+        'deposit_subscriptions': deposit_serializer.data,
+        'saving_subscriptions': saving_serializer.data,
+        'creditloan_subscriptions': creditloan_serializer.data,
+    }, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_favorites_deposit(request):
+    user = request.user
+    deposit_product_id = request.data.get('deposit_product_id')
+    if not deposit_product_id:
+        return Response({'error': 'Deposit product ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        deposit_product = DepositProducts.objects.get(id=deposit_product_id)
+    except DepositProducts.DoesNotExist:
+        return Response({'error': 'Deposit product not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    favorite, created = FavoriteDepositProduct.objects.get_or_create(user=user, deposit_product=deposit_product)
+    if created:
+        return Response({'status': 'added to favorites'}, status=status.HTTP_201_CREATED)
+    else:
+        return Response({'status': 'already in favorites'}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def remove_favorites_deposit(request):
+    user = request.user
+    deposit_product_id = request.data.get('deposit_product_id')
+    if not deposit_product_id:
+        return Response({'error': 'Deposit product ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        deposit_product = DepositProducts.objects.get(id=deposit_product_id)
+    except DepositProducts.DoesNotExist:
+        return Response({'error': 'Deposit product not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    favorite = FavoriteDepositProduct.objects.filter(user=user, deposit_product=deposit_product)
+    if favorite.exists():
+        favorite.delete()
+        return Response({'status': 'removed from favorites'}, status=status.HTTP_204_NO_CONTENT)
+    else:
+        return Response({'error': 'Favorite not found'}, status=status.HTTP_404_NOT_FOUND)
+
+# Saving
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_favorites_saving(request):
+    user = request.user
+    saving_product_id = request.data.get('saving_product_id')
+    if not saving_product_id:
+        return Response({'error': 'Saving product ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        saving_product = SavingProducts.objects.get(id=saving_product_id)
+    except SavingProducts.DoesNotExist:
+        return Response({'error': 'Saving product not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    favorite, created = FavoriteSavingProduct.objects.get_or_create(user=user, saving_product=saving_product)
+    if created:
+        return Response({'status': 'added to favorites'}, status=status.HTTP_201_CREATED)
+    else:
+        return Response({'status': 'already in favorites'}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def remove_favorites_saving(request):
+    user = request.user
+    saving_product_id = request.data.get('saving_product_id')
+    if not saving_product_id:
+        return Response({'error': 'Saving product ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        saving_product = SavingProducts.objects.get(id=saving_product_id)
+    except SavingProducts.DoesNotExist:
+        return Response({'error': 'Saving product not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    favorite = FavoriteSavingProduct.objects.filter(user=user, saving_product=saving_product)
+    if favorite.exists():
+        favorite.delete()
+        return Response({'status': 'removed from favorites'}, status=status.HTTP_204_NO_CONTENT)
+    else:
+        return Response({'error': 'Favorite not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+#creditLoan
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_favorites_creditloan(request):
+    user = request.user
+    creditloan_product_id = request.data.get('creditloan_product_id')
+    if not creditloan_product_id:
+        return Response({'error': 'Creditloan product ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        creditloan_product = CreditLoanProducts.objects.get(id=creditloan_product_id)
+    except creditloan_product.DoesNotExist:
+        return Response({'error': 'Creditloan product not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    favorite, created = FavoriteCreditLoanProduct.objects.get_or_create(user=user, creditloan_product=creditloan_product)
+    if created:
+        return Response({'status': 'added to favorites'}, status=status.HTTP_201_CREATED)
+    else:
+        return Response({'status': 'already in favorites'}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def remove_favorites_creditloan(request):
+    user = request.user
+    creditloan_product_id = request.data.get('creditloan_product_id')
+    if not creditloan_product_id:
+        return Response({'error': 'Creditloan product ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        creditloan_product = CreditLoanProducts.objects.get(id=creditloan_product_id)
+    except CreditLoanProducts.DoesNotExist:
+        return Response({'error': 'Deposit product not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    favorite = FavoriteCreditLoanProduct.objects.filter(user=user, creditloan_product=creditloan_product)
+    if favorite.exists():
+        favorite.delete()
+        return Response({'status': 'removed from favorites'}, status=status.HTTP_204_NO_CONTENT)
+    else:
+        return Response({'error': 'Favorite not found'}, status=status.HTTP_404_NOT_FOUND)

@@ -224,6 +224,7 @@ const filteredProducts = computed(() => {
   });
 });
 
+
 async function fetchProducts() {
   try {
     const res = await axios.get('http://127.0.0.1:8000/financial/creditloan-products/');
@@ -237,6 +238,9 @@ async function fetchProducts() {
       selectedGrades.value[product.id] = '1';
       updateInterestRate(product);  // Update interest rate based on the default grade
     });
+
+    const wishlistRes = await axios.get('http://127.0.0.1:8000/financial/favorites/');
+    wishlist.value = wishlistRes.data.creditloan_subscriptions.map(item => item.creditloan_product);
   } catch (error) {
     console.error('Error fetching products:', error);
   }
@@ -246,6 +250,25 @@ function sortProducts() {
   // No need to do anything here since computed property 'sortedProducts' will react to changes in 'sortBy'
 }
 
+function toggleWishlist(productId) {
+  if (wishlist.value.includes(productId)) {
+    axios.post('http://127.0.0.1:8000/financial/favorites/remove_creditloan/', { creditloan_product_id: productId })
+      .then(() => {
+        wishlist.value = wishlist.value.filter(id => id !== productId);
+      })
+      .catch(error => {
+        console.error('Error removing from wishlist:', error);
+      });
+  } else {
+    axios.post('http://127.0.0.1:8000/financial/favorites/add_creditloan/', { creditloan_product_id: productId })
+      .then(() => {
+        wishlist.value.push(productId);
+      })
+      .catch(error => {
+        console.error('Error adding to wishlist:', error);
+      });
+  }
+}
 function getProductBankName(bankName) {
   switch (bankName) {
     case '농협은행주식회사':
@@ -271,13 +294,6 @@ function isInComparison(productId) {
   return comparisonProducts.value.some(product => product.id === productId);
 }
 
-function toggleWishlist(productId) {
-  if (wishlist.value.includes(productId)) {
-    wishlist.value = wishlist.value.filter(id => id !== productId);
-  } else {
-    wishlist.value.push(productId);
-  }
-}
 
 function uniqueGrades(product) {
   const grades = Object.keys(product.creditloan_options[0])

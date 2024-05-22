@@ -32,6 +32,16 @@ class DepositSubscription(models.Model):
     deposit_product = models.ForeignKey(DepositProducts, on_delete=models.CASCADE)
     subscribed_at = models.DateTimeField(auto_now_add=True)
 
+# 찜한 상품 테이블
+class FavoriteDepositProduct(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    deposit_product = models.ForeignKey(DepositProducts, on_delete=models.CASCADE)
+    favorited_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'deposit_product')
+        
+
 class SavingProducts(models.Model):
     saving_code = models.CharField(unique=True, max_length=100)
     fin_co_no = models.CharField(max_length=100)
@@ -59,7 +69,17 @@ class SavingSubscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     saving_product = models.ForeignKey(SavingProducts, on_delete=models.CASCADE)
     subscribed_at = models.DateTimeField(auto_now_add=True)
+    
+# 찜한 상품 테이블
+class FavoriteSavingProduct(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    saving_product = models.ForeignKey(SavingProducts, on_delete=models.CASCADE)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('user', 'saving_product')
+        
+        
 class CreditLoanProducts(models.Model):
     creditloan_code = models.CharField(unique=True, max_length=100)
     fin_co_no = models.CharField(max_length=100)
@@ -98,3 +118,13 @@ class CreditLoanSubscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     creditloan_product = models.ForeignKey(CreditLoanProducts, on_delete=models.CASCADE)
     subscribed_at = models.DateTimeField(auto_now_add=True)
+
+# 찜한 상품 테이블
+class FavoriteCreditLoanProduct(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    creditloan_product = models.ForeignKey(CreditLoanProducts, on_delete=models.CASCADE)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+        unique_together = ('user', 'creditloan_product')

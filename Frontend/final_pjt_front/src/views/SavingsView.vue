@@ -225,6 +225,9 @@ async function fetchProducts() {
       selectedTerms.value[product.id] = '12';
       updateInterestRate(product);  // Update interest rate based on the default term
     });
+
+    const wishlistRes = await axios.get('http://127.0.0.1:8000/financial/favorites/');
+    wishlist.value = wishlistRes.data.saving_subscriptions.map(item => item.saving_product);
   } catch (error) {
     console.error('Error fetching products:', error);
   }
@@ -261,9 +264,21 @@ function isInComparison(productId) {
 
 function toggleWishlist(productId) {
   if (wishlist.value.includes(productId)) {
-    wishlist.value = wishlist.value.filter(id => id !== productId);
+    axios.post('http://127.0.0.1:8000/financial/favorites/remove_saving/', { saving_product_id: productId })
+      .then(() => {
+        wishlist.value = wishlist.value.filter(id => id !== productId);
+      })
+      .catch(error => {
+        console.error('Error removing from wishlist:', error);
+      });
   } else {
-    wishlist.value.push(productId);
+    axios.post('http://127.0.0.1:8000/financial/favorites/add_saving/', { saving_product_id: productId })
+      .then(() => {
+        wishlist.value.push(productId);
+      })
+      .catch(error => {
+        console.error('Error adding to wishlist:', error);
+      });
   }
 }
 

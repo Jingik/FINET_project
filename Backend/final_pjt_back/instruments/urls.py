@@ -27,4 +27,17 @@ urlpatterns = [
     
     # 가입 상품 조회
     path('user_subscriptions/', views.user_subscriptions, name='user_subscriptions'),
+    
+    # 찜한 상품 저장
+    path('favorites/add_deposit/', views.add_favorites_deposit, name='add_favorites_deposit'),
+    path('favorites/add_saving/', views.add_favorites_saving, name='add_favorites_saving'),
+    path('favorites/add_creditloan/', views.add_favorites_creditloan, name='add_favorites_creditloan'),
+    
+    # 찜한 상품 삭제 
+    path('favorites/remove_deposit/', views.remove_favorites_deposit, name='remove_favorites_deposit'),
+    path('favorites/remove_saving/', views.remove_favorites_saving, name='remove_favorites_saving'),
+    path('favorites/remove_creditloan/', views.remove_favorites_creditloan, name='remove_favorites_creditloan'),
+    
+    # 찜한 상품 조회
+    path('favorites/', views.list_favorites, name='list_favorites'),
 ]
