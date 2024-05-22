@@ -64,10 +64,10 @@
           </div>
         </div>
       </div>
-      <ComparisonSection
+      <SavingComparisonSection
         :comparisonProducts="comparisonProducts"
         @removeFromComparison="removeFromComparison"
-        @compareProducts="showComparisonModal = true"
+        @compareProducts="showSavingComparisonModal = true"
       />
     </div>
     <div class="selectcontainer">
@@ -159,10 +159,10 @@
     </template>
   </div>
   <MyPageRemote />
-  <ComparisonModal 
-    v-if="showComparisonModal" 
+  <SavingComparisonModal 
+    v-if="showSavingComparisonModal" 
     :comparisonProducts="comparisonProducts" 
-    @close="showComparisonModal = false"
+    @close="showSavingComparisonModal = false"
   />
   <SavingDetailModal
     v-if="showSavingDetailModal"
@@ -175,9 +175,10 @@
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import MyPageRemote from '@/components/MyPageRemote.vue';
-import ComparisonSection from '@/components/ComparisonSection.vue';
-import ComparisonModal from '@/components/ComparisonModal.vue';
+import SavingComparisonSection from '@/components/SavingComparisonSection.vue';
+import SavingComparisonModal from '@/components/SavingComparisonModal.vue';
 import SavingDetailModal from '@/components/SavingDetailModal.vue';
+import { controllers } from 'chart.js';
 
 const products = ref([]);
 const selectedProduct = ref(null);
@@ -187,7 +188,7 @@ const wishlist = ref([]);
 const selectedTerms = ref({});
 const selectedInterestRates = ref({});
 const comparisonProducts = ref([]);
-const showComparisonModal = ref(false);
+const showSavingComparisonModal = ref(false);
 const showSavingDetailModal = ref(false);
 
 function openModal(product) {

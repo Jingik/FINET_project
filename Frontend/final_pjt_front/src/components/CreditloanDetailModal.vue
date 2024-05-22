@@ -14,31 +14,22 @@
             <strong>금리안내:</strong> <span class="highlight">{{ rate12Months }}% (세전, 연 12개월)</span>
           </li>
           <li v-if="selectedOption">
-            <strong>이자 계산 방식:</strong> {{ selectedOption.intr_rate_type }}
+            <strong>이자 계산 방식:</strong> {{ selectedOption.crdt_lend_rate_type_nm }}
             <br>
-            <strong>기본 금리:</strong> {{ selectedOption.intr_rate }}%
-            <br>
-            <strong>최고 금리:</strong> {{ selectedOption.intr_rate2 }}%
+            <strong>기본 금리:</strong> {{ selectedOption.crdt_grad_avg }}%
           </li>
-          <li><strong>계좌 수 제한:</strong> {{ localSelectedProduct.etc_note }}</li>
+          <li><strong>계좌 수 제한:</strong> {{ localSelectedProduct.spcl_cnd }}</li>
           <li><strong>최대 한도:</strong> {{ localSelectedProduct.max_limit ? localSelectedProduct.max_limit : '제한 없음' }}</li>
-          <li><strong>가입 불가:</strong> {{ localSelectedProduct.join_deny ? '가입 불가' : '가입 가능' }}</li>
-          <li><strong>가입 대상:</strong> {{ localSelectedProduct.join_member }}</li>
+          <li><strong>가입 불가:</strong> 가입 가능</li>
+          <li><strong>가입 대상:</strong> {{ localSelectedProduct.join_way }}</li>
           <li><strong>만기 후 이자율:</strong> {{ localSelectedProduct.mtrt_int }}</li>
           <li><strong>특별 조건:</strong> {{ localSelectedProduct.spcl_cnd }}</li>
         </ul>
         <div class="term-select">
           <label for="term-select">신용 등급 선택:</label>
-          <div class="button-group">
-            <button
-              v-for="term in uniqueTerms(localSelectedProduct)"
-              :key="term"
-              :class="{'selected-button': selectedTerm === term}"
-              @click="selectedTerm = term"
-            >
-              {{ term }} 등급
-            </button>
-          </div>
+          <select id="term-select" v-model="selectedTerm">
+            <option v-for="term in uniqueTerms(localSelectedProduct)" :key="term" :value="term">{{ term }} 등급</option>
+          </select>
         </div>
         <canvas ref="chartCanvas" width="400" height="200"></canvas>
         <button @click="subscribeProduct">상품 가입</button>
@@ -68,34 +59,32 @@ const chart = ref(null);
 const chartCanvas = ref(null);
 
 const selectedOption = computed(() => {
-  if (localSelectedProduct.value && localSelectedProduct.value.deposit_options) {
-    return localSelectedProduct.value.deposit_options.find(option => option.save_trm === selectedTerm.value) || null;
+  if (localSelectedProduct.value && localSelectedProduct.value.credit_loan_options) {
+    return localSelectedProduct.value.credit_loan_options.find(option => option.save_trm === selectedTerm.value);
   }
   return null;
 });
 
 const rate12Months = computed(() => {
-  if (localSelectedProduct.value && localSelectedProduct.value.deposit_options) {
-    const option = localSelectedProduct.value.deposit_options.find(option => option.save_trm === "12");
-    return option ? option.intr_rate : null;
+  if (localSelectedProduct.value && localSelectedProduct.value.credit_loan_options) {
+    const option = localSelectedProduct.value.credit_loan_options.find(option => option.save_trm === "12");
+    return option ? option.crdt_grad_avg : null;
   }
   return null;
 });
 
 const uniqueTerms = (product) => {
-  if (product && product.deposit_options) {
-    const terms = product.deposit_options.map(option => option.save_trm);
+  if (product && product.credit_loan_options) {
+    const terms = product.credit_loan_options.map(option => option.save_trm);
     return [...new Set(terms)].sort((a, b) => a - b);
   }
   return [];
 };
 
 watch(localSelectedProduct, (newProduct) => {
-  if (newProduct && newProduct.deposit_options) {
-    selectedTerm.value = newProduct.deposit_options[0]?.save_trm || null;
-    if (selectedTerm.value) {
-      renderChart();
-    }
+  if (newProduct && newProduct.credit_loan_options) {
+    selectedTerm.value = newProduct.credit_loan_options[0]?.save_trm || null;
+    renderChart();
   }
 });
 
@@ -103,11 +92,11 @@ function renderChart() {
   if (chart.value) {
     chart.value.destroy();
   }
-  if (localSelectedProduct.value && localSelectedProduct.value.deposit_options) {
+  if (localSelectedProduct.value && localSelectedProduct.value.credit_loan_options) {
     const terms = uniqueTerms(localSelectedProduct.value);
     const rates = terms.map(term => {
-      const option = localSelectedProduct.value.deposit_options.find(option => option.save_trm === term);
-      return option ? option.intr_rate : 0;
+      const option = localSelectedProduct.value.credit_loan_options.find(option => option.save_trm === term);
+      return option ? option.crdt_grad_avg : 0;
     });
 
     chart.value = new Chart(chartCanvas.value, {
@@ -167,18 +156,13 @@ async function subscribeProduct() {
 }
 
 onMounted(() => {
-  if (localSelectedProduct.value && localSelectedProduct.value.deposit_options) {
-    selectedTerm.value = localSelectedProduct.value.deposit_options[0]?.save_trm || null;
-    if (selectedTerm.value) {
-      renderChart();
-    }
-  }
+  renderChart();
 });
 </script>
 
 <style scoped>
 .modal {
-  display: block; /* 모달은 기본적으로 숨김 */
+  display: block;
   position: fixed;
   z-index: 1;
   left: 0;
@@ -186,12 +170,12 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.5); /* 투명한 배경색 */
+  background-color: rgba(0,0,0,0.5);
 }
 
 .modal-content {
   background-color: #fefefe;
-  margin: 5% auto; /* 모달을 화면 중앙에 위치시킴 */
+  margin: 5% auto;
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
@@ -256,31 +240,6 @@ strong {
 
 .term-select {
   margin-top: 20px;
-}
-
-.button-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.button-group button {
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.button-group button:hover {
-  background-color: #0056b3;
-}
-
-.selected-button {
-  background-color: #0056b3;
 }
 
 canvas {
