@@ -27,7 +27,6 @@
         <div class="menu-item">
             <span class="menu-title">예금</span>
             <ul>
-                <li>예적금</li>
                 <li>정기예금</li>
                 <li>정기적금</li>
             </ul>
@@ -35,7 +34,6 @@
         <div class="menu-item">
             <span class="menu-title">대출</span>
             <ul>
-                <li>대출</li>
                 <li>신용대출</li>
                 <li>전세자금대출</li>
                 <li>주택담보대출</li>

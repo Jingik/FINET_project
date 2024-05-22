@@ -2,27 +2,28 @@
     <div class="child"></div>
     <div class="cards">
       <div class="customer-quote">
-        <div class="div17">1번 서비스서비스</div>
+        <div class="div17">청년들의 재테크, FiNET이 함께합니다.<br>첫걸음부터 성공을 위한 파트너</div>
         <img class="icon" alt="" src="@/assets/img/제목을 입력해주세요_-005 (2) 1.png" />
       </div>
       <div class="customer-quote">
-        <div class="div17">2번 서비스서비스</div>
+        <div class="div17">내집마련을 위한 현명한 선택<br> FiNET 대출 비교로 시작하세요</div>
         <img class="icon1" alt="" src="@/assets/img/제목을 입력해주세요_-001 (2) 1.png" />
       </div>
       <div class="customer-quote">
-        <div class="div17">3번 서비스서비스</div>
+        <div class="div17">신혼여행을 더욱 달콤하게,<br>FINET으로 완벽한 여행을 계획하세요</div>
         <img class="icon2" alt="" src="@/assets/img/제목을 입력해주세요_-003 (1) 1.png" />
       </div>
     </div>
     <div class="heading">
-      <div class="div20">우리들의 멋진 서비스</div>
-      <div class="div21">이거 안하면 호구임;</div>
+      <div class="div20">FINET으로 더 나은 미래를 계획하세요</div>
+      <div class="div21"></div>
     </div>
     <div class="div26">
-      <b class="b">이래도 시작 안 할래?</b>
-      <div class="div27">최고금리 예적금, 최저금리 대출, 최대혜택 카드</div>
+      <b class="b">당신의 금융 라이프<br> FiNET이 함께합니다.</b>
+      <div class="div27">최고금리 예적금, 최저금리 대출, 최대혜택 카드 비교</div>
       <div class="button3">
-        <div class="nav-item1">바로 시작하기</div>
+        <RouterLink :to="{ name: 'SignUpView' }"
+            ><div class="nav-item1">바로 시작하기</div></RouterLink>
       </div>
     </div>
 
@@ -38,10 +39,11 @@
   left: 2%;
   right: 2%;
   background-color: #0d99f1;
-  height: 831px;
+  height: 850px;
 }
 
 .div17 {
+  font-size:35px;
   align-self: stretch;
   position: relative;
   line-height: 150%;
@@ -49,15 +51,27 @@
   z-index: 0;
 }
 
-.icon,
-.icon1,
-.icon2 {
+.icon{
   position: absolute;
   bottom: 0; /* 부모 요소의 맨 아래에 배치 */
   width: 100%; /* 부모 요소의 너비에 맞춤 */
-  height: auto; /* 비율을 유지하며 높이 조정 */
+  height: auto; 
+  max-width: 80%; /* 최대 너비를 부모 요소의 너비로 제한 */
+  object-fit: contain; /* 비율을 유지하며 부모 요소에 맞춤 */
+  left:10%;
+}
+
+.icon1,
+.icon2 {
+  top:24%;
+  position: absolute;
+  /* bottom: 0; 부모 요소의 맨 아래에 배치 */
+  width: 100%; /* 부모 요소의 너비에 맞춤 */
+  /* height: auto; 비율을 유지하며 높이 조정 */
+  max-height:80%;
   max-width: 100%; /* 최대 너비를 부모 요소의 너비로 제한 */
   object-fit: contain; /* 비율을 유지하며 부모 요소에 맞춤 */
+  left:0;
 }
 
 .customer-quote {
@@ -83,11 +97,11 @@
 
 .cards {
   position: absolute;
-  top: 1354px;
+  top: 1300px;
   left: 50%;
   transform: translateX(-50%);
   width: 85%;
-  height: 486px;
+  height: 580px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
