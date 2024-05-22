@@ -147,6 +147,8 @@ def save_saving_products(request):
 
     return JsonResponse(response_data)
 
+
+
 @api_view(['GET', 'POST'])
 def saving_products(request):
     if request.method == 'GET':
@@ -160,6 +162,8 @@ def saving_products(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 @api_view(['GET'])
 def saving_product_options(request, fin_prdt_cd):
