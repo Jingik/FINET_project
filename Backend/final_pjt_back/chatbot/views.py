@@ -23,9 +23,9 @@ saving_info = []
 try:
     conn = pymysql.connect(
         host='localhost',
-        user='yonggu97',
+        user='jingi',
         password=settings.DB_PASSWORD,
-        db='ssafy_final'
+        db='jingi'
     )
     cursor = conn.cursor()
     db_list = [
