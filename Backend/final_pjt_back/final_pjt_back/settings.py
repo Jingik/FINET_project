@@ -44,6 +44,7 @@ CORS_ALLOWED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'chatbot',
     'maps', # map
     'accounts', # 로그인
     'boards', # 게시글
@@ -208,3 +209,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DB_PASSWORD = os.getenv('DB_PASSWORD', '1234')
+API_KEY_AI = os.getenv('API_KEY_AI', 'sk-proj-bF2p3aGBqRDyZSzMckvdT3BlbkFJqw7G51QyhZ1WCBUJjojL')

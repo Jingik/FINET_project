@@ -23,6 +23,7 @@ import MyPageView from '@/views/MyPageView.vue'
 import EditProfilePage from '@/views/EditProfilePage.vue'
 import { useUserStore } from '@/stores/user'
 
+import ChatAI from '@/components/ChatAi.vue'
 const routes = [
   { path: '/', name: 'MainView', component: MainView },
   { path: '/maps', name: 'maps', component: KakaoView },
@@ -101,7 +102,12 @@ const routes = [
     path: '/editprofile',
     name: 'EditProfilePage',
     component: EditProfilePage
-  }
+  },
+  {
+    path: '/chat',
+    name: 'ChatAI',
+    component: ChatAI
+  },
   
 ]
 

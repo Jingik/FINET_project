@@ -30,6 +30,8 @@ urlpatterns = [
     # path('accounts/', include('dj_rest_auth.urls')),
     # path('accounts/registration/', include('dj_rest_auth.registration.urls')),
     path('posts/', include('boards.urls')),
+    
+    path('chat/', include('chatbot.urls')),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
     
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
