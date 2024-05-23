@@ -97,7 +97,7 @@
               style="width: 45px; height: 45px"
               />
               <div v-if="dropdownVisible.user" class="dropdown-content">
-                <RouterLink :to="{ name: 'ProfilePage' }"
+                <RouterLink :to="{ name: 'DashBoardPage' }"
               ><div class="dropdown-item">마이페이지</div></RouterLink>
               <RouterLink :to="{ name: 'EditProfilePage' }"
               ><div class="dropdown-item">내정보 수정</div></RouterLink>

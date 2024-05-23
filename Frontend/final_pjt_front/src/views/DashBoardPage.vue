@@ -8,12 +8,12 @@
         </div>
       </RouterLink>
         <RouterLink :to="{ name: 'ProfilePage' }">
-        <div class="sidemenu-item3">
+        <div class="sidemenu-item1">
           내 활동 로그
         </div>
       </RouterLink>
       <RouterLink :to="{ name: 'EditProfilePage' }">
-        <div class="sidemenu-item3">
+        <div class="sidemenu-item1">
           내 정보 수정
         </div>
       </RouterLink>
@@ -30,7 +30,7 @@
           <h2>내 기본 정보</h2>
         </span>
         <hr />
-        
+
 <div class="content">
   <div class="margintop">
     <label for="user_age_group">연 령 대</label>
