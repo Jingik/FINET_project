@@ -31,14 +31,14 @@
   height: 40px;
   object-fit: contain;
   margin:20px;
-  max-width: 100%;
+  max-width: 90%;
 }
 
 .div29 {
 position: absolute;
-top: 899px;
-left: 10%;
-width: 80%;
+top: 36%;
+left: 0%;
+width: 100%;
 display: flex;
 flex-wrap: wrap; /* 이미지가 부모 요소 너비에 맞춰서 줄 바꿈되도록 설정 */
 justify-content: center; /* 수평 가운데 정렬 */
