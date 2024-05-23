@@ -3,24 +3,25 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Inter:var(--small-text-font-weight),var(--body-text-font-weight),500,400,700|Montserrat:500,700,800|Roboto:400");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
-      * {
-        -webkit-font-smoothing: antialiased;
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        margin: 0px;
-        height: 100%;
-      }
-      /* a blue color as a generic focus style */
-      button:focus-visible {
-        outline: 2px solid #4a90e2 !important;
-        outline: -webkit-focus-ring-color auto 5px !important;
-      }
-      a {
-        text-decoration: none;
-      }
 
+* {
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0px;
+  height: 100%;
+}
+/* a blue color as a generic focus style */
+button:focus-visible {
+  outline: 2px solid #4a90e2 !important;
+  outline: -webkit-focus-ring-color auto 5px !important;
+}
+a {
+  text-decoration: none;
+  color: inherit; /* 기본 링크 색상 유지 */
+}
 body {
   margin: 0;
   line-height: normal;
@@ -137,4 +138,19 @@ body {
 
   /* Effects */
   --button-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* RouterLink 스타일 수정 */
+a.router-link-active {
+  color: inherit; /* 링크가 활성 상태일 때 글씨 색 유지 */
+}
+
+a.router-link-exact-active {
+  color: inherit; /* 링크가 정확히 일치할 때 글씨 색 유지 */
+}
+
+/* 필요에 따라 추가적인 스타일링을 적용할 수도 있습니다. */
+a.router-link-active:hover,
+a.router-link-exact-active:hover {
+  color: inherit; /* 링크가 활성 상태에서 호버 시 글씨 색 유지 */
 }

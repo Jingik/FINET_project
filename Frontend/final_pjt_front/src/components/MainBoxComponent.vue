@@ -190,9 +190,9 @@ h3 {
 
 .img-icon {
   position: absolute;
-  top: -70px;
+  bottom:0;
   right: 8%;
-  height: 800px;
+  height: 90%;
   object-fit: cover;
 }
 
@@ -277,7 +277,7 @@ h3 {
 
 .quick-menu-container {
   position: absolute;
-  top: 630px;
+  top: 24%;
   left: 5%;
   width: 90%;
   display: flex;

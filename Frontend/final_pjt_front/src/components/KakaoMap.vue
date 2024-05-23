@@ -46,6 +46,13 @@
 
 <script>
 import mapMarkerImage from '@/assets/img/mapmarker.png';
+import bankLogo_우리은행 from '@/assets/img/우리은행.png';
+import bankLogo_하나은행 from '@/assets/img/하나은행.png';
+import bankLogo_신한은행 from '@/assets/img/신한은행.png';
+import bankLogo_기업은행 from '@/assets/img/기업은행.png';
+import bankLogo_새마을금고 from '@/assets/img/새마을금고.png';
+import bankLogo_국민은행 from '@/assets/img/국민은행.png';
+import bankLogo_농협은행 from '@/assets/img/농협은행.png';
 
 export default {
   data() {
@@ -171,49 +178,75 @@ export default {
     },
     getListItem(index, place) {
       const el = document.createElement("li");
-      const itemStr = `
-        <span class="markerbg marker_${index + 1}"></span>
-        <div class="info" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding:3px;">
-          <h5>${place.place_name}</h5>
-          ${place.road_address_name
-            ? `<span>${place.road_address_name}</span>
-              <span class="jibun gray">${place.address_name}</span>`
-            : `<span>${place.address_name}</span>`
-          }
-          <p class="tel">${place.phone}</p>
-        </div>
-      `;
+      const bankName = document.getElementById("keyword").value.trim(); // 선택된 은행 이름 가져오기
 
+      // 선택된 은행에 따라 적절한 로고 이미지를 선택합니다.
+      let logoSrc = '';
+      switch(bankName) {
+        case '우리은행':
+          logoSrc = bankLogo_우리은행;
+          break;
+        case '하나은행':
+          logoSrc = bankLogo_하나은행;
+          break;
+        case '신한은행':
+          logoSrc = bankLogo_신한은행;
+          break;
+        case '기업은행':
+          logoSrc = bankLogo_기업은행;
+          break;
+        case '새마을금고':
+          logoSrc = bankLogo_새마을금고;
+          break;
+        case '국민은행':
+          logoSrc = bankLogo_국민은행;
+          break;
+        case '농협은행':
+          logoSrc = bankLogo_농협은행;
+          break;
+        // 필요한 만큼 case를 추가합니다.
+        default:
+          // 선택된 은행 이름에 해당하는 이미지가 없을 경우, 기본 로고 이미지를 사용하거나 처리합니다.
+          break;
+      }
+
+      const itemStr = `
+      <div class="info">
+        <img src="${logoSrc}" alt="${bankName}" class="bank-logo" width="15" height="15"> <!-- 은행 로고 이미지 -->
+          ${place.place_name}<vbr>
+          ${place.road_address_name ? `<span>${place.road_address_name}</span><span class="jibun gray">${place.address_name}</span>` : `<span>${place.address_name}</span>`}
+        </div>
+        <hr>
+      `;
       el.innerHTML = itemStr;
       el.className = "item";
-
       return el;
     },
+
+
+
     addMarker(position, idx) {
-      const imageSrc = mapMarkerImage;
-      const imageSize = new kakao.maps.Size(160, 160);
-      const imgOptions = {
-        spriteSize: new kakao.maps.Size(36, 69),
-        spriteOrigin: new kakao.maps.Point(0, idx * 46),
-        offset: new kakao.maps.Point(13, 37),
-      };
+  const imageSrc = mapMarkerImage;
+  const imageSize = new kakao.maps.Size(36, 37);
+  const imgOptions = {
+    offset: new kakao.maps.Point(18, 37),
+  };
+  const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions);
+  const marker = new kakao.maps.Marker({
+    position: position,
+    image: markerImage,
+  });
+  marker.setMap(this.map);
+  this.markers.push(marker);
+  return marker;
+},
 
-      const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions);
-      const marker = new kakao.maps.Marker({
-        position,
-        image: markerImage,
-      });
-
-      marker.setMap(this.map);
-      this.markers.push(marker);
-      return marker;
-    },
     removeMarker() {
       this.markers.forEach(marker => marker.setMap(null));
       this.markers = [];
     },
     displayInfowindow(marker, title) {
-      const content = `<div style="padding:5px;z-index:1;">${title}</div>`;
+      const content = `<div style="padding:3px;z-index:1;">${title}</div>`;
       this.infowindow.setContent(content);
       this.infowindow.open(this.map, marker);
     },

@@ -43,7 +43,7 @@
 }
 
 .div17 {
-  font-size:35px;
+  text-align: center;
   align-self: stretch;
   position: relative;
   line-height: 150%;
@@ -51,19 +51,10 @@
   z-index: 0;
 }
 
-.icon{
-  position: absolute;
-  bottom: 0; /* 부모 요소의 맨 아래에 배치 */
-  width: 100%; /* 부모 요소의 너비에 맞춤 */
-  height: auto; 
-  max-width: 80%; /* 최대 너비를 부모 요소의 너비로 제한 */
-  object-fit: contain; /* 비율을 유지하며 부모 요소에 맞춤 */
-  left:10%;
-}
-
+.icon,
 .icon1,
 .icon2 {
-  top:24%;
+  bottom:0%;
   position: absolute;
   /* bottom: 0; 부모 요소의 맨 아래에 배치 */
   width: 100%; /* 부모 요소의 너비에 맞춤 */
@@ -140,6 +131,25 @@
   font-size: 40px;
   color: #fff;
 }
+.button3 {
+  background-color: #0d99f1;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  text-align: left;
+  font-size: 16px;
+  color: white;
+  border: 1px solid #000;
+}
+
+.button3:hover {
+  background-color: #00408b;
+  color: #fff;
+}
 
 .b {
   align-self: stretch;
@@ -155,25 +165,6 @@
   color: #828282;
 }
 
-.button3 {
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
-  background-color: #fff;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 14px 24px;
-  text-align: left;
-  font-size: 16px;
-  color: #000;
-  border: 1px solid #000;
-}
-
-.button3:hover {
-  background-color: #00276c;
-  color: #fff;
-}
 
 .div26 {
   position: absolute;
@@ -188,6 +179,7 @@
   text-align: center;
   font-size: 64px;
 }
+
 
 @media (max-width: 768px) {
   .heading {

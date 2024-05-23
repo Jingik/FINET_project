@@ -30,8 +30,8 @@
           <RouterLink :to="{ name: 'CreditloanView' }"
             ><div class="dropdown-item">신용대출</div></RouterLink
           >
-          <!-- <div class="dropdown-item">전세자금대출</div>
-          <div class="dropdown-item">주택담보대출</div> -->
+          <div class="dropdown-item">전세자금(개발중)</div>
+          <div class="dropdown-item">주택담보(개발중)</div>
         </div>
       </div>
       <div
@@ -41,9 +41,9 @@
       >
         신용카드
         <div v-if="dropdownVisible.creditCard" class="dropdown-content">
-          <div class="dropdown-item">전체카드조회</div>
-          <div class="dropdown-item">추천카드</div>
-          <div class="dropdown-item">내게 맞는 카드</div>
+          <div class="dropdown-item">전체카드조회(개발중)</div>
+          <div class="dropdown-item">추천카드(개발중)</div>
+          <div class="dropdown-item">내게 맞는 카드(개발중)</div>
         </div>
       </div>
       <RouterLink :to="{ name: 'ExchangeView' }"

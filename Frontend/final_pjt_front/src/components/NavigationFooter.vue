@@ -27,14 +27,14 @@
         <div class="menu-item">
             <span class="menu-title">예금</span>
             <ul>
-                <li>정기예금</li>
-                <li>정기적금</li>
+              <RouterLink :to="{ name: 'DepositView' }"><li>정기예금</li></RouterLink>
+              <RouterLink :to="{ name: 'SavingsView' }"><li>정기적금</li></RouterLink>
             </ul>
         </div>
         <div class="menu-item">
             <span class="menu-title">대출</span>
             <ul>
-                <li>신용대출</li>
+              <RouterLink :to="{ name: 'CreditloanView' }"><li>신용대출</li></RouterLink>
                 <li>전세자금대출</li>
                 <li>주택담보대출</li>
             </ul>
@@ -42,14 +42,14 @@
         <div class="menu-item">
             <span class="menu-title">외환/환전</span>
             <ul>
-                <li>환전계산기</li>
+              <RouterLink :to="{ name: 'ExchangeView' }"><li>환전계산기</li></RouterLink>
             </ul>
         </div>
         <div class="menu-item">
             <span class="menu-title">라운지</span>
             <ul>
-                <li>은행 찾기</li>
-                <li>커뮤니티</li>
+              <RouterLink :to="{ name: 'maps' }"><li>은행 찾기</li></RouterLink>
+                <RouterLink :to="{ name: 'BoardView' }"><li>커뮤니티</li></RouterLink>
             </ul>
         </div>
         

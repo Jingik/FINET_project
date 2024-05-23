@@ -144,6 +144,18 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'finet',
+#         'USER': 'yujin',
+#         'PASSWORD': '1234',
+#         'HOST': 'localhost', # MySQL 호스트
+#         'PORT': '3306',      # MySQL 포트 (기본값은 3306)
+#     }
+# }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
