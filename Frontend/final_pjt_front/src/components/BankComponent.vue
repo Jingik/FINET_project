@@ -36,12 +36,12 @@
 
 .div29 {
 position: absolute;
-top: 36%;
+top: 34%;
 left: 0%;
 width: 100%;
 display: flex;
 flex-wrap: wrap; /* 이미지가 부모 요소 너비에 맞춰서 줄 바꿈되도록 설정 */
-justify-content: center; /* 수평 가운데 정렬 */
+/* justify-content: center; 수평 가운데 정렬 */
 align-items: center; /* 수직 가운데 정렬 */
 gap: 10px; /* 이미지 사이의 간격 */
 }

@@ -1,110 +1,95 @@
 <template>
-  <div class="larger">
-    <div class="smallcontainer">
-      <span>
-        <img src="@/assets/img/user.png" alt="interest">
-        <h2>내 정보 수정 ({{ userProfile.username }})</h2>
-      </span>
-      <hr />
-      <div class="content">
-        <div class="margintop">
-          <label for="phone_number">휴대폰 번호</label>
-          <input type="tel" v-model.trim="userProfile.phone_number" id="phone_number" required>
-          <button @click="handleSubmit" class="submit-button">수정완료</button>
+  <div class="mypage-container">
+    <div class="mypage">
+      <div class="sidemenu">
+      <RouterLink :to="{ name: 'DashBoardPage' }">
+        <div class="sidemenu-item3">
+          FINET 보드
         </div>
-        <div class="margintop">
-          <label for="password1">새 비밀번호</label>
-          <input type="password" v-model.trim="password1" id="password1" required>
+      </RouterLink>
+        <RouterLink :to="{ name: 'ProfilePage' }">
+        <div class="sidemenu-item3">
+          내 활동 로그
         </div>
-        <div class="margintop">
-          <label for="password2">새 비밀번호 재입력</label>
-          <input type="password" v-model.trim="password2" id="password2" required>
-          <button @click="handleSubmit" class="submit-button">수정완료</button>
+      </RouterLink>
+      <RouterLink :to="{ name: 'EditProfilePage' }">
+        <div class="sidemenu-item3">
+          내 정보 수정
         </div>
-        <div v-if="passwordError" class="error-message">{{ passwordError }}</div>
-        <div class="margintop">
-          <label for="user_age_group">연령대</label>
-          <select v-model="userProfile.user_age_group" id="user_age_group" required>
-            <option value="10대">10대</option>
-            <option value="20대">20대</option>
-            <option value="30대">30대</option>
-            <option value="40대">40대</option>
-            <option value="50대">50대</option>
-          </select>
-          <button @click="handleSubmit" class="submit-button">수정완료</button>
+      </RouterLink>
+      <RouterLink :to="{ name: 'RecommendPage' }">
+        <div class="sidemenu-item1">
+          내 맞춤 상품
         </div>
-        <div class="margintop">
-          <label for="service_purpose">서비스 목적</label>
-          <select v-model="userProfile.service_purpose" id="service_purpose" required>
-            <option value="예금 가입">예금 가입</option>
-            <option value="적금 가입">적금 가입</option>
-            <option value="대출 가입">대출 가입</option>
-          </select>
-          <button @click="handleSubmit" class="submit-button">수정완료</button>
-        </div>
-        <div class="margintop">
-          <label for="email">이메일</label>
-          <input type="email" v-model.trim="userProfile.email" id="email" required>
-          <button @click="handleSubmit" class="submit-button">수정완료</button>
-        </div>
-        <div class="margintop">
-          <label for="assets">자산</label>
-          <input type="number" v-model.trim="userProfile.asset" id="assets" required>
-          <button @click="handleSubmit" class="submit-button">수정완료</button>
+      </RouterLink>
+      </div>
+      <div class="bigcontainer">  <div class="larger">
+      <div class="smallcontainer">
+        <span>
+          <img src="@/assets/img/user.png" alt="interest">
+          <h2>내 기본 정보</h2>
+        </span>
+        <hr />
+<div class="content">
+  <div class="margintop">
+    <label for="user_age_group">연 령 대</label>
+    <div id="user_age_group">{{ userProfile.user_age_group }}</div>
+  </div>
+  <div class="margintop">
+    <label for="service_purpose">서비스 목적</label>
+    <div id="service_purpose">{{ userProfile.service_purpose }}</div>
+  </div>
+  <div class="margintop">
+    <label for="assets">자  산</label>
+    <div id="assets">{{ userProfile.asset }}</div>
+  </div>
+</div>
+
+        <!-- <transition name="fade">
+          <div v-if="showToast" class="toast">수정이 완료되었습니다.</div>
+        </transition> -->
+      </div>
+      <div class="smallcontainer">
+        <span>
+          <img src="@/assets/img/deposit.png" alt="interest">
+          <h2>추천 예금 상품</h2>
+        </span>
+        <hr />
+        <div class="cards">
+          <div v-for="subscription in subscribedProducts.deposits" :key="subscription.id" class="card">
+            <p>{{ getProductById('deposits', subscription.deposit_product)?.fin_prdt_nm || "Unknown Product" }}
+              <span class="bank-name">{{ getProductById('deposits', subscription.deposit_product)?.kor_co_nm }}</span>
+            </p>
+          </div>
+          <p v-if="subscribedProducts.deposits.length === 0">관심 상품이 없습니다.</p>
         </div>
       </div>
-      <transition name="fade">
-        <div v-if="showToast" class="toast">수정이 완료되었습니다.</div>
-      </transition>
     </div>
-    <div class="smallcontainer">
-      <span>
-        <img src="@/assets/img/deposit.png" alt="interest">
-        <h2>내 예금 상품</h2>
-      </span>
-      <hr />
-      <div class="cards">
-        <div v-for="subscription in subscribedProducts.deposits" :key="subscription.id" class="card">
-          <p>{{ getProductById('deposits', subscription.deposit_product)?.fin_prdt_nm || "Unknown Product" }}
-            <span class="bank-name">{{ getProductById('deposits', subscription.deposit_product)?.kor_co_nm }}</span>
-          </p>
+    <div class="larger">
+      <div class="smallcontainer">
+        <span>
+          <img src="@/assets/img/saving.png" alt="interest">
+          <h2>추천 적금 상품</h2>
+        </span>
+        <hr />
+        <div class="cards">
+          <p>내용내용</p>
         </div>
-        <p v-if="subscribedProducts.deposits.length === 0">관심 상품이 없습니다.</p>
+      </div>
+      <div class="smallcontainer">
+        <span>
+          <img src="@/assets/img/loan.png" alt="interest">
+          <h2>추천 대출 상품</h2>
+        </span>
+        <hr />
+        <div class="cards">
+          <p>내용내용</p>
+        </div>
       </div>
     </div>
   </div>
-  <div class="larger">
-    <div class="smallcontainer">
-      <span>
-        <img src="@/assets/img/saving.png" alt="interest">
-        <h2>내 적금 상품</h2>
-      </span>
-      <hr />
-      <div class="cards">
-        <div v-for="subscription in subscribedProducts.savings" :key="subscription.id" class="card">
-          <p>{{ getProductById('savings', subscription.saving_product)?.fin_prdt_nm || "Unknown Product" }}
-            <span class="bank-name">{{ getProductById('savings', subscription.saving_product)?.kor_co_nm }}</span>
-          </p>
-        </div>
-        <p v-if="subscribedProducts.savings.length === 0">관심 상품이 없습니다.</p>
-      </div>
     </div>
-    <div class="smallcontainer">
-      <span>
-        <img src="@/assets/img/loan.png" alt="interest">
-        <h2>내 대출 상품</h2>
-      </span>
-      <hr />
-      <div class="cards">
-        <div v-for="subscription in subscribedProducts.creditloans" :key="subscription.id" class="card">
-          <p>{{ getProductById('creditloans', subscription.creditloan_product)?.fin_prdt_nm || "Unknown Product" }}
-            <span class="bank-name">{{ getProductById('creditloans', subscription.creditloan_product)?.kor_co_nm }}</span>
-          </p>
-        </div>
-        <p v-if="subscribedProducts.creditloans.length === 0">관심 상품이 없습니다.</p>
-      </div>
-    </div>
-  </div>
+  </div> 
 </template>
 
 <script setup>
@@ -242,6 +227,75 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
+.mypage-container {
+  margin : 0px auto;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  width: 1920px;
+  align-items:center;
+  left:50%
+}
+.smallcontainer{
+  height:300px;
+}
+
+.mypage {
+  margin : 60px auto;
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  background-color: #0599f1;
+  height: 700px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  width: 1500px;
+  margin-bottom: 20px;
+
+}
+.sidemenu {
+  width:10%
+}
+.sidemenu-item1 {
+  text-align: center;
+  font-size: px;
+  font-weight: bold;
+  padding: 10px;
+  margin-top: 20px;;
+  height:50px;
+  background-color: white;
+  border-radius: 10px;
+}
+/* .sidemenu-item2 {
+  font-size: 18px;
+  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  margin-top: 20px;;
+  height:50px;
+  background-color: white;
+  border-radius: 10px;
+} */
+
+.sidemenu-item3 {
+  font-size: 18px;
+  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  margin-top: 20px;;
+  height:50px;
+  background-color: white;
+  border-radius: 10px;
+}
+.bigcontainer {
+  display:flex;
+  flex-direction: column;
+  height:100%;
+  width:90%;
+}
 img {
   width: 30px;
   height: 30px;
@@ -301,10 +355,13 @@ h2 {
 }
 
 label {
-  margin-right: 20px;
   font-size: 15px;
-  width: 140px;
-  text-align: right;
+  width: 100px;
+  text-align: left;
+  border:1px solid #ccc;
+  text-align: center;
+  border-radius: 10px;
+  margin-right: 10px;
 }
 
 input,

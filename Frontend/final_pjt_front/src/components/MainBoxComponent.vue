@@ -198,7 +198,7 @@ h3 {
 
 .main {
   position: absolute;
-  top: 145px;
+  top: 100px;
   left: 10%;
   background-color: #0d99f1;
   width: 80%;
@@ -277,7 +277,7 @@ h3 {
 
 .quick-menu-container {
   position: absolute;
-  top: 24%;
+  top: 550px;
   left: 5%;
   width: 90%;
   display: flex;

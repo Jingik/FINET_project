@@ -2,9 +2,14 @@
   <div class="mypage-container">
     <div class="mypage">
       <div class="sidemenu">
+      <RouterLink :to="{ name: 'DashBoardPage' }">
+        <div class="sidemenu-item1">
+          FINET 보드
+        </div>
+      </RouterLink>
         <RouterLink :to="{ name: 'ProfilePage' }">
         <div class="sidemenu-item1">
-          마이 페이지
+          내 활동 로그
         </div>
       </RouterLink>
       <RouterLink :to="{ name: 'EditProfilePage' }">
@@ -12,10 +17,13 @@
           내 정보 수정
         </div>
       </RouterLink>
+      <RouterLink :to="{ name: 'RecommendPage' }">
+        <div class="sidemenu-item1">
+          내 맞춤 상품
+        </div>
+      </RouterLink>
       </div>
       <div class="bigcontainer">
-        <div class="sidemenu">
-        </div>
         <EditProfile />
         
       </div>
@@ -31,7 +39,7 @@ import { ref } from "vue";
 <style scoped>
 
 .mypage-container {
-  margin : 60px auto;
+  margin : 0px auto;
   align-items: center;
   justify-content: center;
   padding: 20px;
@@ -81,6 +89,18 @@ import { ref } from "vue";
   background-color: white;
   border-radius: 10px;
 }
+
+/* .sidemenu-item3 {
+  font-size: 18px;
+  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  margin-top: 20px;;
+  height:50px;
+  background-color: white;
+  border-radius: 10px;
+} */
 .bigcontainer {
   display:flex;
   flex-direction: column;

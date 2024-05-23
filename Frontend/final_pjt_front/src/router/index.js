@@ -19,8 +19,10 @@ import DepositView from '@/views/DepositView.vue'
 import SavingsView from '@/views/SavingsView.vue'
 import CreditloanView from '@/views/CreditloanView.vue'
 //마이페이지
+import DashBoardPage from '@/views/DashBoardPage.vue'
 import MyPageView from '@/views/MyPageView.vue'
 import EditProfilePage from '@/views/EditProfilePage.vue'
+import RecommendPage from '@/views/RecommendPage.vue'
 import { useUserStore } from '@/stores/user'
 
 const routes = [
@@ -93,6 +95,11 @@ const routes = [
     component: CreditloanView
   },
   {
+    path: '/dashboard',
+    name: 'DashBoardPage',
+    component: DashBoardPage
+  },
+  {
     path: '/mypage',
     name: 'ProfilePage',
     component: MyPageView
@@ -101,8 +108,12 @@ const routes = [
     path: '/editprofile',
     name: 'EditProfilePage',
     component: EditProfilePage
+  },
+  {
+    path: '/recommend',
+    name: 'RecommendPage',
+    component: RecommendPage
   }
-  
 ]
 
 const router = createRouter({
