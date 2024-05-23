@@ -30,6 +30,7 @@
           <h2>내 기본 정보</h2>
         </span>
         <hr />
+        
 <div class="content">
   <div class="margintop">
     <label for="user_age_group">연 령 대</label>
