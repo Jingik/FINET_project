@@ -139,8 +139,12 @@ CORS_ALLOWED_ORIGINS = [
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'jingi',
+        'USER': 'jingi',
+        'PASSWORD': '1234',
+        'HOST': 'localhost', # MySQL 호스트
+        'PORT': '3306',      # MySQL 포트 (기본값은 3306)
     }
 }
 
