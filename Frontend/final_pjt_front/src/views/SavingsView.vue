@@ -126,7 +126,7 @@
         <div class="card">
           <img :src="`/src/assets/img/${product.kor_co_nm}.png`" alt="" class="product-image">
           <div class="product-info">
-            <h3>{{ product.fin_prdt_nm }}</h3>
+            <h2>{{ product.fin_prdt_nm }}</h2>
             <h4>{{ getProductBankName(product.kor_co_nm) }}</h4>
             <p>{{ product.join_way }}</p>
             <div>
