@@ -39,7 +39,7 @@ function goTolounge() {
 .remocon {
   position: fixed;
   right: 50px;
-  top: 60%;
+  top: 30%;
   transform: translateY(-50%);
   background-color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
