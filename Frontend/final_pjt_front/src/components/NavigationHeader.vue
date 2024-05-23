@@ -204,7 +204,7 @@ const sendMessage = async () => {
 
   chatHistory.value.push({ role: 'user', content: message.value })
   try {
-    const res = await axios.get('http://localhost:8000/chat/', {
+    const res = await axios.get('http://127.0.0.1:8000/chat/', {
       params: {
         message: message.value,
       },
