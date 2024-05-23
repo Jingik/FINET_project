@@ -68,10 +68,10 @@
 <script setup>
 import { reactive } from 'vue';
 const cards = reactive([
-  { id: 1, title: '서비스 1', description: '이것은 서비스 1입니다.' },
-  { id: 2, title: '서비스 2', description: '이것은 서비스 2입니다.' },
-  { id: 3, title: '서비스 3', description: '이것은 서비스 3입니다.' },
-  { id: 4, title: '서비스 4', description: '이것은 서비스 4입니다.' }
+  { id: 1, title: '금리기준 추천', description: '금리를 기준으로 추천해주는 서비스입니다.' },
+  { id: 2, title: '상품정보 기반 추천', description: '상품 정보를 기준으로 추천해주는 서비스입니다.' },
+  { id: 3, title: '상품, 유저 정보 기반 추천', description: '상품정보와 유저정보의 유사도를 바탕으로 추천해주는 서비스입니다.' },
+  { id: 4, title: '비슷한 상품 추천', description: '나와 비슷한 상품을 담은 사람 기준 해당 상품을 추천해주는 서비스입니다.' }
 ]);
 </script>
 

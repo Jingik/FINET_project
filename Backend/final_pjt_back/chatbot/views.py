@@ -36,7 +36,7 @@ try:
 
     for db in db_list:
         if 'creditloan' in db:
-            cursor.execute(f'SELECT kor_co_nm, fin_prdt_nm, dcls_month, crdt_prdt_type_nm, join_way, spcl_cnd, max_limit, rpay_type_nm, cb_name, crdt_grad_avg FROM {db}')
+            cursor.execute(f'SELECT kor_co_nm, fin_prdt_nm, dcls_month, crdt_prdt_type_nm, join_way, spcl_cnd, max_limit, rpay_type_nm, cb_name FROM {db}')
             rows = cursor.fetchall()
             columns = [description[0] for description in cursor.description]
             df = pd.DataFrame(rows, columns=columns)

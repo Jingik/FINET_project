@@ -85,7 +85,7 @@ from collections import OrderedDict
 file = OrderedDict()
 
 username_list = []
-N = 10000
+N = 1000
 i = 0
 
 while i < N:

@@ -2,104 +2,130 @@
   <div class="mypage-container">
     <div class="mypage">
       <div class="sidemenu">
-      <RouterLink :to="{ name: 'DashBoardPage' }">
-        <div class="sidemenu-item1">
-          FINET 보드
-        </div>
-      </RouterLink>
+        <RouterLink :to="{ name: 'DashBoardPage' }">
+          <div class="sidemenu-item1">FINET 보드</div>
+        </RouterLink>
         <RouterLink :to="{ name: 'ProfilePage' }">
-        <div class="sidemenu-item1">
-          내 활동 로그
-        </div>
-      </RouterLink>
-      <RouterLink :to="{ name: 'EditProfilePage' }">
-        <div class="sidemenu-item1">
-          내 정보 수정
-        </div>
-      </RouterLink>
-      <RouterLink :to="{ name: 'RecommendPage' }">
-        <div class="sidemenu-item3">
-          내 맞춤 상품
-        </div>
-      </RouterLink>
+          <div class="sidemenu-item1">내 활동 로그</div>
+        </RouterLink>
+        <RouterLink :to="{ name: 'EditProfilePage' }">
+          <div class="sidemenu-item1">내 정보 수정</div>
+        </RouterLink>
+        <RouterLink :to="{ name: 'RecommendPage' }">
+          <div class="sidemenu-item3">내 맞춤 상품</div>
+        </RouterLink>
       </div>
-      <div class="bigcontainer">  <div class="larger">
-      <div class="smallcontainer">
-        <span>
-          <img src="@/assets/img/user.png" alt="interest">
-          <h2>내 기본 정보</h2>
-        </span>
-        <hr />
-<div class="content">
-  <div class="margintop">
-    <label for="user_age_group">연 령 대</label>
-    <div id="user_age_group">{{ userProfile.user_age_group }}</div>
-  </div>
-  <div class="margintop">
-    <label for="service_purpose">서비스 목적</label>
-    <div id="service_purpose">{{ userProfile.service_purpose }}</div>
-  </div>
-  <div class="margintop">
-    <label for="assets">자  산</label>
-    <div id="assets">{{ userProfile.asset }}</div>
-  </div>
-</div>
+      <div class="bigcontainer">
+        <div class="larger">
+          <div class="smallcontainer">
+            <span>
+              <img src="@/assets/img/user.png" alt="interest" />
+              <h2>내 기본 정보</h2>
+              <div class="toggles">
+              <button @click="fetchRecommendations('recommend_rating')">Rating</button>
+              <button @click="fetchRecommendations('recommend_dot')">Dot</button>
+              <button @click="fetchRecommendations('recommend_count')">Count</button>
+            </div>
+            </span>
+            <hr />
+            <div class="content">
+              <div class="margintop">
+                <label for="user_age_group">연 령 대</label>
+                <div id="user_age_group">{{ userProfile.user_age_group }}</div>
+              </div>
+              <div class="margintop">
+                <label for="service_purpose">서비스 목적</label>
+                <div id="service_purpose">{{ userProfile.service_purpose }}</div>
+              </div>
+              <div class="margintop">
+                <label for="assets">자 산</label>
+                <div id="assets">{{ userProfile.asset }}</div>
+              </div>
 
-        <!-- <transition name="fade">
-          <div v-if="showToast" class="toast">수정이 완료되었습니다.</div>
-        </transition> -->
-      </div>
-      <div class="smallcontainer">
-        <span>
-          <img src="@/assets/img/deposit.png" alt="interest">
-          <h2>추천 예금 상품</h2>
-        </span>
-        <hr />
-        <div class="cards">
-          <div v-for="subscription in subscribedProducts.deposits" :key="subscription.id" class="card">
-            <p>{{ getProductById('deposits', subscription.deposit_product)?.fin_prdt_nm || "Unknown Product" }}
-              <span class="bank-name">{{ getProductById('deposits', subscription.deposit_product)?.kor_co_nm }}</span>
-            </p>
+            </div>
+
           </div>
-          <p v-if="subscribedProducts.deposits.length === 0">관심 상품이 없습니다.</p>
+          <div class="smallcontainer">
+            <span>
+              <img src="@/assets/img/deposit.png" alt="interest" />
+              <h2>추천 예금 상품</h2>
+            </span>
+            <hr />
+            <div class="cards">
+              <div
+                v-for="product in recommendations.deposit_recommendations.slice(0, 3)"
+                :key="product.id"
+                class="card"
+              >
+                <p>
+                  {{ product.fin_prdt_nm }}
+                  <span class="bank-name">{{ product.kor_co_nm }}</span>
+                </p>
+              </div>
+              <p v-if="recommendations.deposit_recommendations.length === 0">
+                관심 상품이 없습니다.
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="larger">
-      <div class="smallcontainer">
-        <span>
-          <img src="@/assets/img/saving.png" alt="interest">
-          <h2>추천 적금 상품</h2>
-        </span>
-        <hr />
-        <div class="cards">
-          <p>내용내용</p>
-        </div>
-      </div>
-      <div class="smallcontainer">
-        <span>
-          <img src="@/assets/img/loan.png" alt="interest">
-          <h2>추천 대출 상품</h2>
-        </span>
-        <hr />
-        <div class="cards">
-          <p>내용내용</p>
+        <div class="larger">
+          <div class="smallcontainer">
+            <span>
+              <img src="@/assets/img/saving.png" alt="interest" />
+              <h2>추천 적금 상품</h2>
+            </span>
+            <hr />
+            <div class="cards">
+              <div
+                v-for="product in recommendations.saving_recommendations.slice(0, 3)"
+                :key="product.id"
+                class="card"
+              >
+                <p>
+                  {{ product.fin_prdt_nm }}
+                  <span class="bank-name">{{ product.kor_co_nm }}</span>
+                </p>
+              </div>
+              <p v-if="recommendations.saving_recommendations.length === 0">
+                관심 상품이 없습니다.
+              </p>
+            </div>
+          </div>
+          <div class="smallcontainer">
+            <span>
+              <img src="@/assets/img/loan.png" alt="interest" />
+              <h2>추천 대출 상품</h2>
+            </span>
+            <hr />
+            <div class="cards">
+              <div
+                v-for="product in recommendations.creditloan_recommendations.slice(0, 3)"
+                :key="product.id"
+                class="card"
+              >
+                <p>
+                  {{ product.fin_prdt_nm }}
+                  <span class="bank-name">{{ product.kor_co_nm }}</span>
+                </p>
+              </div>
+              <p v-if="recommendations.creditloan_recommendations.length === 0">
+                관심 상품이 없습니다.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-    </div>
-  </div> 
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue';
+import { ref, reactive, onMounted, computed } from 'vue';
 import axios from 'axios';
-import { useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();
-const token = ref(userStore.token);
+const token = computed(() => userStore.token);
 const userProfile = reactive({
   username: '',
   phone_number: '',
@@ -108,24 +134,16 @@ const userProfile = reactive({
   email: '',
   asset: '',
 });
-const password1 = ref('');
-const password2 = ref('');
-const passwordError = ref('');
-const showToast = ref(false);
-
-const depositProducts = ref([]);
-const savingProducts = ref([]);
-const creditloanProducts = ref([]);
-const subscribedProducts = reactive({
-  deposits: [],
-  savings: [],
-  creditloans: []
+const recommendations = reactive({
+  deposit_recommendations: [],
+  saving_recommendations: [],
+  creditloan_recommendations: [],
 });
+const error = ref(null);
 
 onMounted(async () => {
   await fetchUserProfile();
-  await fetchAllProducts();
-  await fetchUserSubscriptions();
+  await fetchRecommendations('recommend_rating'); // 기본 값은 rating으로 설정
 });
 
 const fetchUserProfile = async () => {
@@ -140,108 +158,70 @@ const fetchUserProfile = async () => {
   }
 };
 
-const fetchAllProducts = async () => {
-  try {
-    const depositResponse = await axios.get("http://127.0.0.1:8000/financial/deposit-products/", {
-      headers: { Authorization: `Token ${token.value}` }
-    });
-    depositProducts.value = depositResponse.data;
+const fetchRecommendations = async (type) => {
+  let url;
+  let requestData = {};
 
-    const savingResponse = await axios.get("http://127.0.0.1:8000/financial/saving-products/", {
-      headers: { Authorization: `Token ${token.value}` }
-    });
-    savingProducts.value = savingResponse.data;
-
-    const creditloanResponse = await axios.get("http://127.0.0.1:8000/financial/creditloan-products/", {
-      headers: { Authorization: `Token ${token.value}` }
-    });
-    creditloanProducts.value = creditloanResponse.data;
-  } catch (error) {
-    console.error("Error fetching products:", error);
-  }
-};
-
-const fetchUserSubscriptions = async () => {
-  try {
-    const response = await axios.get("http://127.0.0.1:8000/financial/user_subscriptions/", {
-      headers: { Authorization: `Token ${token.value}` }
-    });
-    subscribedProducts.deposits = response.data.deposit_subscriptions;
-    subscribedProducts.savings = response.data.saving_subscriptions;
-    subscribedProducts.creditloans = response.data.creditloan_subscriptions;
-  } catch (error) {
-    console.error("Error fetching user subscriptions:", error);
-  }
-};
-
-const getProductById = (type, productId) => {
-  let productList;
-  switch (type) {
-    case 'deposits':
-      productList = depositProducts.value;
-      break;
-    case 'savings':
-      productList = savingProducts.value;
-      break;
-    case 'creditloans':
-      productList = creditloanProducts.value;
-      break;
-    default:
-      productList = [];
-  }
-  return productList.find(product => product.id === productId);
-};
-
-const handleSubmit = async () => {
-  if (password1.value && password1.value !== password2.value) {
-    passwordError.value = "Passwords do not match.";
-    return;
-  }
-  passwordError.value = '';
-
-  const updatedProfile = {
-    phone_number: userProfile.phone_number,
-    user_age_group: userProfile.user_age_group,
-    service_purpose: userProfile.service_purpose,
-    email: userProfile.email,
-    asset: userProfile.asset,
-  };
-
-  if (password1.value) {
-    updatedProfile.password = password1.value;
-    updatedProfile.password_confirm = password2.value;
+  if (type === 'recommend_rating') {
+    url = 'http://127.0.0.1:8000/financial/recommend_rating/';
+    requestData = {
+      user_age_group: userProfile.user_age_group,
+      asset: userProfile.asset,
+    };
+  } else if (type === 'recommend_count') {
+    url = 'http://127.0.0.1:8000/financial/recommend_count/';
+  } else if (type === 'recommend_dot') {
+    url = 'http://127.0.0.1:8000/financial/recommend_dot/';
+    requestData = {
+      user_age_group: userProfile.user_age_group,
+      asset: userProfile.asset,
+      service_purpose: userProfile.service_purpose
+    };
   }
 
   try {
-    await axios.patch(`http://127.0.0.1:8000/users/profile/${userStore.user}/`, updatedProfile, {
-      headers: { Authorization: `Token ${token.value}` }
-    });
-    showToast.value = true;
-    setTimeout(() => {
-      showToast.value = false;
-    }, 3000);
-  } catch (error) {
-    console.error("Error updating profile:", error);
+    let response;
+    if (type === 'recommend_count') {
+      response = await axios.get(url, {
+        headers: { Authorization: `Bearer ${token.value}` }
+      });
+    } else {
+      response = await axios.post(url, requestData, {
+        headers: { Authorization: `Bearer ${token.value}` }
+      });
+    }
+
+    recommendations.deposit_recommendations = response.data.deposit_recommendations;
+    recommendations.saving_recommendations = response.data.saving_recommendations;
+    recommendations.creditloan_recommendations = response.data.creditloan_recommendations;
+    error.value = null;
+  } catch (err) {
+    console.error("Error fetching recommendations:", err);
+    recommendations.deposit_recommendations = [];
+    recommendations.saving_recommendations = [];
+    recommendations.creditloan_recommendations = [];
+    error.value = err.response?.data?.error || 'An error occurred';
   }
 };
 </script>
 
-<style scoped>
+<style>
 .mypage-container {
-  margin : 0px auto;
+  margin: 0 auto;
   align-items: center;
   justify-content: center;
   padding: 20px;
   width: 1920px;
-  align-items:center;
-  left:50%
+  align-items: center;
+  left: 50%;
 }
-.smallcontainer{
-  height:300px;
+
+.smallcontainer {
+  height: 300px;
 }
 
 .mypage {
-  margin : 60px auto;
+  margin: 60px auto;
   display: flex;
   flex-direction: row;
   padding: 20px;
@@ -252,54 +232,44 @@ const handleSubmit = async () => {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   width: 1500px;
   margin-bottom: 20px;
-
 }
+
 .sidemenu {
-  width:10%
+  width: 10%;
 }
-.sidemenu-item1 {
-  text-align: center;
-  font-size: px;
-  font-weight: bold;
-  padding: 10px;
-  margin-top: 20px;;
-  height:50px;
-  background-color: white;
-  border-radius: 10px;
-}
-/* .sidemenu-item2 {
-  font-size: 18px;
-  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
-  text-align: center;
-  font-weight: bold;
-  padding: 10px;
-  margin-top: 20px;;
-  height:50px;
-  background-color: white;
-  border-radius: 10px;
-} */
 
+.sidemenu-item1,
 .sidemenu-item3 {
-  font-size: 18px;
-  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
   text-align: center;
+  font-size: 18px;
   font-weight: bold;
   padding: 10px;
-  margin-top: 20px;;
-  height:50px;
+  margin-top: 20px;
+  height: 50px;
   background-color: white;
   border-radius: 10px;
+  transition: background-color 0.3s, transform 0.3s;
 }
+
+.sidemenu-item1:hover,
+.sidemenu-item3:hover {
+  background-color: #0284c7;
+  color: white;
+  transform: translateY(-2px);
+}
+
 .bigcontainer {
-  display:flex;
+  display: flex;
   flex-direction: column;
-  height:100%;
-  width:90%;
+  height: 100%;
+  width: 90%;
 }
+
 img {
   width: 30px;
   height: 30px;
 }
+
 .cards {
   display: flex;
   flex-wrap: wrap;
@@ -313,6 +283,12 @@ img {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  border-radius: 8px;
+  transition: box-shadow 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
 .bank-name {
@@ -328,7 +304,7 @@ span {
 }
 
 h2 {
-  font-size: 1em;
+  font-size: 1.5em;
   margin: auto 20px;
 }
 
@@ -337,6 +313,7 @@ h2 {
   flex-direction: row;
   height: 50%;
 }
+
 .smallcontainer {
   height: 90%;
   background-color: #ffffff;
@@ -358,7 +335,7 @@ label {
   font-size: 15px;
   width: 100px;
   text-align: left;
-  border:1px solid #ccc;
+  border: 1px solid #ccc;
   text-align: center;
   border-radius: 10px;
   margin-right: 10px;
@@ -375,6 +352,30 @@ select {
   display: flex;
   padding: 5px;
   justify-content: left;
+}
+
+.toggles {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -40px; /* Adjust as needed to align with the heading */
+}
+
+.toggles button {
+  background-color: #ffffff;
+  border: 2px solid #0284c7;
+  color: #0284c7;
+  font-size: 14px;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.toggles button:hover {
+  background-color: #0284c7;
+  color: white;
+  transform: translateY(-2px);
 }
 
 .submit-button {
@@ -411,4 +412,6 @@ select {
 .fade-leave-to {
   opacity: 0;
 }
+
+
 </style>

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from django.db.models import Count
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -8,6 +9,8 @@ from rest_framework import status
 import requests
 from .models import *
 from .serializers import *
+from django.db.models import Avg
+
 
 ## 예금
 @api_view(['GET'])
@@ -90,26 +93,42 @@ def deposit_product_options(request, fin_prdt_cd):
     serializers = DepositOptionsSerializer(options, many=True)
     return Response(serializers.data)
 
+## 상품 Top Rate 1개 추천 
+# @api_view(['GET'])
+# def deposit_top_rate(request):
+#     if request.method == 'GET':
+#         top_rate_option = DepositOptions.objects.all().order_by('-intr_rate2').first()
+#         if not top_rate_option:
+#             return Response({'error': 'No deposit options found'}, status=status.HTTP_404_NOT_FOUND)
+        
+#         fin_prdt_cd = top_rate_option.deposit_code
+#         dpst_prdt = get_object_or_404(DepositProducts, deposit_code=fin_prdt_cd)
+#         dpst_prdt_serializer = DepositProductsSerializer(dpst_prdt)
+#         dpst_opts = DepositOptions.objects.filter(deposit=dpst_prdt)
+#         dpst_opts_serializers = DepositOptionsSerializer(dpst_opts, many=True)
+        
+#         response_data = {
+#             "deposit_product": dpst_prdt_serializer.data,
+#             "options": dpst_opts_serializers.data,
+#         }
+        
+#         return Response(response_data)
+
 @api_view(['GET'])
 def deposit_top_rate(request):
     if request.method == 'GET':
-        top_rate_option = DepositOptions.objects.all().order_by('-intr_rate2').first()
-        if not top_rate_option:
+        top_rate_options = DepositOptions.objects.all().order_by('-intr_rate2')
+        if not top_rate_options:
             return Response({'error': 'No deposit options found'}, status=status.HTTP_404_NOT_FOUND)
         
-        fin_prdt_cd = top_rate_option.deposit_code
-        dpst_prdt = get_object_or_404(DepositProducts, deposit_code=fin_prdt_cd)
-        dpst_prdt_serializer = DepositProductsSerializer(dpst_prdt)
-        dpst_opts = DepositOptions.objects.filter(deposit=dpst_prdt)
-        dpst_opts_serializers = DepositOptionsSerializer(dpst_opts, many=True)
+        top_rate_options_serializers = DepositOptionsSerializer(top_rate_options, many=True)
         
         response_data = {
-            "deposit_product": dpst_prdt_serializer.data,
-            "options": dpst_opts_serializers.data,
+            "top_rate_options": top_rate_options_serializers.data,
         }
         
         return Response(response_data)
-
+    
 ## 적금 
 
 @api_view(['GET'])
@@ -172,24 +191,39 @@ def saving_product_options(request, fin_prdt_cd):
     serializers = SavingOptionsSerializer(options, many=True)
     return Response(serializers.data)
 
+# @api_view(['GET'])
+# def saving_top_rate(request):
+#     top_rate_option = SavingOptions.objects.all().order_by('-intr_rate2').first()
+#     if not top_rate_option:
+#         return Response({'error': 'No saving options found'}, status=status.HTTP_404_NOT_FOUND)
+    
+#     fin_prdt_cd = top_rate_option.saving.saving_code
+#     svng_prdt = get_object_or_404(SavingProducts, saving_code=fin_prdt_cd)
+#     svng_prdt_serializer = SavingProductsSerializer(svng_prdt)
+#     svng_opts = SavingOptions.objects.filter(saving=svng_prdt)
+#     svng_opts_serializers = SavingOptionsSerializer(svng_opts, many=True)
+    
+#     response_data = {
+#         "saving_product": svng_prdt_serializer.data,
+#         "options": svng_opts_serializers.data,
+#     }
+    
+#     return Response(response_data)
+
 @api_view(['GET'])
 def saving_top_rate(request):
-    top_rate_option = SavingOptions.objects.all().order_by('-intr_rate2').first()
-    if not top_rate_option:
-        return Response({'error': 'No saving options found'}, status=status.HTTP_404_NOT_FOUND)
-    
-    fin_prdt_cd = top_rate_option.saving.saving_code
-    svng_prdt = get_object_or_404(SavingProducts, saving_code=fin_prdt_cd)
-    svng_prdt_serializer = SavingProductsSerializer(svng_prdt)
-    svng_opts = SavingOptions.objects.filter(saving=svng_prdt)
-    svng_opts_serializers = SavingOptionsSerializer(svng_opts, many=True)
-    
-    response_data = {
-        "saving_product": svng_prdt_serializer.data,
-        "options": svng_opts_serializers.data,
-    }
-    
-    return Response(response_data)
+    if request.method == 'GET':
+        top_rate_options = SavingOptions.objects.all().order_by('-intr_rate2')
+        if not top_rate_options:
+            return Response({'error': 'No saving options found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        top_rate_options_serializers = SavingOptionsSerializer(top_rate_options, many=True)
+        
+        response_data = {
+            "top_rate_options": top_rate_options_serializers.data,
+        }
+        
+        return Response(response_data)
 
 # 개인 신용 대출
 
@@ -250,25 +284,39 @@ def creditloan_product_options(request, fin_prdt_cd):
     serializers = CreditLoanOptionsSerializer(options, many=True)
     return Response(serializers.data)
 
+# @api_view(['GET'])
+# def creditloan_top_rate(request):
+#     top_rate_option = CreditLoanOptions.objects.all().order_by('-crdt_grad_1').first()
+#     if not top_rate_option:
+#         return Response({'error': 'No credit loan options found'}, status=status.HTTP_404_NOT_FOUND)
+    
+#     fin_prdt_cd = top_rate_option.creditloan.creditloan_code
+#     crdtloan_prdt = get_object_or_404(CreditLoanProducts, creditloan_code=fin_prdt_cd)
+#     crdtloan_prdt_serializer = CreditLoanProductsSerializer(crdtloan_prdt)
+#     crdtloan_opts = CreditLoanOptions.objects.filter(creditloan=crdtloan_prdt)
+#     crdtloan_opts_serializers = CreditLoanOptionsSerializer(crdtloan_opts, many=True)
+    
+#     response_data = {
+#         "creditloan_product": crdtloan_prdt_serializer.data,
+#         "options": crdtloan_opts_serializers.data,
+#     }
+    
+#     return Response(response_data)
+
 @api_view(['GET'])
 def creditloan_top_rate(request):
-    top_rate_option = CreditLoanOptions.objects.all().order_by('-crdt_grad_1').first()
-    if not top_rate_option:
-        return Response({'error': 'No credit loan options found'}, status=status.HTTP_404_NOT_FOUND)
-    
-    fin_prdt_cd = top_rate_option.creditloan.creditloan_code
-    crdtloan_prdt = get_object_or_404(CreditLoanProducts, creditloan_code=fin_prdt_cd)
-    crdtloan_prdt_serializer = CreditLoanProductsSerializer(crdtloan_prdt)
-    crdtloan_opts = CreditLoanOptions.objects.filter(creditloan=crdtloan_prdt)
-    crdtloan_opts_serializers = CreditLoanOptionsSerializer(crdtloan_opts, many=True)
-    
-    response_data = {
-        "creditloan_product": crdtloan_prdt_serializer.data,
-        "options": crdtloan_opts_serializers.data,
-    }
-    
-    return Response(response_data)
-
+    if request.method == 'GET':
+        top_rate_options = CreditLoanOptions.objects.all().order_by('-crdt_grad_1')
+        if not top_rate_options:
+            return Response({'error': 'No credit loan options found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        top_rate_options_serializers = CreditLoanOptionsSerializer(top_rate_options, many=True)
+        
+        response_data = {
+            "top_rate_options": top_rate_options_serializers.data,
+        }
+        
+        return Response(response_data)
 
 # 상품 가입 저장
 @api_view(['POST'])
@@ -471,3 +519,240 @@ def remove_favorites_creditloan(request):
         return Response({'status': 'removed from favorites'}, status=status.HTTP_204_NO_CONTENT)
     else:
         return Response({'error': 'Favorite not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+
+### 상품 추천
+## Rating 값 계산
+def calculate_saving_deposit_score(user, product):
+    age_weight = 1.0
+    asset_weight = 0.5
+    favorites_weight = 2.0
+
+    # 연령대 가중치
+    if user['user_age_group'] == '20대':
+        age_weight = 1.2
+    elif user['user_age_group'] == '30대':
+        age_weight = 1.5
+    elif user['user_age_group'] == '40대':
+        age_weight = 1.8
+    elif user['user_age_group'] == '50대':
+        age_weight = 2.0
+
+    # 자산 가중치
+    if user['asset'] > 100000000:
+        asset_weight = 2.0
+    elif user['asset'] > 50000000:
+        asset_weight = 1.5
+
+    # 찜한 상품 가중치
+    favorites_count = FavoriteDepositProduct.objects.filter(deposit_product=product).count() if isinstance(product, DepositProducts) else FavoriteSavingProduct.objects.filter(saving_product=product).count()
+
+    return age_weight * asset_weight * (1 + favorites_weight * favorites_count)
+
+def calculate_creditloan_score(user, product):
+    age_weight = 1.0
+    asset_weight = 0.5
+    limit_weight = 1.5
+    favorites_weight = 2.0
+
+    # 연령대 가중치
+    if user['user_age_group'] == '20대':
+        age_weight = 0.4
+    elif user['user_age_group'] == '30대':
+        age_weight = 1.0
+    elif user['user_age_group'] == '40대':
+        age_weight = 1.5
+    elif user['user_age_group'] == '50대':
+        age_weight = 2.0
+
+    # 자산 가중치
+    if user['asset'] > 100000000:
+        asset_weight = 2.0
+    elif user['asset'] > 50000000:
+        asset_weight = 1.5
+    elif user['asset'] > 25000000:
+        asset_weight = 1.0
+    elif user['asset'] > 10000000:
+        asset_weight = 0.5
+
+    # 최대 한도 가중치
+    limit_score = product.max_limit / 1000000 if product.max_limit else 1
+
+    # 찜한 상품 가중치
+    favorites_count = FavoriteCreditLoanProduct.objects.filter(creditloan_product=product).count()
+
+    return age_weight * asset_weight * limit_weight * limit_score * (1 + favorites_weight * favorites_count)
+
+def recommend_products(user):
+    # 예금 상품 추천
+    deposit_products = DepositProducts.objects.all()
+    deposit_scores = [(product, calculate_saving_deposit_score(user, product)) for product in deposit_products]
+    deposit_recommendations = sorted(deposit_scores, key=lambda x: x[1], reverse=True)[:5]
+
+    # 적금 상품 추천
+    saving_products = SavingProducts.objects.all()
+    saving_scores = [(product, calculate_saving_deposit_score(user, product)) for product in saving_products]
+    saving_recommendations = sorted(saving_scores, key=lambda x: x[1], reverse=True)[:5]
+
+    # 신용 대출 상품 추천
+    creditloan_products = CreditLoanProducts.objects.all()
+    creditloan_scores = [(product, calculate_creditloan_score(user, product)) for product in creditloan_products]
+    creditloan_recommendations = sorted(creditloan_scores, key=lambda x: x[1], reverse=True)[:5]
+
+    return deposit_recommendations, saving_recommendations, creditloan_recommendations
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def recommend_view_rating(request):
+    user_data = request.data
+    if 'user_age_group' not in user_data or 'asset' not in user_data:
+        return Response({"error": "User profile data is incomplete"}, status=status.HTTP_400_BAD_REQUEST)
+
+    deposit_recommendations, saving_recommendations, creditloan_recommendations = recommend_products(user_data)
+
+    context = {
+        'deposit_recommendations': DepositProductsSerializer([rec[0] for rec in deposit_recommendations], many=True).data,
+        'saving_recommendations': SavingProductsSerializer([rec[0] for rec in saving_recommendations], many=True).data,
+        'creditloan_recommendations': CreditLoanProductsSerializer([rec[0] for rec in creditloan_recommendations], many=True).data,
+    }
+
+    return Response(context, status=status.HTTP_200_OK)
+
+
+## 가장 많이 담은 순
+def recommend_products_count(user):
+    # Recommend deposit products favored by users in the same age group
+    deposit_recommendations = DepositProducts.objects.filter(
+        favoritedepositproduct__user__user_age_group=user.user_age_group
+    ).annotate(num_users=Count('favoritedepositproduct')).order_by('-num_users')[:5]
+
+    # Recommend saving products favored by users in the same age group
+    saving_recommendations = SavingProducts.objects.filter(
+        favoritesavingproduct__user__user_age_group=user.user_age_group
+    ).annotate(num_users=Count('favoritesavingproduct')).order_by('-num_users')[:5]
+
+    # Recommend credit loan products favored by users in the same age group
+    creditloan_recommendations = CreditLoanProducts.objects.filter(
+        favoritecreditloanproduct__user__user_age_group=user.user_age_group
+    ).annotate(num_users=Count('favoritecreditloanproduct')).order_by('-num_users')[:5]
+
+    return deposit_recommendations, saving_recommendations, creditloan_recommendations
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def recommend_view_counting(request):
+    user = request.user
+    deposit_recommendations, saving_recommendations, creditloan_recommendations = recommend_products_count(user)
+    
+    deposit_serializer = DepositProductsSerializer(deposit_recommendations, many=True)
+    saving_serializer = SavingProductsSerializer(saving_recommendations, many=True)
+    creditloan_serializer = CreditLoanProductsSerializer(creditloan_recommendations, many=True)
+
+    response_data = {
+        'deposit_recommendations': deposit_serializer.data,
+        'saving_recommendations': saving_serializer.data,
+        'creditloan_recommendations': creditloan_serializer.data
+    }
+    return Response(response_data, status=status.HTTP_200_OK)
+
+
+
+
+
+## Dot production
+
+def vectorize_user(user):
+    # 사용자 정보를 벡터화하는 예시
+    age_group_vector = {
+        '10대': 0.1,
+        '20대': 0.2,
+        '30대': 0.3,
+        '40대': 0.4,
+        '50대': 0.5
+    }
+    service_purpose_vector = {
+        '예금 가입': 0.1,
+        '적금 가입': 0.2,
+        '대출 가입': 0.3
+    }
+    vector = [
+        user['asset'],
+        age_group_vector.get(user['user_age_group'], 0),
+        service_purpose_vector.get(user['service_purpose'], 0),
+    ]
+    return vector
+
+def vectorize_product(product):
+    if isinstance(product, DepositProducts):
+        vector = [
+            product.max_limit if product.max_limit else 0,
+            max([option.intr_rate for option in product.depositoptions_set.all() if option.intr_rate is not None] if hasattr(product, 'depositoptions_set') else [0]),
+            product.join_deny if product.join_deny is not None else 0,
+            len(product.join_member) if product.join_member else 0,
+            int(product.dcls_month) if product.dcls_month else 0,
+            len(product.join_way) if product.join_way else 0,
+            len(product.spcl_cnd) if product.spcl_cnd else 0,
+        ]
+    elif isinstance(product, SavingProducts):
+        vector = [
+            product.max_limit if product.max_limit else 0,
+            max([option.intr_rate for option in product.savingoptions_set.all() if option.intr_rate is not None] if hasattr(product, 'savingoptions_set') else [0]),
+            product.join_deny if product.join_deny is not None else 0,
+            len(product.join_member) if product.join_member else 0,
+            int(product.dcls_month) if product.dcls_month else 0,
+            len(product.join_way) if product.join_way else 0,
+            len(product.spcl_cnd) if product.spcl_cnd else 0,
+        ]
+    elif isinstance(product, CreditLoanProducts):
+        vector = [
+            product.max_limit if product.max_limit else 0,
+            product.creditloanoptions_set.aggregate(Avg('crdt_grad_avg'))['crdt_grad_avg__avg'] if product.creditloanoptions_set.exists() else 0,
+            len(product.join_way) if product.join_way else 0,
+            len(product.spcl_cnd) if product.spcl_cnd else 0,
+        ]
+    return vector
+
+
+def dot_product(vec1, vec2):
+    return sum(x * y for x, y in zip(vec1, vec2))
+
+def calculate_recommendation_score(user, product):
+    user_vector = vectorize_user(user)
+    product_vector = vectorize_product(product)
+    return dot_product(user_vector, product_vector)
+
+def recommend_products_dot(user):
+    # 예금 상품 추천
+    deposit_products = DepositProducts.objects.all()
+    deposit_scores = [(product, calculate_recommendation_score(user, product)) for product in deposit_products]
+    deposit_recommendations = sorted(deposit_scores, key=lambda x: x[1], reverse=True)[:5]
+
+    # 적금 상품 추천
+    saving_products = SavingProducts.objects.all()
+    saving_scores = [(product, calculate_recommendation_score(user, product)) for product in saving_products]
+    saving_recommendations = sorted(saving_scores, key=lambda x: x[1], reverse=True)[:5]
+
+    # 신용 대출 상품 추천
+    creditloan_products = CreditLoanProducts.objects.all()
+    creditloan_scores = [(product, calculate_recommendation_score(user, product)) for product in creditloan_products]
+    creditloan_recommendations = sorted(creditloan_scores, key=lambda x: x[1], reverse=True)[:5]
+
+    return deposit_recommendations, saving_recommendations, creditloan_recommendations
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def recommend_view_dot(request):
+    user_data = request.data
+    if 'user_age_group' not in user_data or 'asset' not in user_data or 'service_purpose' not in user_data:
+        return Response({"error": "User profile data is incomplete"}, status=status.HTTP_400_BAD_REQUEST)
+
+    deposit_recommendations, saving_recommendations, creditloan_recommendations = recommend_products_dot(user_data)
+
+    context = {
+        'deposit_recommendations': DepositProductsSerializer([rec[0] for rec in deposit_recommendations], many=True).data,
+        'saving_recommendations': SavingProductsSerializer([rec[0] for rec in saving_recommendations], many=True).data,
+        'creditloan_recommendations': CreditLoanProductsSerializer([rec[0] for rec in creditloan_recommendations], many=True).data,
+    }
+
+    return Response(context, status=status.HTTP_200_OK)
