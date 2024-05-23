@@ -30,8 +30,6 @@
           <RouterLink :to="{ name: 'CreditloanView' }"
             ><div class="dropdown-item">신용대출</div></RouterLink
           >
-          <!-- <div class="dropdown-item">전세자금대출</div>
-          <div class="dropdown-item">주택담보대출</div> -->
         </div>
       </div>
       <div
@@ -86,6 +84,9 @@
         />
       </div>
       <div class="button-group">
+        <button @click="toggleChatbot" class="button">Chating Bot</button>
+      </div>
+      <div class="button-group">
         <button v-if="isLogin" @click="logOut" class="button">로그아웃</button>
         <RouterLink :to="isLogin ? { name: 'ProfilePage' } : { name: 'LogInView' }">
           <div @mouseover="showDropdown('user')" @mouseleave="hideDropdown('user')">
@@ -107,6 +108,34 @@
           </div>
         </RouterLink>
       </div>
+
+    </div>
+  </div>
+  <div v-if="chatbotVisible" class="modal-overlay" @click.self="toggleChatbot">
+    <div class="modal">
+      <div class="chat-page">
+        <h1>AI Chat</h1>
+        <div class="chat-container">
+          <div
+            v-for="(message, index) in chatHistory"
+            :key="index"
+            class="chat-message"
+            :class="message.role"
+          >
+            <p>{{ message.content }}</p>
+          </div>
+        </div>
+        <div class="input-container">
+          <input
+            v-model="message"
+            @keyup.enter="sendMessage"
+            placeholder="질문을 입력하세요"
+            class="chat-input"
+          />
+          <button @click="sendMessage" class="send-button">전송</button>
+        </div>
+      </div>
+      <button @click="toggleChatbot" class="close-button">Close</button>
     </div>
   </div>
 </template>
@@ -115,6 +144,7 @@
 import { ref, computed } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
+import axios from 'axios';
 
 const dropdownVisible = ref({
   user: false,
@@ -124,6 +154,10 @@ const dropdownVisible = ref({
   exchange: false,
   lounge: false,
 });
+
+const chatbotVisible = ref(false);
+const message = ref('');
+const chatHistory = ref([]);
 
 const userStore = useUserStore();
 const isLogin = computed(() => userStore.isLogin);
@@ -139,6 +173,10 @@ const hideDropdown = (key) => {
 
 const toggleDropdown = (key) => {
   dropdownVisible.value[key] = !dropdownVisible.value[key];
+};
+
+const toggleChatbot = () => {
+  chatbotVisible.value = !chatbotVisible.value;
 };
 
 const logOut = () => {
@@ -158,8 +196,25 @@ const goToPage = (pageName) => {
   router.push({ name: pageName });
   hideDropdown('user'); // dropdown 닫기
 };
-</script>
 
+const sendMessage = async () => {
+  if (message.value.trim() === '') return
+
+  chatHistory.value.push({ role: 'user', content: message.value })
+  try {
+    const res = await axios.get('http://localhost:8000/chat/', {
+      params: {
+        message: message.value,
+      },
+    })
+    chatHistory.value.push({ role: 'ai', content: res.data })
+    message.value = ''
+  } catch (error) {
+    console.error(error)
+    chatHistory.value.push({ role: 'error', content: 'Error: Failed to get response' })
+  }
+};
+</script>
 
 <style scoped>
 .header {
@@ -296,65 +351,130 @@ const goToPage = (pageName) => {
   background-color: #0056b3;
 }
 
-@media (max-width: 1024px) {
-  .navbar {
-    gap: 10px;
-  }
-
-  .input-typetext {
-    width: 150px;
-  }
-
-  .button {
-    padding: 8px 16px;
-    font-size: 14px;
-  }
+.modal-overlay {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: auto;
+  height: auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  z-index: 1000;
+  padding: 20px;
 }
 
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    height: auto;
-    padding: 10px;
-    width: 90%;
-  }
-
-  .header .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-  }
-
-  .header .nav {
-    width: 100%;
-    padding: 10px 0;
-  }
-
-  .header .input-typetext {
-    width: 100%;
-  }
+.modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  width: 500px;
+  max-width: 500px; /* 최대 너비를 줄임 */
+  height: 55vh; /* 높이를 고정 */
+  display: flex;
+  flex-direction: column;
 }
 
-@media (max-width: 480px) {
-  .header {
-    padding: 0 5px;
-  }
+.close-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
 
-  .header .p4 {
-    font-size: 20px;
-  }
+.close-button:hover {
+  background-color: #0056b3;
+}
 
-  .header .nav {
-    font-size: 18px;
-  }
+.chat-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%; /* 부모의 높이에 맞춤 */
+}
 
-  .header .input-typetext {
-    font-size: 12px;
-  }
+h1 {
+  margin-bottom: 20px;
+}
 
-  .button {
-    font-size: 14px;
-  }
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+  overflow-y: auto; /* 스크롤 가능 */
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.chat-message {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 75%;
+  word-wrap: break-word;
+}
+
+.user {
+  align-self: flex-end;
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+.ai {
+  align-self: flex-start;
+  background-color: #e0e0e0;
+  color: #000000;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  align-self: flex-start;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+  background-color: #ffffff;
+  border-top: 1px solid #cccccc;
+  border-radius: 0 0 10px 10px;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.send-button {
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.send-button:hover {
+  background-color: #0056b3;
 }
 </style>
+
