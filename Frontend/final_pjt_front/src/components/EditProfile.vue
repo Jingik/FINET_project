@@ -3,14 +3,13 @@
     <div class="smallcontainer">
       <span>
         <img src="@/assets/img/user.png" alt="interest">
-        <h2>내 정보 수정</h2>
+        <h2>내 정보 수정</h2> {{ userProfile.username }}
       </span>
       <hr />
       <div class="content">
         <div class="margintop">
           <label for="phone_number">휴대폰 번호</label>
-          {{ user_name }}
-          <input type="tel" v-model.trim="phone_number" id="phone_number" required>
+          <input type="tel" v-model.trim="userProfile.phone_number" id="phone_number" required>
           <button @click="handleSubmit" class="submit-button">수정완료</button>
         </div>
         <div class="margintop">
@@ -25,32 +24,32 @@
         <div v-if="passwordError" class="error-message">{{ passwordError }}</div>
         <div class="margintop">
           <label for="user_age_group">연령대</label>
-          <select v-model="user_age_group" id="user_age_group" required>
-            <option value="10s">10대</option>
-            <option value="20s">20대</option>
-            <option value="30s">30대</option>
-            <option value="40s">40대</option>
-            <option value="50s">50대</option>
+          <select v-model="userProfile.user_age_group" id="user_age_group" required>
+            <option value="10대">10대</option>
+            <option value="20대">20대</option>
+            <option value="30대">30대</option>
+            <option value="40대">40대</option>
+            <option value="50대">50대</option>
           </select>
           <button @click="handleSubmit" class="submit-button">수정완료</button>
         </div>
         <div class="margintop">
           <label for="service_purpose">서비스 목적</label>
-          <select v-model="service_purpose" id="service_purpose" required>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
+          <select v-model="userProfile.service_purpose" id="service_purpose" required>
+            <option value="예금 가입">예금 가입</option>
+            <option value="적금 가입">적금 가입</option>
+            <option value="대출 가입">대출 가입</option>
           </select>
           <button @click="handleSubmit" class="submit-button">수정완료</button>
         </div>
         <div class="margintop">
           <label for="email">이메일</label>
-          <input type="email" v-model.trim="email" id="email" required>
+          <input type="email" v-model.trim="userProfile.email" id="email" required>
           <button @click="handleSubmit" class="submit-button">수정완료</button>
         </div>
         <div class="margintop">
           <label for="assets">자산</label>
-          <input type="number" v-model.trim="assets" id="assets" required>
+          <input type="number" v-model.trim="userProfile.asset" id="assets" required>
           <button @click="handleSubmit" class="submit-button">수정완료</button>
         </div>
       </div>
@@ -65,9 +64,9 @@
       </span>
       <hr />
       <div class="cards">
-        <div v-for="product in subscribedProducts.deposits" :key="product.id" class="card">
-          <p>{{ getProductById('deposits', product.deposit_product)?.fin_prdt_nm || "Unknown Product" }}
-            <span class="bank-name">{{ getProductById('deposits', product.deposit_product)?.kor_co_nm }}</span>
+        <div v-for="subscription in subscribedProducts.deposits" :key="subscription.id" class="card">
+          <p>{{ getProductById('deposits', subscription.deposit_product)?.fin_prdt_nm || "Unknown Product" }}
+            <span class="bank-name">{{ getProductById('deposits', subscription.deposit_product)?.kor_co_nm }}</span>
           </p>
         </div>
         <p v-if="subscribedProducts.deposits.length === 0">관심 상품이 없습니다.</p>
@@ -82,9 +81,9 @@
       </span>
       <hr />
       <div class="cards">
-        <div v-for="product in subscribedProducts.savings" :key="product.id" class="card">
-          <p>{{ getProductById('savings', product.saving_product)?.fin_prdt_nm || "Unknown Product" }}
-            <span class="bank-name">{{ getProductById('savings', product.saving_product)?.kor_co_nm }}</span>
+        <div v-for="subscription in subscribedProducts.savings" :key="subscription.id" class="card">
+          <p>{{ getProductById('savings', subscription.saving_product)?.fin_prdt_nm || "Unknown Product" }}
+            <span class="bank-name">{{ getProductById('savings', subscription.saving_product)?.kor_co_nm }}</span>
           </p>
         </div>
         <p v-if="subscribedProducts.savings.length === 0">관심 상품이 없습니다.</p>
@@ -97,9 +96,9 @@
       </span>
       <hr />
       <div class="cards">
-        <div v-for="product in subscribedProducts.creditloans" :key="product.id" class="card">
-          <p>{{ getProductById('creditloans', product.creditloan_product)?.fin_prdt_nm || "Unknown Product" }}
-            <span class="bank-name">{{ getProductById('creditloans', product.creditloan_product)?.kor_co_nm }}</span>
+        <div v-for="subscription in subscribedProducts.creditloans" :key="subscription.id" class="card">
+          <p>{{ getProductById('creditloans', subscription.creditloan_product)?.fin_prdt_nm || "Unknown Product" }}
+            <span class="bank-name">{{ getProductById('creditloans', subscription.creditloan_product)?.kor_co_nm }}</span>
           </p>
         </div>
         <p v-if="subscribedProducts.creditloans.length === 0">관심 상품이 없습니다.</p>
@@ -109,33 +108,30 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
-import axios from "axios";
-import { useRoute } from "vue-router";
-import { useUserStore } from "@/stores/user";
-
-const route = useRoute();
-const username = computed(() => route.params.username);
+import { ref, onMounted, reactive } from 'vue';
+import axios from 'axios';
+import { useRoute } from 'vue-router';
+import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();
-const token = computed(() => userStore.token);
-
-const phone_number = ref('');
-const user_name = ref('');
+const token = ref(userStore.token);
+const userProfile = reactive({
+  username: '',
+  phone_number: '',
+  user_age_group: '',
+  service_purpose: '',
+  email: '',
+  asset: '',
+});
 const password1 = ref('');
 const password2 = ref('');
-const user_age_group = ref('');
-const service_purpose = ref('');
-const email = ref('');
-const assets = ref('');
 const passwordError = ref('');
 const showToast = ref(false);
 
 const depositProducts = ref([]);
 const savingProducts = ref([]);
 const creditloanProducts = ref([]);
-
-const subscribedProducts = ref({
+const subscribedProducts = reactive({
   deposits: [],
   savings: [],
   creditloans: []
@@ -149,18 +145,11 @@ onMounted(async () => {
 
 const fetchUserProfile = async () => {
   try {
-    console.log("Fetching user profile for username:", username.value);
-    const response = await axios.get(`http://127.0.0.1:8000/users/profile/${username.value}/`, {
+    const response = await axios.get(`http://127.0.0.1:8000/users/profile/${userStore.user}/`, {
       headers: { Authorization: `Token ${token.value}` },
     });
     console.log("Fetched user profile data:", response.data);
-    const userProfile = response.data.user_profile;
-    phone_number.value = userProfile.phone_number;
-    user_name.value = userProfile.username;
-    user_age_group.value = userProfile.user_age_group;
-    service_purpose.value = userProfile.service_purpose;
-    email.value = userProfile.email;
-    assets.value = userProfile.asset;
+    Object.assign(userProfile, response.data.user_profile);
   } catch (error) {
     console.error("Error fetching user profile:", error);
   }
@@ -172,19 +161,16 @@ const fetchAllProducts = async () => {
       headers: { Authorization: `Token ${token.value}` }
     });
     depositProducts.value = depositResponse.data;
-    console.log("Fetched deposit products:", depositResponse.data);
 
     const savingResponse = await axios.get("http://127.0.0.1:8000/financial/saving-products/", {
       headers: { Authorization: `Token ${token.value}` }
     });
     savingProducts.value = savingResponse.data;
-    console.log("Fetched saving products:", savingResponse.data);
 
     const creditloanResponse = await axios.get("http://127.0.0.1:8000/financial/creditloan-products/", {
       headers: { Authorization: `Token ${token.value}` }
     });
     creditloanProducts.value = creditloanResponse.data;
-    console.log("Fetched credit loan products:", creditloanResponse.data);
   } catch (error) {
     console.error("Error fetching products:", error);
   }
@@ -195,10 +181,9 @@ const fetchUserSubscriptions = async () => {
     const response = await axios.get("http://127.0.0.1:8000/financial/user_subscriptions/", {
       headers: { Authorization: `Token ${token.value}` }
     });
-    subscribedProducts.value.deposits = response.data.deposits;
-    subscribedProducts.value.savings = response.data.savings;
-    subscribedProducts.value.creditloans = response.data.creditloans;
-    console.log("Fetched user subscriptions:", response.data);
+    subscribedProducts.deposits = response.data.deposit_subscriptions;
+    subscribedProducts.savings = response.data.saving_subscriptions;
+    subscribedProducts.creditloans = response.data.creditloan_subscriptions;
   } catch (error) {
     console.error("Error fetching user subscriptions:", error);
   }
@@ -223,23 +208,27 @@ const getProductById = (type, productId) => {
 };
 
 const handleSubmit = async () => {
-  if (password1.value !== password2.value) {
+  if (password1.value && password1.value !== password2.value) {
     passwordError.value = "Passwords do not match.";
     return;
   }
   passwordError.value = '';
 
   const updatedProfile = {
-    phone_number: phone_number.value,
-    user_age_group: user_age_group.value,
-    service_purpose: service_purpose.value,
-    email: email.value,
-    asset: assets.value,
-    password: password1.value || undefined,
+    phone_number: userProfile.phone_number,
+    user_age_group: userProfile.user_age_group,
+    service_purpose: userProfile.service_purpose,
+    email: userProfile.email,
+    asset: userProfile.asset,
   };
 
+  if (password1.value) {
+    updatedProfile.password = password1.value;
+    updatedProfile.password_confirm = password2.value;
+  }
+
   try {
-    await axios.patch(`http://127.0.0.1:8000/users/profile/${username.value}/`, updatedProfile, {
+    await axios.patch(`http://127.0.0.1:8000/users/profile/${userStore.user}/`, updatedProfile, {
       headers: { Authorization: `Token ${token.value}` }
     });
     showToast.value = true;

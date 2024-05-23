@@ -1,7 +1,7 @@
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from django.contrib.auth import login
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework import status
 from .serializers import *
 from django.contrib.auth.hashers import check_password
@@ -9,6 +9,8 @@ from .models import *
 from rest_framework.authtoken.models import Token
 import traceback
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -43,6 +45,8 @@ def signup(request):
 
 
 @api_view(['POST'])
+@authentication_classes([])
+@permission_classes([AllowAny])
 def user_login(request):
     """
     사용자 로그인
@@ -61,6 +65,7 @@ def user_login(request):
     if check_password(password, user.password):
         login(request, user)
         token, created = Token.objects.get_or_create(user=user)
+        print(token.key)
         return JsonResponse({'message': 'Login successful', 'token': token.key}, status=status.HTTP_200_OK)
     else:
         return JsonResponse({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)

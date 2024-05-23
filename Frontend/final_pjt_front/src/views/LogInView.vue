@@ -49,7 +49,6 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
 import Modal from '@/components/LoginModal.vue'
 import { useUserStore } from '@/stores/user';
@@ -69,26 +68,13 @@ watch(password, (newVal) => {
 })
 
 const logIn = async () => {
-  console.log('Username before request:', username.value)
-  console.log('Password before request:', password.value)
   try {
-    console.log('Username request:', username.value)
-    console.log('Password request:', password.value)
-    const response = await axios.post('http://127.0.0.1:8000/users/login/', {
-      username: username.value,
-      password: password.value
-    })
-    // Handle successful login
-    console.log(response.data)
-    localStorage.setItem('auth_token', response.data.token)
-    axios.defaults.headers.common['Authorization'] = `Token ${response.data.token}`
-    userStore.token = response.data.token
-    console.log('로그인 성공, 토큰:', userStore.token)
-    console.log('isLogin:', userStore.isLogin)
-    router.push({ name: 'MainLogin' })
-  } catch (err) {
-    showModal.value = true
-    console.error(err)
+    await userStore.logIn({ username: username.value, password: password.value });
+    // 로그인 성공 시 MainLogin 뷰로 이동
+    router.push({ name: 'MainLogin' });
+  } catch (error) {
+    console.error('로그인 실패:', error);
+    showModal.value = true;
   }
 }
 
