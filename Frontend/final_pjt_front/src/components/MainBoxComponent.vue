@@ -190,9 +190,9 @@ h3 {
 
 .img-icon {
   position: absolute;
-  top: -70px;
+  bottom:0;
   right: 8%;
-  height: 800px;
+  height: 90%;
   object-fit: cover;
 }
 
